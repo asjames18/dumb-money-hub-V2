@@ -9,9 +9,6 @@ export function Roadmap() {
         <span className="sticker bg-primary px-2.5 py-1 font-display text-xs uppercase tracking-[0.2em] text-primary-foreground">
           Roadmap
         </span>
-        <p className="max-w-md text-[11px] leading-relaxed text-muted-foreground">
-          Plans, not promises. Shipping order can change as the community steers it.
-        </p>
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

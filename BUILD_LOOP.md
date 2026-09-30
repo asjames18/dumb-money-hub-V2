@@ -7,6 +7,127 @@
 > "preview" deploy goes straight to the public site. Treat all deploys as
 > production deploys until Antonio approves a real preview/production split.
 
+- 2026-09-30 10:13 ET run: backlog #9 DONE (security/safety hardening, recurring) ->
+  SHIPPED one earned #9 fix: **Alt+S owner shortcut no longer fires from form
+  fields**. (1) TOKEN INTEGRITY MONITOR: exit 0 — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0, DAMP fees()=300 dist=(3333,0,3333,3334)
+  owner=0x0; DUMB supply 28B / dead 15,838,636,604 (56.6%), DAMP supply 1B /
+  dead 364,165,314 (36.4%) — every LOCKED claim the hub publishes still matches
+  live chain state; loop GREEN. Dead balances byte-identical to the 09:03 read —
+  zero burns since, consistent with flat traffic. (2) ADVERSARIAL REVIEW: the
+  10:03 #8 ship — the Alt+S → /stats owner shortcut in
+  src/routes/__root.tsx. HELD UP on security: fixed internal target, no user
+  input, no secrets/wallet/data-source, passphrase gate on /stats itself
+  unchanged (the page is still unlisted, robots-disallowed, not in sitemap;
+  the shortcut only skips the URL-memory step), try/catch so it can never
+  break the app, listener added/removed cleanly, Ctrl/Meta variants untouched.
+  FOUND + FIXED (safety, earned): the handler fired while typing in ANY text
+  field — a user mid-form (scan paste box, AI chat, burn amount) hitting Alt+S
+  got whisked to /stats and lost form context. Now skips when the target is
+  INPUT/TEXTAREA/SELECT/contenteditable (~4 lines; the shortcut just needs a
+  re-press from outside the field). The /stats beacon exclusion (lines
+  190-191) RE-VERIFIED airtight: ping() checks window.location.pathname at
+  fire time, post-navigation, so Alt+S-triggered route changes beacon nothing.
+  tsc + eslint clean (one prettier --fix-shaped edit), build + deploy (v
+  00d909bf, ANALYTICS_KV binding present), LIVE-VERIFIED: served
+  index-C6OMh14A.js carries the isContentEditable guard; / /scan /burn /ai
+  /plan /roots /trade /wallet all 200 on the custom domain; /api/market 200
+  fresh non-stale (correct pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186);
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}). Zero wallet/signing/data-source/mascot touch,
+  no new data sources. (3) Considered and REJECTED: re-auditing SwapBox/Pro/
+  scan adversarial reviews (nothing on those surfaces changed since
+  07:03/05:33/07:43); force-exercising the /api/market stale path (manufactured
+  failure theater against a live edge — 08:23 mitigation audited 09:03, KV
+  fallback standing by); touching anything beyond the guard (nothing earned
+  it). #9 stays open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD
+  per Antonio 2026-09-29; #8/#10/#13 stay open as recurring.
+
+- 2026-09-30 10:03 ET run: backlog #8 DONE (bullish-demand research, recurring) ->
+  research + ONE earned ship: **Alt+S owner shortcut to /stats**.
+  (1) TWENTY-SEVENTH traffic read (KV, read-only, day-scoped keys):
+  2026-09-29 final 230 pv / 83 ev — byte-identical to the last twenty-one
+  reads (twenty-seventh straight; zero activity since ~01:23 ET);
+  2026-09-30 since midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 —
+  byte-identical to every read since 03:53), events quick_scan 1 +
+  wallet_connect 1, countries US 9 + JP 1 (the same single anonymous JP pv, no
+  events — noise, not signal). The 09:23 "flat = traffic/distribution" thesis
+  stands; still confounded by Antonio's Pro testing + auditor sessions. New
+  visibility this run (full 7-day read, not just today): 09-29 country mix was
+  US 202 / CA 1 / ID 2 / MY 1 / PH 1 / SE 1 (non-US = 6 pvs, zero events —
+  crawler-grade noise, same honesty verdict). (2) Feedback inbox: no new
+  entries — no fb keys on 09-29 or 09-30; the single known 2026-09-28 form
+  test remains dismissed. (3) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board
+  RE-VERIFIED LIVE via /api/pledges: still the single real pledge (too_dumb,
+  1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed).
+  /api/market 200 fresh (non-stale) with real DexScreener data through the
+  23:53 guards (dumb $0.000003909, correct pairAddress
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186, https chartUrl) — the 08:23 KV
+  stale-cache mitigation holds; amber watch stays closed. (4) Demand-surface
+  drift check (grep-level): "never promise price" x19 case-insensitive
+  (byte-identical), "5% instant burn" x9 with decomposition adjacent,
+  scan-pass 100k-SENT/~95k-lands copy intact ("95,000 lands" x2 in
+  TokenScanner.tsx), zero Robinhood refs in dump.ts (blackout holds) — no
+  drift anywhere. Tree quiet (git clean on src; zero node/npm processes; no
+  foreign writes). (5) THE SHIP: owner one-tap route to /stats
+  (src/routes/__root.tsx, ~18 lines): Alt+S on any route navigates to the
+  private /stats page. Hidden by design — /stats stays unlisted (no nav link,
+  not in sitemap.xml, robots-disallowed); the shortcut is not discoverable in
+  the UI, never tracks, never beacons (the /stats beacon exclusion already
+  covers it), wrapped in try/catch so it can never break the app. EVIDENCE:
+  Antonio had to ask how to reach his own private analytics (alignment
+  synthesis 2026-09-30) — real owner pain, not invented churn. Antonio needs
+  to be told the shortcut (a hidden route no one knows about helps no one) —
+  flag in the handoff. tsc + eslint clean, build + deploy (v
+  1fb9c46c-b130-4103-8446-918a870d93f8, ANALYTICS_KV binding present),
+  LIVE-VERIFIED in the served bundle (assets/index-CPtA1yzE.js carries the
+  Alt+S → /stats handler) and / /scan /burn /ai /plan /roots /trade /wallet
+  all 200 on the custom domain. Zero wallet/signing/data-source/mascot touch,
+  no new data sources. (6) Considered and REJECTED: an internal
+  burn_voluntary-event vs on-chain honesty canary (churn — one unreproduced
+  mismatch from 09-29 is a watch item, not machinery; build only if it
+  recurs); acting on the flat 09-30 numbers or the JP pv
+  (meaningless/confounded/crawler noise); outbound or in-site demand nudges
+  (hard boundary + no baseline). BULLISH-RESEARCH.md updated. #8 stays open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+
+- 2026-09-30 09:53 ET run: backlog #13 DONE (real-utility research, recurring) ->
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (git clean; zero node/npm processes; all src mtimes = the loop's
+  own known ships: 08:33 #10 roadmap, 08:23 #9 market-cache, 05:33 #9 signed
+  sessions, 04:46 FeedTheBurn fix). (1) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board
+  RE-VERIFIED LIVE via /api/pledges: still the single real pledge (too_dumb,
+  1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed).
+  /api/market: 1/1 probe 200 fresh (non-stale) with real DexScreener data
+  through the 23:53 guards (dumb $0.000003909, damp $0.00002116, correct
+  pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186, https chartUrl) —
+  the 08:23 KV stale-cache mitigation holds; amber watch stays closed.
+  (2) Drift check (grep-level): "never promise price" x19 case-insensitive
+  (byte-identical), "5% instant burn" x9 with decomposition adjacent, zero
+  Robinhood refs in dump.ts (blackout holds), scanner paste-box wallet gate
+  present — no drift anywhere. (3) Considered and REJECTED: a "scan my
+  holdings" funnel on /wallet (premature — 3 deep scans in 30 days means
+  discovery, not the funnel, is the bottleneck; NOTED for when scanner usage
+  exists); tx-hash acceptance in the /scan box (read-only, no new data
+  source, but same discovery-bottleneck verdict — NOTED alongside the
+  DexScreener-URL idea); a personal "your verified burns" panel on /wallet
+  (churn — zero burners beyond tests; BurnTicker already covers recent burns;
+  NOTED for the leaderboard era); a rug-recovery checklist (no
+  burn/deepening leg — fails the utility bar; speculative content without
+  Antonio's voice sign-off); a downloadable/PDF deep-scan report (duplicate
+  of the 09-28 shipped shareable report cards); a standalone impersonation
+  registry (already covered by /scan + ContractGuardrail + /story's
+  name-collision warning); touching src or shipping (nothing earned it).
+  BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /trade all 200
+  on the custom domain. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #13 stays open as recurring; #5 on Antonio's idea-only hold;
+  #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay open as recurring.
+
 - 2026-09-30 09:13 ET run: backlog #8 DONE (bullish-demand research, recurring) ->
   research-only, NO code changes, no build/deploy — nothing earned a ship.
   (1) TWENTY-SIXTH traffic read (KV, read-only, day-scoped keys): 2026-09-29
