@@ -104,14 +104,14 @@ const BRIEFS: Record<MissionType, string[]> = {
     "Use a Smiley Gallery scene as the base. Add one sharp line about receipts over rumors.",
   ],
   "Proof Post": [
-    "Post the DUMP contract address with a note telling people to verify for themselves. State only what you can prove.",
+    "Post the DUMB contract address with a note telling people to verify for themselves. State only what you can prove.",
     "Screenshot a block explorer page and explain one thing you personally checked.",
     "Share the explorer link and walk through one tab: holders, source, or transfers — no speculation.",
   ],
   "Recruit Holder": [
     "Invite one person who is new to crypto. Send them the beginner lesson, not a buy pitch.",
     "DM one friend the wallet-safety basics, then invite them to the community chat.",
-    "Bring one retail friend into Telegram with a 3-bullet explainer: what DUMP is, where receipts live, how to verify.",
+    "Bring one retail friend into Telegram with a 3-bullet explainer: what DUMB is, where receipts live, how to verify.",
   ],
   "Retail Lesson": [
     "Teach one habit: verify addresses, never share a seed phrase, size positions you can lose. One post, one lesson.",
@@ -158,8 +158,14 @@ const XP: Record<MissionType, number> = {
   "Smiley Reaction": 25,
 };
 
-/** Most XP any single real mission can award — used to sanity-check imports. */
-export const MAX_MISSION_XP = Math.max(...Object.values(XP));
+/**
+ * Most XP any single real mission can award — used to sanity-check imports.
+ * Daily missions award a flat +10 on top of the type value (see
+ * generateMission), so the cap has to include that bonus. Without it a
+ * top-tier daily mission awards 70 and parseStats silently clamps the
+ * user's own earned XP back down to 60 on every load.
+ */
+export const MAX_MISSION_XP = Math.max(...Object.values(XP)) + 10;
 
 export const todayKey = () => new Date().toISOString().slice(0, 10);
 

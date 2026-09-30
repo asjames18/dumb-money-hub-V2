@@ -1,7 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "../components/dumb/PageShell";
+import { pageMeta } from "../lib/page-meta";
+
+const TITLE = "Privacy — Dumb Money Hub";
+const DESCRIPTION =
+  "What the Dumb Money Hub does and does not collect: anonymous visit counts only — no cookies, no tracking, no wallet data.";
 
 export const Route = createFileRoute("/privacy")({
+  head: () => pageMeta("/privacy", TITLE, DESCRIPTION),
   component: PrivacyPage,
 });
 

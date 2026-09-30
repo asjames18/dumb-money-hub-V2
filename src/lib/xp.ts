@@ -106,7 +106,16 @@ export function loadStats(): XpStats {
 }
 
 export function saveStats(stats: XpStats) {
-  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+  // Persistence is best-effort: storage can be disabled, blocked, or over
+  // quota, and setItem throws in all three cases. A failed write must not
+  // abort the rest — the in-memory stats are still valid for this session,
+  // so still publish and still notify live components. Every other
+  // localStorage read/write in this codebase is guarded the same way.
+  try {
+    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+  } catch {
+    /* storage unavailable or over quota — keep the session working */
+  }
   publishToBoard(stats);
   // Live components (leaderboard, arcade chips) refresh without a reload.
   try {

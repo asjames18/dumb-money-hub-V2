@@ -15,7 +15,8 @@ const fmtB = (n: number) =>
 /** The next unhit milestone, or null once all three are crushed. */
 const nextMilestone = (burned: number): number | null => MILESTONES.find((m) => burned < m) ?? null;
 
-const milestoneShareUrl = (): string => `${window.location.origin}/burn`;
+const milestoneShareUrl = (): string =>
+  `${typeof window !== "undefined" ? window.location.origin : ""}/burn`;
 
 const milestoneShareText = (burned: number, next: number | null): string =>
   next === null

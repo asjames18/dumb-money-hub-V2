@@ -1,7 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageShell } from "../components/dumb/PageShell";
+import { pageMeta } from "../lib/page-meta";
+
+const TITLE = "Terms — Dumb Money Hub";
+const DESCRIPTION =
+  "The terms for using the Dumb Money Hub: an unaudited community tool for the DUMB token on PulseChain. Not financial advice.";
 
 export const Route = createFileRoute("/terms")({
+  head: () => pageMeta("/terms", TITLE, DESCRIPTION),
   component: TermsPage,
 });
 

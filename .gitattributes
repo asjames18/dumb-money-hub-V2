@@ -1,0 +1,9 @@
+# Normalize line endings on checkin so CRLF checkouts don't turn every file
+# into a "Delete ␍" prettier/eslint error (31k phantom lint problems on
+# Windows). Keeps the lint signal readable.
+* text=auto eol=lf
+
+# Lockfiles and generated files stay as-is.
+bun.lock -text
+package-lock.json -text
+src/routeTree.gen.ts -text

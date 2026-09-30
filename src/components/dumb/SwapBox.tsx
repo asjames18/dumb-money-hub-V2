@@ -900,6 +900,13 @@ export function SwapBox() {
       abi: erc20Abi,
       functionName: "approve",
       args: [PULSEX_V2_ROUTER, parsedIn],
+      // Belt-and-suspenders chain guard, matching BurnBox/TokenScanner/
+      // AiPreview: without chainId wagmi leaves assertChainId off and builds
+      // the client from whatever chain the connector reports at call time,
+      // so a wallet that flips networks between the button enabling and the
+      // signature would prepare the tx against 943 (or another chain) while
+      // these mainnet contract addresses are hardcoded.
+      chainId: pulsechain.id,
     });
   };
 
@@ -927,6 +934,7 @@ export function SwapBox() {
         functionName: "swapExactETHForTokensSupportingFeeOnTransferTokens",
         args: [minOut, [...route.path], address, deadline],
         value: parsedIn,
+        chainId: pulsechain.id,
       });
     } else if (route.kind === "eth-out") {
       // Sell DUMB/DAMP back to PLS: token -> WPLS through the pair, the
@@ -936,6 +944,7 @@ export function SwapBox() {
         abi: routerAbi,
         functionName: "swapExactTokensForETHSupportingFeeOnTransferTokens",
         args: [parsedIn, minOut, [...route.path], address, deadline],
+        chainId: pulsechain.id,
       });
     } else {
       // Direct single-hop and legacy multihop: the fee-supporting variant
@@ -945,6 +954,7 @@ export function SwapBox() {
         abi: routerAbi,
         functionName: "swapExactTokensForTokensSupportingFeeOnTransferTokens",
         args: [parsedIn, minOut, [...route.path], address, deadline],
+        chainId: pulsechain.id,
       });
     }
   };

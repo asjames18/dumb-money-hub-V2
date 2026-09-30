@@ -1,14 +1,21 @@
+# The private /stats page must stay out of every index. The most specific
+# user-agent group wins, so each named crawler needs its own Disallow —
+# a rule under "User-agent: *" alone does NOT cover the groups below.
 User-agent: Googlebot
 Allow: /
+Disallow: /stats
 
 User-agent: Bingbot
 Allow: /
+Disallow: /stats
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /stats
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /stats
 
 User-agent: *
 Allow: /

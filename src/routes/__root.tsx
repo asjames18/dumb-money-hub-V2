@@ -135,7 +135,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "DUMB MONEY — PulseChain's tax-burning meme token hub" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@dumpmoneydotwin" },
+      { name: "twitter:site", content: "@dumbmoneydotwin" },
       { name: "twitter:title", content: "Dumb Money Hub — The Home of Retail Crypto" },
       {
         name: "twitter:description",

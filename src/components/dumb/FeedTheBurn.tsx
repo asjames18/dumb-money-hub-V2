@@ -336,7 +336,8 @@ const TRANSFER_EVENT = parseAbiItem(
 // data, never invented). Same intent-button pattern as the burn leaderboard:
 // nothing ever posts automatically, and the shared link re-renders the same
 // live board for the viewer.
-const donorShareUrl = (): string => `${window.location.origin}/burn`;
+const donorShareUrl = (): string =>
+  `${typeof window !== "undefined" ? window.location.origin : ""}/burn`;
 
 const donorShareText = (rank: number, usd: number): string =>
   `I donated ${fmtUsdCompact(usd)} to the Feed-the-Burn vault — rank #${rank} on the Dumb Money all-time donor board. Every donation verified on-chain.`;

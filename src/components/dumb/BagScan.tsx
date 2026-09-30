@@ -318,7 +318,12 @@ export function BagScan() {
         <ul className="mt-3 divide-y divide-border rounded-md border border-border bg-background">
           {rows.map((row) => (
             <li key={row.address} className="flex flex-wrap items-center gap-2 px-3 py-2.5">
-              <span className="font-mono text-sm font-bold">
+              {/* The symbol comes from an arbitrary contract, so it can be any
+                  length and contain no break opportunities (a hex-ish string).
+                  min-w-0 + break-all keeps a hostile 40-char symbol from
+                  overflowing the row at 390px — flex-wrap can't help when
+                  there's nowhere to wrap. Same guard Proof.tsx uses. */}
+              <span className="min-w-0 break-all font-mono text-sm font-bold">
                 {row.result?.symbol ?? shortAddr(row.address)}
               </span>
               <VerdictChip result={row.result} />
