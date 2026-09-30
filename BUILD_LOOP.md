@@ -1,0 +1,8998 @@
+# PulseChain DUMB/DAMP — Build Loop State
+
+> DEPLOY ARCHITECTURE (verified 2026-09-29 ~23:30 ET): there is NO separate
+> production worker. `dumbmoneypulse.melanatedintech.com` is a custom domain
+> on the `dump-money-hub-preview` worker itself (Cloudflare API:
+> /accounts/{id}/workers/scripts/dump-money-hub-preview/domains). Every
+> "preview" deploy goes straight to the public site. Treat all deploys as
+> production deploys until Antonio approves a real preview/production split.
+
+- 2026-09-30 09:13 ET run: backlog #8 DONE (bullish-demand research, recurring) ->
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  (1) TWENTY-SIXTH traffic read (KV, read-only, day-scoped keys): 2026-09-29
+  final 230 pv / 83 ev — byte-identical to the last twenty reads
+  (twenty-sixth straight; zero activity since ~01:23 ET); 2026-09-30 since
+  midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 — byte-identical to
+  every read since 03:53), events quick_scan 1 + wallet_connect 1, countries
+  US 9 + JP 1 (the same single anonymous JP pv, no events — noise, not
+  signal). 09-29's composition (63 wallet_connects, 4 swap_quotes, 3 raid_play,
+  3 copy_contract) remains confounded by Antonio's Pro testing + auditor
+  sessions — no honest read beyond "flat = traffic/distribution" is available
+  yet. (2) Feedback inbox: no new entries — no fb keys on 09-29 or 09-30; the
+  single known 2026-09-28 form test remains dismissed. (3) Revisit scan: no
+  ripened items — /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board
+  RE-VERIFIED LIVE via /api/pledges: still the single real pledge (too_dumb,
+  1000 DUMB, unredeemed); /api/market 200 fresh (non-stale) with real
+  DexScreener data through the 23:53 guards (dumb $0.000003909, damp
+  $0.00002116, correct pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186,
+  https chartUrl) — the 08:23 KV stale-cache mitigation holds; amber watch
+  stays closed. (4) Demand-surface drift check (grep-level): "never promise
+  price" x19 case-insensitive (byte-identical), "5% instant burn" x9 with
+  decomposition adjacent, scan-pass 100k-SENT/~95k-lands copy intact
+  ("95,000 lands" x2 in TokenScanner.tsx), zero Robinhood refs in dump.ts
+  (blackout holds) — no drift anywhere. All src mtimes map exactly to known
+  loop-owned ships (08:33 #10 roadmap, 08:23 #9 market-cache, 05:33 #9 signed
+  sessions, 04:46 FeedTheBurn fix); zero node/npm processes; no foreign
+  writes. (5) Considered and REJECTED: a first-visit guided-tour overlay
+  (churn — /trade's 5-step walkthrough + gas guide and /story already cover
+  onboarding; the UX audit's IA gap is Antonio's call); an embeddable
+  ContractGuardrail "verified-contract kit" for other communities (zero
+  demand evidence — the 06:43 build-first precedent); a burn quote-card
+  generator (already-built: BurnBox share text + leaderboard share rows);
+  daily burn recaps on X (hard boundary: outbound comms); acting on 09-29's
+  event composition (confounded — invented enthusiasm is exactly what the
+  honesty rules forbid); touching src or shipping (nothing earned it).
+  (6) NOTED not rejected: the 09-29 burn_voluntary event<->chain mismatch
+  stays a data-quality watch item (audit the BurnBox event path if it recurs);
+  DexScreener-URL acceptance in the /scan box stays NOTED for when scanner
+  usage exists; gift-a-scan-pass / gift-a-Pro-pass stay parked for Antonio;
+  direct DUMB<->DAMP routing stays parked (his approval, per AGENTS.md).
+  BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /plan /roots
+  /trade /wallet all 200 on the custom domain. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #8 stays open as recurring;
+  #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29;
+  #9/#10/#13 stay open as recurring.
+
+- 2026-09-30 09:03 ET run: backlog #9 DONE (security/safety hardening, recurring)
+  -> audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (git clean; zero node/npm processes; no src writes since the loop's
+  own 08:33 #10 roadmap ship, already deployed + live-verified that run).
+  (1) TOKEN INTEGRITY MONITOR: exit 0 — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0, DAMP fees()=300 dist=(3333,0,3333,3334)
+  owner=0x0; DUMB supply 28B / dead 15,838,636,604 (56.6%), DAMP supply 1B /
+  dead 364,165,314 (36.4%) — every LOCKED claim the hub publishes still matches
+  live chain state; loop GREEN. Dead-balance deltas since 07:43 (+27,457 DUMB /
+  +1,037 DAMP) are protocol tax burn legs of ordinary taxed transfers,
+  consistent with light traffic. (2) ADVERSARIAL REVIEW: the 08:23 #9 ship
+  itself — the KV-backed stale-cache mitigation in src/server/market.ts (not
+  yet re-audited since it landed). HELD UP: best-effort KV write on success
+  (binding-absent early-return, whole write wrapped in try/catch — can never
+  break a live response); failure path prefers the fresh in-isolate cache
+  first (stale:true), then the KV snapshot, then the honest 502; KV reads
+  shape-validate (numeric at, dumb/damp objects, <15 min age, plus the KV
+  TTL's own 900s expiry as belt-and-braces); server.ts:111 passes the
+  request through so KV is reachable; JSON.parse corruption swallowed to
+  null; stale marker only added on failure paths; no wallet/secret/PII touch,
+  no new data source, minimal attack surface. The stale:false success shape
+  is byte-identical to pre-ship responses, so clients see zero behavior
+  change outside flake episodes. (3) LIVE: /api/market 3/3 probes 200 with
+  fresh (non-stale) DexScreener data through the 23:53 guards (dumb
+  $0.000003909, correct pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186,
+  https chartUrl) — the flake episodes self-recovered and the KV layer stays
+  a quiet standby; / /scan /burn /ai /plan /roots /trade /wallet all 200 on
+  the custom domain; /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}). (4) Considered and
+  REJECTED: force-exercising the stale path by blocking DexScreener (manufactured
+  failure theater against a live edge — the code path is linear and audited;
+  wait for a real flake); re-running the SwapBox/Pro/scan adversarial reviews
+  (07:03/06:23/07:43 — nothing on those surfaces changed since); touching src
+  or shipping (nothing earned it). Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #9 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-30 08:53 ET run: backlog #8 DONE (bullish-demand research, recurring) ->
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  (1) TWENTY-FIFTH traffic read (KV, read-only, day-scoped keys): 2026-09-29
+  final 230 pv / 83 ev — byte-identical to the last nineteen reads
+  (twenty-fifth straight; zero activity since ~01:23 ET); 2026-09-30 since
+  midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 — byte-identical to
+  every read since 03:53), events quick_scan 1 + wallet_connect 1, countries
+  US 9 + JP 1 (the same single anonymous JP pv, no events — noise, not
+  signal). NEW visibility: the day-scoped read exposed 09-29's full event
+  composition for the first time — {bag_scan:1, burn_voluntary:1,
+  copy_contract:3, quick_scan:3, raid_play:3, scan_started:4, swap_quote:4,
+  wallet_connect:63, watchlist_toggle:1}. The 09:23 "flat =
+  traffic/distribution" thesis stands; still confounded by Antonio's Pro
+  testing + auditor sessions, but the 63 wallet_connects + 4 swap_quotes are
+  real session activity. (2) Feedback inbox: no new entries — no fb keys on
+  09-29 or 09-30; the single known 2026-09-28 form test remains dismissed.
+  (3) Revisit scan: no ripened items — /api/scan-stats flat since 03:50
+  09-29 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge
+  board RE-VERIFIED LIVE via /api/pledges: still the single real pledge
+  (too_dumb, 1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67,
+  unredeemed); /api/market 200 fresh (non-stale) with real DexScreener data
+  through the 23:53 guards (dumb $0.000003909, damp $0.00002116, correct
+  pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186, https chartUrl) —
+  the 08:23 KV stale-cache mitigation holds; amber watch stays closed.
+  (4) ON-CHAIN VERIFICATION of the 09-29 event surface (new this run):
+  scanned ALL Transfer(to=dead) logs for DUMB (37 txs) and DAMP (34 txs)
+  across the full 09-29 ET window (~13k blocks, no chunk failures), grouped
+  legs per tx per sender. Real trading CONFIRMED: sells/swaps through the
+  pairs incl. hub-SwapBox-shaped multihop trades, plus one third-party
+  contract (0x0e723e98 — has code; receipt-classified on tx 0xfc21cb4ea1a6
+  as taxed legs of its own router operations, NOT a hub path). BUT: no tx
+  on either token matches the voluntary-burn signature (two to-dead legs,
+  same sender, ~94:1 / ~98:1) — the burn_voluntary:1 event has NO on-chain
+  counterpart; single-leg EOA transfers are all protocol burn legs of
+  ordinary taxed transfers. Per honesty rules the event stays UNVERIFIED and
+  is NOT counted as a real burn; logged as a BurnBox data-quality watch
+  item (audit the event path if it recurs). (5) Demand-surface drift check
+  (grep-level): "never promise price" x19 case-insensitive (byte-identical),
+  "5% instant burn" x9 with decomposition adjacent, scan-pass
+  100k-SENT/~95k-lands copy intact ("95,000 lands" x2 in TokenScanner.tsx),
+  zero Robinhood refs in dump.ts (blackout holds) — no drift anywhere.
+  (6) Considered and REJECTED: claiming the burn_voluntary event as a real
+  community burn (no on-chain proof — exactly the invented-enthusiasm the
+  honesty rules forbid); a "whale watch" on to-dead legs (the eye-catching
+  legs are protocol burn legs of taxed transfers, not whale signals);
+  listing/linking third-party contract 0x0e723e98 (unverified, not ours —
+  safety-first brand doesn't endorse external contracts); acting on the
+  flat 09-30 numbers or the JP pv (meaningless/confounded/crawler noise);
+  outbound or in-site demand nudges (hard boundary + no baseline); touching
+  src or shipping (nothing earned it). NOTED not rejected: the
+  burn_voluntary event<->chain mismatch as a watch item; gift passes parked
+  for Antonio; direct DUMB<->DAMP routing parked (his approval, per
+  AGENTS.md). BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai
+  /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays
+  open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 08:43 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (only the loop's own 05:33 #9 session ship + 08:23 #9 market-cache
+  ship in-tree, both deployed + live-verified their runs; zero node/npm
+  processes). (1) Revisit scan: no ripened items — /api/scan-stats flat since
+  03:50 09-29 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  pledge board RE-VERIFIED LIVE via /api/pledges: still the single real pledge
+  (too_dumb, 1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67,
+  unredeemed). (2) /api/market: 3/3 probes 200 with real DexScreener data
+  through the 23:53 guards (dumb $0.000003909, damp $0.00002116, correct
+  pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186, https chartUrl) —
+  the 08:23 KV stale-cache mitigation holds; the 06:03–08:13 flake episodes
+  have self-recovered; no stale:true needed this run; amber watch item closes
+  for now. (3) AI knowledge staleness check (04:23 precedent): clean —
+  scanner answer names the paste-box wallet gate; Pro answer ("tied to the
+  wallet that paid") stays accurate post-05:33 signed sessions (invisible
+  internals, no copy change earned); 08:33 roadmap signed-sessions line
+  (dump.ts:252) accurate and live. (4) Demand-surface drift check (grep-level):
+  "never promise price" ×19 case-insensitive (byte-identical to prior reads),
+  zero Robinhood refs in dump.ts (blackout holds). (5) Considered and REJECTED:
+  DexScreener-URL acceptance in the /scan box (still un-earned — discovery,
+  not the paste box, is the bottleneck; stays NOTED for revisit when scanner
+  usage exists), mobile acceptance testing (Antonio's call, not a loop
+  decision), Pro free-question rollover or gift-pass experiments (freemium
+  boundary locked — "free is free and free is limited"), batch/multi-address
+  scan queue (zero demand base — machinery for a nonexistent cohort is churn),
+  touching src or shipping (nothing earned it). NOTED not rejected:
+  gift-a-deep-scan-pass / gift-a-Pro-pass parked for Antonio (promo/pricing-
+  adjacent, zero demand base); direct DUMB↔DAMP routing parked (his approval,
+  per AGENTS.md). BULLISH-RESEARCH.md updated. Live health: / /scan /burn
+  /ai /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #13 stays
+  open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #8/#9/#10 stay open as recurring.
+- 2026-09-30 08:33 ET run: backlog #10 DONE (roadmap hygiene, recurring) ->
+  SHIPPED one ROADMAP addition in src/data/dump.ts ("Dumb AI Pro" entry):
+  "Wallet-signed Pro sessions — every paid request re-authorizes on a fresh
+  wallet-signed session that expires in 30 minutes, so a claimed address alone
+  never gets paid answers and a captured session can't be reused past its
+  window; signing costs nothing and nothing moves." This closes the one real
+  gap found by diffing the ROADMAP against everything shipped since the last
+  #10 run (07:13) — the 05:33 run's signed short-lived Pro sessions (the
+  authz gate that met the real-money-Pro-test precondition) had no roadmap
+  line. Everything else audited byte-current: the 08:23 KV market stale-cache
+  mitigation is already documented in the "Analytics home" entry; scanner,
+  burns, pledges, vault, Pro payment/80-20 terms, /terms+/privacy, watchlist,
+  "scan my bags", tx explainer, brag cards, milestone strip, username card,
+  approvals section all match live behavior; no status flips earned (Week 1/2/3
+  done:true correct; "60 days"/"90 days"/Planned entries still pending); zero
+  Robinhood refs in dump.ts (blackout holds). Considered and REJECTED: new
+  "Planned" roadmap entries for parked ideas (gift-a-scan-pass / gift-a-Pro-pass
+  / DexScreener-URL acceptance / direct DUMB<->DAMP routing — all parked on
+  Antonio's call, roadmap only lists planned/thinking items with momentum) and
+  churn-touches like rewording done items. tsc + eslint clean, build + deploy
+  (v d47ac972, ANALYTICS_KV binding present), live-verified: / /plan /scan
+  /burn /ai /roots /trade /wallet all 200 on the custom domain, new line
+  confirmed in the served bundle (assets/dump-a3SSTAI6.js). Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #10 stays
+  open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #8/#9/#13 stay open as recurring.
+- 2026-09-30 08:23 ET run: backlog #9 DONE (security/safety hardening, recurring)
+  → SHIPPED the KV-backed stale-cache mitigation for /api/market (the earned
+  #9 unit: graduation condition met — 502s persisted across 2+ runs with
+  worsening density at 08:13, per the 07:53 pre-authorization). On success,
+  handleMarket() now best-effort-writes `market:cache` (15-min TTL) into
+  ANALYTICS_KV via the established getEnv(request) pattern
+  (analytics.ts:66-73); server.ts:110 now passes request through so KV is
+  reachable; on double-fetch failure the handler serves a KV payload <15 min
+  old with `stale:true` (Roots.tsx:349 already renders "stale — feed
+  unreachable, last good snapshot"), else the honest 502. Honest by
+  construction: never stale beyond 15 min, never invented numbers, no new
+  data source (DexScreener still the only upstream), no secrets/wallet/
+  mascot touch. KV reads shape-validate (numeric at, dumb/damp objects);
+  write failures are swallowed so the fallback layer can never break a live
+  response. tsc + eslint clean (2 fixes this run: TS4111 bracket access,
+  prettier line wrap), build + deploy ×2, live-verified: /api/market 200 ×5
+  fresh (non-stale, priceUsd 3.909e-06 / 2.116e-05), / /scan /burn /ai
+  /roots /trade /wallet all 200. Standing #9 token-integrity-check.py: exit 0
+  — locked claims (DUMB fees 600 / dist 3333,3333,1667,1667 / renounced; DAMP
+  fees 300 / dist 3333,0,3333,3334 / renounced) all match chain state.
+  ROADMAP Analytics-home line updated to document the labeled stale-snapshot
+  fallback. Tree otherwise quiet. #9 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as
+  recurring.
+- 2026-09-30 08:13 ET run: backlog #8 DONE (bullish-demand research, recurring) ->
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own 05:33 #9 signed-session ship at
+  05:37 ET, already deployed + live-verified that run; one transient node
+  process, gone — zero node/npm processes).
+  (1) TWENTY-FOURTH traffic read (KV, read-only, day-scoped keys): 2026-09-29
+  final ~229 pv / 83 ev — byte-identical to the last eighteen reads
+  (twenty-fourth straight; zero activity since ~01:23 ET); 2026-09-30 since
+  midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 — byte-identical to
+  every read since 03:53), events quick_scan 1 + wallet_connect 1, countries
+  US 9 + JP 1 (the same single anonymous JP pv, no events — noise, not
+  signal). The 09:23 "flat = traffic/distribution" thesis stands; still
+  confounded by Antonio's Pro testing + auditor sessions. (2) Feedback inbox:
+  no new entries — no fb keys on 09-29 or 09-30; the single known 2026-09-28
+  form test remains dismissed. (3) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board RE-VERIFIED LIVE via /api/pledges:
+  still the single real pledge (too_dumb, 1000 DUMB,
+  0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed).
+  (4) /api/market GRADUATES to incident-track: probe 1 returned 200 with real
+  DexScreener data through the 23:53 guards (dumb $0.000003909, correct
+  pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186, https chartUrl; DAMP
+  $0.00002116), then THREE consecutive honest 502s
+  ({"ok":false,"reason":"Market data unavailable."}). 502s have now occurred
+  across BOTH runs since the 07:53 graduation condition ("persist across 2+
+  more runs") — 08:03 showed one, 08:13 shows three of four; four episodes in
+  ~2 hours (06:03, 07:33, 07:53, 08:13) with worsening density. Code check
+  this run: market.ts:125-151 ALREADY serves a stale in-isolate snapshot
+  (60s) — the gap is cross-isolate churn, which only a KV cache closes.
+  The KV-backed stale-cache mitigation is now an EARNED #9 unit per the 07:53
+  pre-authorization. Verified design for the next #9 run: on success,
+  best-effort KV put `market:cache` (TTL ~15 min) into ANALYTICS_KV via the
+  getEnv(request) pattern (analytics.ts:66-73); server.ts:110 calls
+  handleMarket() without the request — pass it through so KV is reachable;
+  on double-fetch failure read KV, if payload <15 min old return it with
+  stale:true (Roots.tsx:349 already renders "stale — feed unreachable, last
+  good snapshot"), else the honest 502. Honest by construction, no new data
+  source, no wallet/secrets/mascot touch. User-facing state stays honest by
+  design meanwhile (Roots.tsx:102); no funds at risk, no claim broken —
+  incident-track, NOT a pause condition.
+  (5) Demand-surface drift check (grep-level): "never promise price" x19
+  case-insensitive (byte-identical), "5% instant burn" x9 with decomposition
+  adjacent, scan-pass 100k-SENT/~95k-lands copy intact ("95,000 lands" x2 in
+  TokenScanner.tsx), zero Robinhood refs in dump.ts (blackout holds) — no
+  drift anywhere. (6) Considered and REJECTED: acting on the flat numbers or
+  the JP pageview (meaningless/confounded/crawler noise); outbound or in-site
+  demand nudges (hard boundary + no baseline); burn streaks/badges
+  (premature — hollow recognition for a zero-opted-in base); a "why burns
+  can't save a dead token" explainer on /burn (churn — the honest framing is
+  already on-site x19); an embeddable /roots widget (zero demand evidence;
+  build-first pattern, per the 06:43 precedent); touching src or shipping
+  (nothing earned it). (7) NOTED not rejected: DexScreener-URL acceptance in
+  the /scan box (revisit when scanner usage exists); gift-a-deep-scan-pass
+  and gift-a-Pro-pass stay parked for Antonio (promo/pricing-adjacent, zero
+  demand base); direct DUMB<->DAMP pair routing stays parked (his approval,
+  per AGENTS.md). BULLISH-RESEARCH.md updated. Live health: / /scan /burn
+  /ai /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring — next #9 run owns the KV
+  market-cache unit.
+- 2026-09-30 08:03 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own prior ships: last write = the
+  05:33 #9 signed-session ship at 05:37 ET, already deployed + live-verified
+  that run; one transient node process). (1) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board RE-VERIFIED LIVE via /api/pledges:
+  still the single real pledge (too_dumb, 1000 DUMB,
+  0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed). (2) /api/market:
+  2 of 3 probes 200 with real DexScreener data through the 23:53 guards
+  (dumb $0.000003854, correct pairAddress, https chartUrl, volume $31.66 h24,
+  1 buy / 9 sells); the third probe was the designed honest 502. The 07:53
+  amber watch item does NOT graduate: this is the known intermittent flake
+  shape (06:03, 07:33, 07:53 episodes all self-recovered), not "502s persist
+  across 2+ more runs" — the honest unavailable state renders correctly on
+  /roots (Roots.tsx:102), no claim broken, no funds at risk; the KV-backed
+  stale-cache mitigation stays parked pending real persistence evidence.
+  (3) AI knowledge staleness check (04:23 precedent): clean — scanner answer
+  still names the paste-box wallet gate ("someone else's burn hash won't
+  count" ×1); Pro answer ("tied to the wallet that paid" ×1) stays accurate
+  post-05:33 signed sessions (invisible internals, no copy change earned).
+  (4) Considered and REJECTED: escalating /api/market to incident + shipping
+  the KV stale-cache mitigation now (2/3 success = graduation condition
+  unmet; churn); client-side auto-retry on market !ok (would add pressure to
+  the suspected shared-egress-IP rate-limiting, making flakes worse); a
+  second price API as fallback (new external data source = hard boundary);
+  batch/multi-address scan queue (zero demand base — 3 deep scans in 30 days
+  total; machinery for a cohort that doesn't exist is churn); Pro free-
+  question rollover (freemium boundary locked by Antonio — "free is free and
+  free is limited"; loosening caps without his call is overreach); touching
+  src or shipping (nothing earned it). BULLISH-RESEARCH.md updated. Live
+  health: / /scan /burn /ai /plan /roots /trade /wallet all 200 on the custom
+  domain. Zero wallet/signing/data-source/mascot touch, no new data sources.
+  #13 stays open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29; #8/#9/#10 stay open as recurring.
+- 2026-09-30 07:53 ET run: backlog #8 DONE (bullish-demand research, recurring) ->
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own 05:33 #9 signed-session ship at
+  05:37 ET, already deployed + live-verified that run; one transient node
+  process, now gone — zero node/npm processes).
+  (1) TWENTY-THIRD traffic read (KV, read-only, day-scoped keys): 2026-09-29
+  final 230 pv / 83 ev — byte-identical to the last seventeen reads
+  (twenty-third straight; zero activity since ~01:23 ET); 2026-09-30 since
+  midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 — byte-identical to
+  every read since 03:53), events quick_scan 1 + wallet_connect 1, countries
+  US 9 + JP 1 (the same single anonymous JP pv, no events — noise, not
+  signal). The 09:23 "flat = traffic/distribution" thesis stands; still
+  confounded by Antonio's Pro testing + auditor sessions. (2) Feedback inbox:
+  no new entries — no fb keys on 09-29 or 09-30; the single known 2026-09-28
+  form test remains dismissed. (3) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board RE-VERIFIED LIVE via /api/pledges:
+  still the single real pledge (too_dumb, 1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed).
+  (4) /api/market FLAKE EPISODE: 5 consecutive honest 502s
+  ({"ok":false,"reason":"Market data unavailable."}) over ~5 min — a longer
+  episode than the self-recovering 06:03 and 07:33 flakes. Direct sandbox
+  probe of api.dexscreener.com for the flagship pair returned healthy in
+  0.6s, so the upstream is up; the fault sits between the worker edge and
+  DexScreener (likely shared-egress-IP rate limiting). User-facing state
+  stays honest by design: /roots renders "Market data unavailable right now
+  — the feed might be rate-limiting. Nothing is guessed in…" (Roots.tsx:102).
+  Verdict: amber, not red — no funds at risk, no claim broken; NOT a pause
+  condition. Watch item for the next runs: if 502s persist across 2+ more
+  runs it graduates to incident, and a KV-backed stale-cache mitigation (TTL
+  ~15 min, stale:true marker) becomes an earned #9 unit. (5) Demand-surface
+  drift check (grep-level): "never promise price" ×19 case-insensitive
+  (byte-identical), "5% instant burn" ×9 with decomposition adjacent,
+  scan-pass 100k-SENT/~95k-lands copy intact ("95,000 lands" ×2 in
+  TokenScanner.tsx), zero Robinhood refs in dump.ts (blackout holds) — no
+  drift anywhere. (6) Considered and REJECTED: acting on flat numbers or the
+  JP pv (meaningless/confounded/crawler noise); outbound or in-site demand
+  nudges (hard boundary + no baseline); burn-to-unlock gated premium content
+  (pricing-adjacent, zero demand base, irreversible-burn paywall nobody asked
+  for); a Telegram activity feed on the hub (new external data source +
+  unmoderated third-party content on a safety-first site); referral/affiliate
+  kickbacks (promised-returns-adjacent, vetoed); a "Dumb of the week"
+  spotlight (zero opted-in members — honesty rules); touching src or shipping
+  (nothing earned it). (7) NOTED not rejected: gift-a-deep-scan-pass and
+  gift-a-Pro-pass stay parked for Antonio (promo/pricing-adjacent, zero
+  demand base); direct DUMB<->DAMP pair routing stays parked (his approval,
+  per AGENTS.md). BULLISH-RESEARCH.md updated. Live health: / /scan /burn
+  /ai /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 07:43 ET run: backlog #9 DONE (security/safety hardening, recurring) ->
+  audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own 05:33 #9 signed-session ship at
+  05:37 ET, already deployed + live-verified that run; zero node/npm processes).
+  (1) TOKEN INTEGRITY MONITOR: exit 0 — DUMB fees()=600 dist=(3333,3333,1667,1667)
+  owner=0x0, DAMP fees()=300 dist=(3333,0,3333,3334) owner=0x0; DUMB supply 28B /
+  dead 15,838,609,147 (56.6%), DAMP supply 1B / dead 364,164,288 (36.4%) — every
+  LOCKED claim the hub publishes still matches live chain state; loop GREEN.
+  Dead-balance deltas since 07:03 (+37,273 DUMB / +1,011 DAMP) are protocol tax
+  burn legs of ordinary taxed transfers, consistent with light traffic.
+  (2) ADVERSARIAL REVIEW: deep-scan pass verification path (TokenScanner.tsx +
+  token-scan.ts), the surface changed by the 2026-09-29 paste-box wallet gate.
+  HELD UP: verifyScanBurn requires receipt success + tx.to = DUMB + plain
+  transfer() calldata + recipient = dead + >=100k DUMB + a receipt Transfer(from,
+  dead) log; paste path additionally gates verified.from == connected wallet
+  (case-insensitive) so no one claims a pass with a stranger's burn hash;
+  wallet/PLS paths use only the wallet's own broadcast hash; shared ?burn= links
+  re-verify on-chain and issue no pass. Residual client-side-only replay guard
+  (localStorage USED_BURNS_KEY) is benign — re-claiming your own already-paid
+  burn costs nothing and grants nothing new; the pass gates only client-side
+  RPC calls, no server resource. No fix earned. (3) Live health: / /scan /burn
+  /ai /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #9 stays open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29;
+  #8/#10/#13 stay open as recurring.
+## Run log
+- 2026-09-30 07:33 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (all src mtimes = the loop's own 05:33 #9 signed-session ship at 05:37 ET,
+  already deployed + live-verified that run; zero node/npm processes).
+  (1) TWENTY-SECOND traffic read (KV, read-only, day-scoped keys): 2026-09-29
+  final 230 pv / 83 ev — byte-identical to the last sixteen reads (twenty-second
+  straight; zero activity since ~01:23 ET); 2026-09-30 since midnight: 9 pv
+  (/ 3, /burn 3, /ai 1, /scan 1, /story 1 — byte-identical to every read since
+  03:53), events quick_scan 1 + wallet_connect 1, countries US 9 + JP 1 (the same
+  single anonymous JP pv, no events — noise, not signal). The 09:23 "flat =
+  traffic/distribution" thesis stands; still confounded by Antonio's Pro testing
+  + auditor sessions. (2) Feedback inbox: no new entries — no fb keys on 09-29
+  or 09-30; the single known 2026-09-28 form test remains dismissed.
+  (3) Revisit scan: no ripened items — /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board
+  RE-VERIFIED LIVE via /api/pledges: still the single real pledge (too_dumb,
+  1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed);
+  /api/market first hit 502 at 07:33 (transient upstream/cold-start flake, NOT
+  a site fault — recovered on retry 8s later) with real DexScreener data through
+  the 23:53 guards (dumb $0.000003976, correct pairAddress, https chartUrl —
+  unchanged). (4) Demand-surface drift check (grep-level): "never promise price"
+  ×19 case-insensitive (byte-identical), "5% instant burn" ×9 with decomposition
+  adjacent, scan-pass 100k-SENT/~95k-lands copy intact ("95,000 lands" ×2 in
+  TokenScanner.tsx:932,1019), zero Robinhood refs in dump.ts (blackout holds).
+  (5) Self-check on the run's only ship candidate: a scan-activity social-proof
+  strip was ALREADY SHIPPED (src/components/dumb/ScanActivity.tsx, anti-abuse
+  hardened) — rejected as already-built, no duplicate ship. (6) Considered and
+  REJECTED: a "Dumbest contract on PulseChain" public-shaming board
+  (reputational/legal exposure, brand turns fear-mongering, burns nothing —
+  fails the utility bar); batch tax-watch/tax-change alerts (covered by the
+  07:23 verdict-change-alerts rejection: new dependency + identity surface,
+  violates the local-only privacy design, burns nothing). (7) PARKED for
+  Antonio: gift-a-deep-scan-pass, gift-a-Pro-pass (promo/pricing-adjacent, zero
+  demand base); direct DUMB↔DAMP routing (needs his approval, per AGENTS.md).
+  BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /plan /roots
+  /trade /wallet all 200 on the custom domain. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #8 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay open as
+  recurring.
+- 2026-09-30 07:23 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own prior ships: last write = the
+  05:33 #9 signed-session ship at 05:37 ET, already deployed + live-verified
+  that run; zero node/npm processes). (1) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board still the single real pledge
+  (too_dumb, 1000 DUMB, unredeemed); /api/market 200 with real DexScreener
+  data through the 23:53 guards (dumb $0.000003976, correct pairAddress, https
+  chartUrl — unchanged). (2) AI knowledge staleness check (04:23 precedent):
+  clean — scanner answer (dump.ts:403) still names the paste-box wallet gate
+  ("someone else's burn hash won't count"); Pro answer (dump.ts:419, "tied to
+  the wallet that paid") stays accurate post-05:33 signed sessions (invisible
+  internals, no copy change earned). (3) Considered and REJECTED: (a) Pro
+  scan-explainer sharing with a non-Pro friend via shared quota — punches a
+  hole in the $20 Pro pricing wall with no demand base (Antonio's call if he
+  ever wants a referral mechanic); (b) verdict-change push/email alerts for
+  the browser-local /scan watchlist — new dependency + identity surface,
+  violates the deliberate local-only privacy design, burns/deepens nothing.
+  (4) PARKED for Antonio: gift-a-Pro-pass (burn DUMB to grant a 30-day Pro
+  pass to another wallet — burns supply, brings outsiders in, no custody;
+  pricing/revenue-adjacent with zero demand base, same bucket as
+  gift-a-deep-scan-pass). BULLISH-RESEARCH.md updated. Live health: / /scan
+  /burn /ai /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #13 stays
+  open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #8/#9/#10 stay open as recurring.
+- 2026-09-30 07:13 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (zero src writes since the loop's own 05:33 #9 signed-session ship,
+  already deployed + live-verified that run; git clean; zero node/npm
+  processes). (1) Done flags re-verified honest: 9 done:true / 4 done:false —
+  byte-identical to the 06:33 verified state, no status flips earned. (2)
+  Claim freshness re-verified: exact "never promise price" ×19
+  case-insensitive across 13 files (byte-identical to every prior read), "5%
+  instant burn" ×9 with decomposition adjacent, scan-pass 100k-SENT/~95k-lands
+  copy intact ("95,000 lands" ×2 in TokenScanner.tsx), zero Robinhood
+  references in dump.ts (blackout holds). (3) Nothing shipped since the 06:33
+  #10 is missing from the ROADMAP: the 06:43 (#13), 06:53 (#8), and 07:03 (#9)
+  runs were all audit-only; the 05:33 #9 signed-session ship stays off the
+  ROADMAP per the invisible-security-internals precedent (reaffirmed). (4)
+  Considered and REJECTED: any done-flag flip (none earned — recurring items
+  stay pending by design), a ROADMAP line for the signed sessions (invisible
+  internals, no user-facing copy change), touching src (nothing earned it).
+  Live health: / /scan /burn /ai /plan /roots /trade /wallet all 200 on the
+  custom domain. Zero wallet/signing/data-source/mascot touch, no new data
+  sources. #8/#9/#13 stay open as recurring; #5 on Antonio's idea-only hold;
+  #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 07:03 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own prior ships: last write =
+  the 05:33 #9 signed-session ship, already deployed + live-verified that
+  run; zero node/npm processes). (1) TOKEN INTEGRITY MONITOR: exit 0 —
+  DUMB fees()=600 dist=(3333,3333,1667,1667) owner=0x0, DAMP fees()=300
+  dist=(3333,0,3333,3334) owner=0x0; DUMB supply 28B / dead 15,838,571,874
+  (56.6%), DAMP supply 1B / dead 364,163,277 (36.4%) — every LOCKED claim
+  the hub publishes still matches live chain state; loop GREEN. Dead
+  balances byte-identical to the 04:03/05:33/06:23 reads — zero burns since,
+  consistent with flat traffic. Script completed in ~96s this run (no RPC
+  hang — the hardened retry/backoff holds). (2) ADVERSARIAL REVIEW:
+  SwapBox end-to-end (src/components/dumb/SwapBox.tsx, all 1602 lines) —
+  the highest-value real-money surface not yet re-audited since the recent
+  Pro/session work. HELD UP: tax math side-aware and correct (input tax
+  reduces the amount BEFORE getAmountsOut on sells, output tax AFTER on
+  buys, both on DUMB<->DAMP — exactly the locked model); minOut computed
+  in post-output-tax units, matching the SupportingFeeOnTransfer router's
+  balance-delta check on the recipient; exact-amount approvals only (never
+  infinite) with allowance refetch after approve; receipt status check —
+  reverted txs never celebrated (txSucceeded requires receipt.status
+  success), share buttons render only on txSucceeded + hash and use the
+  at-send lastTrade snapshot with honest copy ("~", "No promises", DYOR);
+  impact math consistent on the input-side reserve convention with the
+  two-leg 1-(1-l1)(1-l2) multihop composition, 5% warn / 25% block gates;
+  PulseChain-only gate, no-route states honest, "Quotes unavailable — try
+  again" disables the button (never signs blind); MAX on PLS leaves a 1-PLS
+  gas buffer + the 0.05-PLS gas warning with gas-guide link; unknown-tax
+  warning copy intact for non-curated-side tokens; curated tokens only, no
+  paste-any-address; 8% default slippage, 20-min deadline; wallet-side and
+  on-chain failure events tracked by category only (raw errors never leave
+  the device). (3) SOFT NOTE (not churn): on sell multihop into an
+  unknown-tax output token, the minOut/quote are pre-output-tax by design —
+  the "may carry its own transfer tax — not reflected here" copy covers it;
+  nothing user-facing is wrong. (4) Served-layer health: / /scan /burn /ai
+  /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8/#10/#13
+  stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29.
+- 2026-09-30 06:53 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (all src mtimes = the loop's own prior ships: last write =
+  the 05:33 #9 signed-session ship, already deployed + live-verified that run;
+  zero node/npm processes). (1) TWENTY-FIRST traffic read (KV, read-only,
+  day-scoped keys): 2026-09-29 final 230 pv / 83 ev — byte-identical to the last
+  fifteen reads (twenty-first straight, zero activity since ~01:23 ET);
+  2026-09-30 since midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 —
+  byte-identical to every read since 03:53), events quick_scan 1 +
+  wallet_connect 1, countries US 9 + JP 1 (the same single anonymous JP pv, no
+  events — noise, not signal). The 09:23 "flat = traffic/distribution" thesis
+  stands for the twenty-first straight read; still confounded by Antonio's Pro
+  testing + auditor sessions. (2) Feedback inbox: no new entries — no fb keys on
+  09-29 or 09-30; the single known 2026-09-28 form test remains dismissed.
+  (3) Revisit scan: no ripened items — /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board
+  RE-VERIFIED LIVE via /api/pledges: still the single real pledge (too_dumb,
+  1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed);
+  /api/market 200 with real DexScreener data through the 23:53 guards (dumb
+  $0.000003976, correct pairAddress, https chartUrl — unchanged). (4)
+  Demand-surface drift check (grep-level): "never promise price" ×19
+  case-insensitive (byte-identical), "5% instant burn" ×9 with decomposition
+  adjacent, scan-pass 100k-SENT/~95k-lands copy intact ("95,000 lands" ×2 in
+  TokenScanner.tsx), the only src "Robinhood" hits are the standing blackout
+  guardrail (knowledge.ts ×2) — no drift anywhere. (5) Cooldown-probe correction
+  re-verified in code (token-scan.ts:1252-1277 — the 5j owner-cooldown probe is
+  LIVE: setter impersonation + tradingCooldown/cooldownEnabled getters). (6)
+  Considered and REJECTED: any demand move on the flat numbers (twenty-first
+  straight identical read, statistically meaningless, confounded); acting on the
+  single JP pv (stray-crawler noise — inventing a signal would violate the
+  honesty rules); a verdict-less "recently scanned tokens" public feed
+  (addresses + symbols only, no verdicts — REJECTED on three counts: leaks what
+  visitors research = privacy surface the hub avoids; burns/deepens nothing =
+  fails the utility bar; a public "what's being checked" list is social-proof
+  advertising a honeypot maker would want their token on); outbound or in-site
+  demand nudges (hard boundary + no baseline); burn leaderboard/contest push (1
+  real pledge, no demand base, #5 on Antonio's idea-only hold); touching src or
+  shipping (nothing earned it). NOTED not rejected: gift-a-deep-scan-pass stays
+  PARKED for Antonio (promo/pricing-adjacent, zero demand base); deep-scan pass
+  promo experiments parked per the 05:53 precedent; direct DUMB↔DAMP pair routing
+  parked (Antonio's approval, per AGENTS.md). BULLISH-RESEARCH.md updated. Live
+  health: / /scan /burn /ai /plan /roots /trade /wallet all 200 on the custom
+  domain. Zero wallet/signing/data-source/mascot touch, no new data sources. #8
+  stays open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 06:43 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own prior ships: last write = the
+  05:33 #9 signed-session ship, already deployed + live-verified that run;
+  zero node/npm processes). (1) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board RE-VERIFIED LIVE via
+  /api/pledges: still the single real pledge (too_dumb, 1000 DUMB,
+  0x3d5a3eab832bdf9659d0882daf1a146d228a9c67, unredeemed); /api/market 200
+  with real DexScreener data through the 23:53 guards (dumb $0.000003976,
+  correct pairAddress, https chartUrl — unchanged). (2) AI knowledge
+  staleness check (04:23 precedent): clean — scanner answer still names the
+  paste-box wallet gate; Pro answer ("tied to the wallet that paid") stays
+  accurate post-05:33 signed sessions (invisible internals, no copy change
+  earned). Deep-scan pass irreversibility disclosure VERIFIED present in
+  TokenScanner.tsx copy ("permanent and can never be recovered" ×2, "burned
+  forever" ×1) — no gap vs the /burn checkbox. (3) Stale-note correction:
+  the 06:03 log's "trading-cooldown probe stays DEFERRED" is wrong — the
+  cooldown probe (5j) is LIVE in token-scan.ts:1252-1277 and in the AI
+  knowledge answer; stop calling it deferred. (4) Considered and REJECTED:
+  embeddable quick-scan widget for other communities (no demand evidence —
+  building distribution plumbing before the first distribution conversation
+  is the build-first pattern the charter rejects; Antonio's gap is
+  distribution, not product), owner-LP-holder-concentration probe (marginal
+  machinery — existing LP copy already handles it honestly). (5) PARKED for
+  Antonio: direct DUMB↔DAMP pair routing (one hop vs two, liquid pair) —
+  needs his explicit approval per AGENTS.md, not a per-run decision.
+  BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /plan /roots
+  /trade /wallet all 200 on the custom domain. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #13 stays open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #8/#9/#10 stay open as recurring.
+- 2026-09-30 06:33 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (zero src writes since the loop's own 05:33 #9 signed-session ship,
+  already deployed + live-verified that run; zero node/npm processes). (1)
+  Done flags re-verified honest: 9 done:true / 4 done:false —
+  byte-identical to the 05:43 verified state, no status flips earned. (2)
+  Claim freshness re-verified: exact "never promise price" ×19
+  case-insensitive (13-file distribution byte-identical to prior reads), "5%
+  instant burn" ×3 in dump.ts / ×9 across src with decomposition adjacent,
+  scan-pass 100k-SENT/~95k-lands copy intact (TokenScanner.tsx ×2), zero
+  Robinhood references in dump.ts (blackout holds). (3) Nothing shipped
+  since the 05:43 #10 is missing from the ROADMAP: the 05:53 (#8), 06:03
+  (#13), 06:13 (#8), and 06:23 (#9) runs were all audit-only. (4) Considered
+  and REJECTED: a ROADMAP line for the 05:33 signed-session ship (invisible
+  security internals — precedent), any done-flag flip (none earned —
+  recurring items stay pending by design), touching src (nothing earned it).
+  Live health: / /scan /burn /ai /plan /roots /trade /wallet all 200 on the
+  custom domain. Zero wallet/signing/data-source/mascot touch, no new data
+  sources. #8/#9/#13 stay open as recurring; #5 on Antonio's idea-only hold;
+  #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 06:23 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  Tree quiet (all src mtimes = the loop's own 05:33 #9 signed-session ship,
+  already deployed + live-verified that run; one transient node process,
+  now gone — zero node/npm processes). (1) TOKEN INTEGRITY MONITOR:
+  exit 0 — DUMB fees()=600 dist=(3333,3333,1667,1667) owner=0x0, DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0; DUMB supply 28B / dead
+  15,838,571,874 (56.6%), DAMP supply 1B / dead 364,163,277 (36.4%) —
+  every LOCKED claim the hub publishes still matches live chain state;
+  loop GREEN. Dead balances byte-identical to the 04:03/05:33 reads —
+  zero burns since, consistent with flat traffic. (2) ADVERSARIAL REVIEW:
+  the full Pro activation/verify server path (src/server/ai-pro.ts,
+  src/lib/ai/pro.ts) — the real-money surface the 05:33 session fix
+  didn't re-audit. HELD UP: burn leg both shapes (direct transfer +
+  allowlisted router swap to dead) prove ARRIVAL via receipt logs, tx.from
+  pinned to the signer, selector-parsing uses slice(34,74) correctly on
+  the lowercased input, allowlisted paths derived from PRO_PAY_TOKENS;
+  model leg both shapes prove arrival at the server-configured model
+  wallet (never client-supplied), ERC-20 lookup correctly uses tx.to as
+  the token; activation signature binds address + BOTH tx hashes;
+  replay-guard keys written only on success so a 502/price retry is
+  safe (hashes unconsumed until grant); KV race stays benign per the
+  05:33 analysis (tx.from + signature pin the grantee address); grant
+  TTL/expiry math consistent; block-anchored reserve pricing with one
+  "latest" retry; body cap 4096; constants cross-checked against
+  Antonio's locked flat-$20 rule (targets 16+4=$20 exactly, no markup —
+  the old $19.50/$17.60 targets are gone from pro.ts). (3) SOFT NOTE (not
+  churn): the $15 direct-burn floor has ~1.3% slack vs block-anchored
+  WPLS-price × spot-time PLS/USD — a legit $15.20 arrival could miss
+  if PLS moves between mining and "verify" click. Failure mode is benign
+  (retry-safe, nothing consumed) and fail-conservative is the documented
+  design — noted, not shipped. (4) Served-layer health: / /scan /burn /ai
+  /plan /roots /trade /wallet all 200 on the custom domain; /api/scan-stats
+  flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); /api/market 200 with real DexScreener data
+  through the 23:53 guards (dumb $0.000003976, correct pairAddress, https
+  chartUrl). (5) Considered and REJECTED: tightening the $15 floor
+  (would trade false-rejects for false-accepts — the 1.3% slack is the
+  honest band), a floor/warning copy change (nothing user-facing is wrong),
+  touching src or shipping (nothing earned it). Zero wallet/signing (beyond
+  the user's own signMessage)/data-source/mascot touch, no new data sources.
+  #8/#10/#13 stay open as recurring; #5 on Antonio's idea-only hold; #6 ON
+  HOLD per Antonio 2026-09-29.
+- 2026-09-30 06:13 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (zero src writes since the loop's own 05:33 #9 signed-session
+  ship, already deployed + live-verified that run; zero node/npm processes).
+  (1) TWENTIETH traffic read (KV, read-only, day-scoped keys): 2026-09-29 final
+  230 pv / 83 ev — byte-identical to the last fourteen reads (twentieth straight,
+  zero activity since ~01:23 ET); 2026-09-30 since midnight: 9 pv (byte-identical
+  to every read since 03:53), events quick_scan 1 + wallet_connect 1, countries
+  US 9 + JP 1 (the same single anonymous JP pv, no events — noise, not signal).
+  The 09:23 "flat = traffic/distribution" thesis stands for the twentieth straight
+  read; still confounded by Antonio's Pro testing + auditor sessions. (2) Feedback
+  inbox: no new entries — no fb keys on 09-29 or 09-30; the single known
+  2026-09-28 form test remains dismissed. (3) Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board RE-VERIFIED LIVE (not copied): still
+  the single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/market 200 with real DexScreener data through the 23:53 guards (dumb
+  $0.000003976, correct pairAddress, https chartUrl — unchanged). (4) Demand-surface
+  drift check (grep-level): "never promise price" ×19 case-insensitive (same file
+  distribution), "5% instant burn" ×9 with decomposition adjacent, scan-pass
+  100k-SENT/~95k-lands copy intact ("95,000 lands" ×2 in TokenScanner.tsx), the
+  only src "Robinhood" hits are the standing blackout guardrail (knowledge.ts) —
+  no drift anywhere. (5) Considered and REJECTED: any demand move on the flat
+  numbers (statistically meaningless, confounded); acting on the single JP pv
+  (stray-crawler noise — inventing a signal would violate the honesty rules);
+  outbound or in-site demand nudges (hard boundary + no baseline); burn
+  leaderboard/contest push (1 real pledge, no demand base, #5 on Antonio's
+  idea-only hold); touching src or shipping (nothing earned it). NOTED not
+  rejected: gift-a-deep-scan-pass stays PARKED for Antonio (promo/pricing-
+  adjacent, zero demand base); deep-scan pass promo experiments parked per the
+  05:53 precedent (Antonio's call, not a per-run loop decision).
+  BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /plan /roots
+  /trade /wallet all 200 on the custom domain. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #8 stays open as recurring; #5 on
+  Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay
+  open as recurring.
+- 2026-09-30 06:03 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (all src mtimes = the loop's own 05:33 #9 signed-session
+  ship, already deployed + live-verified that run; zero node/npm processes).
+  (1) Revisit scan: no ripened items — /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board still
+  the single real pledge (too_dumb, 1000 DUMB, unredeemed); trading-cooldown
+  probe stays DEFERRED (scanner family complete through 5n + measured tax; no
+  new evidence to ripen it). (2) AI knowledge staleness check (04:23 precedent):
+  clean — the 05:33 signed-session ship is invisible security internals; AI_QA's
+  "What is Dumb AI Pro?" answer ("tied to the wallet that paid") stays accurate
+  because sessions are signed BY the paid wallet; the deep-scan answer already
+  names the paste-box wallet gate (04:23 fix). (3) /api/market incident noted,
+  NOT a regression: first two reads returned the designed honest {"ok":false}
+  (worker-edge transient), direct DexScreener probe 200 in 0.64s with the exact
+  23:53-guard payload (dumb $0.000003976, correct pairAddress); third read
+  ~2 min later → 200 with real data through both 23:53 guards. Self-recovered,
+  zero code touched (01:13 precedent). (4) Considered and REJECTED:
+  (a) DAMP-denominated deep-scan pass — REJECTED as churn: the PLS fallback
+  already covers low-DUMB holders, DAMP's thinner market makes quotes less
+  reliable, same cohort + more machinery = ~zero marginal utility;
+  (b) newcomer /start safety-checklist page — REJECTED as churn: real newcomer
+  pain exists, but /trade already carries the 5-step first-swap walkthrough +
+  gas guide and /story + /whitepaper cover the education; thin marginal value,
+  and it burns/deepens nothing (fails the utility bar); (c) canonically indexed
+  /scan report pages for SEO — REJECTED: the 02:43 shared-link design
+  deliberately avoids cached verdicts (preview card names the symbol only, never
+  the verdict, so cached cards can't go stale); indexed report pages reintroduce
+  exactly that staleness. (5) Considered and PARKED for Antonio (not rejected):
+  gift-a-deep-scan-pass — burn 100k DUMB to grant a 30-day pass to another
+  wallet: burns DUMB, brings outsiders in (the recipient visits the hub), no
+  custody (plain burn to dead + KV grant like the existing pass), no funded
+  prizes, no promised returns. But zero demand base (nobody's buying passes yet)
+  and it's promo/pricing-adjacent → Antonio's call per the 05:53 #8 precedent.
+  BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /plan /roots
+  /trade /wallet all 200 on the custom domain. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #13 stays open as recurring; #5 on
+  Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay
+  open as recurring.
+- 2026-09-30 05:53 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. (1) NINETEENTH traffic read (KV, read-only, day-scoped keys):
+  2026-09-29 final 230 pv / 83 ev — byte-identical to the last thirteen reads
+  (fourteenth straight, zero activity since ~01:23 ET); 2026-09-30 since
+  midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 — byte-identical to
+  the 03:53–04:53 reads), events quick_scan 1 + wallet_connect 1, countries
+  US 9 + JP 1 (the same single anonymous JP pv, no events — noise, not
+  signal). The 09:23 "flat = traffic/distribution" thesis stands for the
+  nineteenth straight read; still confounded by Antonio's Pro testing +
+  auditor sessions. (2) Feedback inbox: no new entries — no fb keys on 09-29
+  or 09-30; the single known 2026-09-28 form test remains dismissed.
+  (3) Revisit scan: no ripened items — all revisit conditions (baseline
+  traffic, burn-step volume, aged epoch, pass volume) unmet; /api/scan-stats
+  flat since 03:50 09-29 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:
+  100000}); pledge board RE-VERIFIED LIVE (not copied): still the single real
+  pledge (too_dumb, 1000 DUMB, 0x3d5a3eab832bdf9659d0882daf1a146d228a9c67);
+  /api/market 200 with real DexScreener data through the 23:53 guards (dumb
+  $0.000003976, correct pairAddress, https chartUrl — unchanged since 04:53).
+  (4) Demand-surface drift check (grep-level): "never promise price" ×19
+  (byte-identical), "5% instant burn" ×9 with decomposition adjacent (dump.ts
+  ×3 + SwapBox/whitepaper/index/__root), scan-pass 100k-SENT/~95k-lands copy
+  intact ("95,000 lands" ×2 in TokenScanner.tsx), the only src "Robinhood"
+  hits are the standing blackout guardrail (knowledge.ts ×2) — no drift
+  anywhere. (5) Considered and REJECTED: any demand move on the flat numbers
+  (statistically meaningless, confounded); acting on the single JP pv
+  (stray-crawler noise — inventing a signal would violate the honesty rules);
+  outbound or in-site demand nudges (hard boundary + no baseline); burn
+  leaderboard/contest push (1 real pledge, no demand base, #5 on Antonio's
+  idea-only hold); touching src or shipping (nothing earned it). NOTED not
+  rejected: the 05:33 #9 run closed the #17 session-authz blocker, so a
+  deep-scan pass promo experiment's old precondition is met — but with zero
+  demand base there is no measurable cohort, and promos touch pricing/
+  revenue, so that is Antonio's call, not a per-run loop decision (parked).
+  Tree quiet (all src mtimes = the loop's own prior ships, last write 05:37
+  ET from the 05:33 #9 session ship; one transient node process, now gone —
+  zero node/npm processes). Live health: / /scan /burn /ai /plan /roots
+  /trade /wallet all 200 on the custom domain. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. BULLISH-RESEARCH.md updated.
+  #8 stays open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 05:43 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (only the loop's own 05:33 #9 ship since then — ai-chat.ts,
+  AiPreview.tsx, ai-pro.ts, pro.ts, dump.ts; zero node/npm processes).
+  (1) Done flags re-verified honest: 9 done:true / 4 done:false —
+  byte-identical to the 05:03 verified state, no status flips earned. (2)
+  Claim freshness re-verified: "never promise price" ×19 (matches the
+  05:03 read), "5% instant burn" headline ×3 in dump.ts with decomposition
+  adjacent, scan-pass 100k-SENT/~95k-lands copy intact (TokenScanner.tsx ×2),
+  zero Robinhood references in dump.ts (blackout holds — the only src hit
+  is the standing knowledge.ts guardrail). (3) Nothing shipped since 05:03
+  is missing from the ROADMAP: the 05:13 #13 ship was a ROADMAP edit itself,
+  05:23 was research-only, and the 05:33 #9 ship (signed short-lived Pro
+  sessions) is invisible security internals — no user-facing feature, no
+  ROADMAP line, per precedent. The #17 residuals are now CLOSED (05:33),
+  so no new internal line queued. (4) Considered and REJECTED: any
+  done-flag flip (none earned — recurring items stay pending by design), a
+  ROADMAP line for Pro session authz (invisible hardening, precedent),
+  touching src (nothing earned it). Live health: / /scan /burn /ai /plan
+  /roots /trade /wallet all 200 on the custom domain. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #8/#9/#13 stay open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29.
+- 2026-09-30 05:33 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **signed short-lived Pro chat sessions** (the #17 residual's
+  planned design — closes the real authz hole: paid chat + scan explainer
+  authorized on a browser-supplied wallet address alone, so anyone who knew
+  a Pro wallet's address could spend its OpenRouter quota). Server
+  (src/server/ai-chat.ts): the paid branches now use ONLY a
+  signature-verified address (`verifyProSession` in src/server/ai-pro.ts —
+  message binds address + 30-min expiry, local viem verify, no RPC);
+  a claimed address alone gets the free tier; scan-explainer denials carry
+  `sessionRequired: true`. Client (src/components/dumb/AiPreview.tsx):
+  Pro wallets sign one session message per 30 min (memory-only, never
+  persisted), attach expiresAt + signature to each request, retry once with
+  a fresh signature on `sessionRequired`; declined signatures fall back to
+  the free tier with one honest toast. Shared message builder +
+  PRO_SESSION_MS in src/lib/ai/pro.ts. Adversarial self-review of the
+  design: replay to another address impossible (address in signed bytes),
+  expiry can't be stretched (in signed bytes), activation signatures can't
+  cross as sessions (different labels), 30-min interception window is the
+  accepted short-session tradeoff, verify is local crypto (no DoS via RPC),
+  no new data sources, no secrets. TOKEN INTEGRITY MONITOR: exit 0 —
+  DUMB fees()=600 dist=(3333,3333,1667,1667) owner=0x0, DAMP fees()=300
+  dist=(3333,0,3333,3334) owner=0x0; DUMB supply 28B / dead 15,838,571,874
+  (56.6%), DAMP supply 1B / dead 364,163,277 (36.4%) — every LOCKED claim
+  the hub publishes still matches live chain state; loop GREEN. Tree was
+  quiet (only the loop's own 05:13 dump.ts ship in-tree; zero node/npm
+  processes), so a deploy was safe. Pipeline: tsc clean, eslint clean
+  (--fix on one prettier nit), build passed (patch-wrangler merged,
+  ANALYTICS_KV binding intact), deployed preview
+  2da6ddc3-bf33-43ca-a017-5c51742c67ad (custom domain = production —
+  standing architecture note). LIVE VERIFIED (served): crypto unit test
+  6/6 (valid OK; tampered-expiry / wrong-address / expired / far-future /
+  garbage all rejected); custom-domain POST scan-explainer with an unproven
+  address → proRequired + sessionRequired; free-tier question → live free
+  answer (unaffected); served pro chunk carries the session message;
+  / /scan /burn /ai /plan /roots /trade /wallet all 200. #17 residuals
+  updated in the backlog entry (session half closed, KV-race half analyzed
+  benign — real-money-test precondition on the session half now met).
+  Zero wallet/signing (beyond the user's own signMessage)/data-source/mascot
+  touch, no new data sources. #8/#10/#13 stay open as recurring; #5 on
+  Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 05:23 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (all src mtimes = the loop's own prior ships: last write =
+  the 05:13 run's dump.ts donor-leaderboard claim fix; zero node/npm processes).
+  (1) EIGHTEENTH traffic read (KV, read-only, day-scoped keys): 2026-09-29 final
+  230 pv / 83 ev — byte-identical to the last twelve reads (thirteenth straight,
+  zero activity since ~01:23 ET); 2026-09-30 since midnight: 9 pv (/ 3, /burn 3,
+  /ai 1, /scan 1, /story 1 — byte-identical to the 03:53, 04:13, 04:43 and 04:53
+  reads), events quick_scan 1 + wallet_connect 1, countries US 9 + JP 1 (the same
+  single anonymous JP pv, no events — noise, not signal). The 09:23 "flat =
+  traffic/distribution" thesis stands for the eighteenth straight read; still
+  confounded by Antonio's Pro testing + auditor sessions. (2) Feedback inbox: no
+  new entries — no fb keys on 09-29 or 09-30; the single known 2026-09-28 form
+  test remains dismissed. (3) Revisit scan: no ripened items — all revisit
+  conditions (baseline traffic, burn-step volume, aged epoch, pass volume)
+  unmet; /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board still the single real pledge
+  (too_dumb, 1000 DUMB, unredeemed); /api/market 200 with real DexScreener data
+  through the 23:53 guards. (4) Demand-surface drift check (grep-level): "never
+  promise price" ×19 case-insensitive (byte-identical to the 01:23/01:43 reads),
+  "5% instant burn" ×9 with decomposition adjacent, scan-pass 100k-SENT/~95k-
+  lands copy intact ("95,000 lands" ×2 in TokenScanner.tsx), the only src
+  "Robinhood" hits are the standing blackout guardrail (knowledge.ts) — no drift
+  anywhere. (5) Considered and REJECTED: any demand move on the flat numbers
+  (eighteenth straight identical read, statistically meaningless, confounded),
+  acting on the single JP pv (indistinguishable from a stray crawler — building
+  signal from it would violate the honesty rules), outbound or in-site demand
+  nudges (hard boundary + no baseline), deep-scan pass promo experiments
+  (blocked by the #17 authz residual: no real-money Pro test until signed
+  short-lived Pro sessions per request; inventing promo activity would violate
+  the honesty rules anyway), burn leaderboard/contest push (1 real pledge, no
+  demand base, and #5 is on Antonio's idea-only hold), touching src or shipping
+  (nothing earned it). BULLISH-RESEARCH.md updated. Live health: / /scan /burn
+  /ai /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29;
+  #9/#10/#13 stay open as recurring.
+- 2026-09-30 05:13 ET run: backlog #13 DONE (real-utility research, recurring) →
+  SHIPPED **roadmap claim-precision fix: donor-leaderboard scope** (src/data/dump.ts,
+  one clause, zero other files) — the #13 knowledge-staleness check (04:23
+  precedent) found a genuine gap: the 04:43 #9 run fixed the Feed-the-Burn
+  board's intro to "Every donation of the five vault tokens since launch"
+  (the board only indexes Transfer logs for the five curated vault tokens —
+  WPLS, HEX, INC, PRVX, PLSX — a manual 6th-token transfer would be
+  invisible), but the ROADMAP "Feed the Burn" done-item (dump.ts:223) still
+  said "every donation since the vault launched", so the public /plan page
+  carried the imprecise claim. FIX: aligned the roadmap line with the page.
+  Grep-sweep for other stale sites: exactly one other "every donation" hit
+  in src (FeedTheBurn.tsx share copy — no coverage claim, clean); the AI_QA
+  donor-board mention (dump.ts:359) is share-button copy with no coverage
+  claim, clean. Tree was quiet (zero src writes since the loop's own 05:03
+  ET run; zero node/npm processes), so a deploy was safe. Pipeline: tsc
+  clean, eslint clean, build passed (patch-wrangler merged), deployed
+  preview bcd2db69-32f4-4f56-b605-8305c2b5ee3e (custom domain = production —
+  standing architecture note). LIVE VERIFIED (served bundle): /plan 200
+  carries the new clause ×1 in the served HTML, old wording ×0; / /scan
+  /burn /ai /roots /trade /wallet all 200 on the custom domain. Revisit
+  scan: no ripened items — /api/scan-stats flat since 03:50 09-29
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board
+  still the single real pledge (too_dumb, 1000 DUMB, unredeemed); /api/market
+  200 with real DexScreener data through the 23:53 guards. #17 residual
+  UNCHANGED (signed short-lived Pro sessions still the planned design).
+  Zero wallet/signing/data-source/mascot touch, no new data sources. #8/
+  #9/#10 stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD
+  per Antonio 2026-09-29.
+- 2026-09-30 05:03 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (all src mtimes = the loop's own prior ships: FeedTheBurn.tsx 04:46,
+  dump.ts 04:24, ai-chat.ts 03:05, analytics.ts 03:03, rag.ts 01:34 ET; zero
+  node/npm processes). (1) Done flags re-verified honest: 9 done:true / 4
+  done:false in src/data/dump.ts — byte-identical to the 03:33 verified
+  state; the 03:33 "Honest community activity" quote fix still clean (1 hit,
+  no stray quote). (2) Claim freshness re-verified: "never promise price"
+  ×19, "5% instant burn" ×3 in dump.ts with decomposition adjacent, scan-pass
+  100k-SENT/~95k-lands copy intact (TokenScanner.tsx:932 + :1019), zero
+  Robinhood references in dump.ts (blackout holds). (3) Nothing shipped since
+  the 04:13 #10 is missing from the ROADMAP: the 04:23 and 04:43 runs were
+  claim-precision fixes (AI_QA scanner answer, FeedTheBurn donor-board intro)
+  — precedent holds, claim fixes don't get ROADMAP lines; the 04:33/04:53
+  runs were research-only. (4) Considered and REJECTED: any done-flag flip
+  (none earned — the recurring items stay pending by design), a ROADMAP line
+  for the #17 signed-session authz residual (security fix needing a design,
+  not a public line — precedent), touching src (nothing earned it). Live
+  health: / /scan /burn /ai /plan /roots /trade /wallet all 200 on the custom
+  domain. Zero wallet/signing/data-source/mascot touch, no new data sources.
+  #8/#9/#13 stay open as recurring; #5 on Antonio's idea-only hold; #6 ON
+  HOLD per Antonio 2026-09-29.
+- 2026-09-30 04:53 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing
+  earned a ship. Tree quiet (all src mtimes = the loop's own prior ships: last
+  write = the 04:43 run's FeedTheBurn.tsx claim-precision fix at 04:46;
+  zero node/npm processes). (1) SEVENTEENTH traffic read (KV, read-only,
+  day-scoped keys): 2026-09-29 final 230 pv / 83 ev — byte-identical to the
+  last eleven reads (twelfth straight; zero activity since ~01:23 ET);
+  2026-09-30 since midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 —
+  byte-identical to the 03:53, 04:13 and 04:43 reads), events quick_scan 1 +
+  wallet_connect 1, countries US 9 + JP 1 (the same single anonymous JP pv,
+  no events — noise, not signal). The 09:23 "flat = traffic/distribution"
+  thesis stands for the seventeenth straight read; still confounded by
+  Antonio's Pro testing + auditor sessions. (2) Feedback inbox: no new
+  entries — no fb keys on 09-29 or 09-30; the single known 2026-09-28 form
+  test remains dismissed. (3) Revisit scan: no ripened items — all
+  conditions unmet; /api/scan-stats flat since 03:50 ({deep_scans:3,
+  pass_burns:1, dumb_destroyed_min:100000}); pledge board still the single
+  real pledge (too_dumb, 1000 DUMB, unredeemed); /api/market 200 with real
+  DexScreener data through the 23:53 guards. (4) Demand-surface drift check
+  (grep-level): "never promise price" ×19 case-insensitive (×17 lowercase +
+  2 capitalized — byte-identical to the 01:23/01:43 reads), "5% instant burn"
+  ×9 with decomposition adjacent, scan-pass 100k-SENT/~95k-lands copy intact
+  (TokenScanner.tsx:932 + :1019), the only src "Robinhood" hits are the
+  standing blackout guardrail (knowledge.ts) — no drift anywhere.
+  (5) Considered and REJECTED: any demand move on the flat numbers
+  (seventeenth straight identical read, statistically meaningless,
+  confounded), acting on the single JP pv (indistinguishable from a stray
+  crawler — building signal from it would violate the honesty rules),
+  outbound or in-site demand nudges (hard boundary + no baseline), touching
+  src or shipping (nothing earned it). BULLISH-RESEARCH.md updated.
+  PROCESS NOTE: the 04:33 #8 run updated BULLISH-RESEARCH.md but never logged
+  its entry here (the log jumps 04:43 → 04:23) — its numbers are preserved in
+  BULLISH-RESEARCH.md; this entry does not reconstruct it. Live health:
+  / /scan /burn /ai /plan /roots all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 04:43 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **donor-leaderboard claim-precision fix** (src/components/dumb/FeedTheBurn.tsx,
+  one clause, zero other files) — adversarial review of the Feed-the-Burn in-page
+  deposit flow (the newest real-money surface the loop hadn't re-audited: DripVault
+  donations + permissionless drip trigger). HELD UP: DonateCard is a plain ERC-20
+  `transfer` to the pinned vault address (no approval, exact amount), curated
+  5-token selector only (no paste-any-address), irreversibility front and center
+  ("gone forever … cannot be undone") with the one-way-street warning covering
+  unlisted tokens and the honest "burns never promise price" line; drip()
+  permissionless with accurate 25%-of-balance copy and an honest revert toast
+  (cooldown consumed by someone else's drip); vault stats sum Drip-event
+  dumbBurned straight from contract logs; the leaderboard's readState machine
+  never collapses a total read failure into a false "No donations yet" (ok/
+  partial/stale/failed states all render honestly) and its USD-ranking copy
+  admits ranks are "an estimate for bragging rights, nothing more". THE ONE GAP:
+  the board's intro claimed "Every donation since the vault launched" — but it
+  only indexes Transfer logs for the five curated tokens, so a manual 6th-token
+  transfer (possible; the warning contemplates it) would be invisible. FIX: "Every
+  donation of the five vault tokens since launch". Dust threshold checked:
+  DRIP_DUST=1e12 raw units (sub-cent on every token incl. 8-decimal HEX) — the
+  dust-"too small to drip" state is immaterial, no copy change earned. STANDING
+  STEP: token-integrity-check.py exit 0 — DUMB fees()=600 dist=(3333,3333,1667,
+  1667) owner=0x0, DAMP fees()=300 dist=(3333,0,3333,3334) owner=0x0 — every
+  LOCKED claim the hub publishes still matches live chain state; loop GREEN.
+  Tree was quiet (only the loop's own 04:23 dump.ts ship in-tree; zero node/npm
+  processes), so a deploy was safe. Pipeline: tsc clean, eslint clean, build
+  passed (patch-wrangler merged, ANALYTICS_KV binding intact), deployed preview
+  754d3a8a-217c-4139-a997-ea9d0235728e (custom domain = production — standing
+  architecture note). LIVE VERIFIED (served bundle): /burn 200 carries the new
+  clause ×1, old wording ×0; / /scan /ai /plan /roots all 200 on the custom
+  domain. Zero wallet/signing/data-source/mascot touch, no new data sources.
+  #17 residual UNCHANGED (signed short-lived Pro sessions still the planned
+  design). #8/#10/#13 stay open as recurring; #5 on Antonio's idea-only hold;
+  #6 ON HOLD per Antonio 2026-09-29.
+  research-only, NO code changes, no build/deploy — audit-only run, nothing
+  earned a ship. Tree quiet (only the loop's own 04:23 dump.ts knowledge fix
+  since 03:33; zero node/npm processes). (1) SIXTEENTH traffic read (KV,
+  read-only, day-scoped): 2026-09-29 final 230 pageviews / 83 events —
+  byte-identical to the last ten reads (zero activity since ~01:23 ET);
+  2026-09-30 since midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1, /story 1 —
+  byte-identical to the 03:53 and 04:13 reads), events quick_scan 1 +
+  wallet_connect 1, countries US 9 + JP 1 (the same single anonymous JP pv,
+  no events — noise, not signal). The 09:23 "flat = traffic/distribution"
+  thesis stands for the sixteenth straight read; still confounded by
+  Antonio's Pro testing + auditor sessions. (2) Feedback inbox: no new
+  entries — no fb keys on 09-29 or 09-30; the single known 2026-09-28 form
+  test remains dismissed. (3) Revisit scan: no ripened items — all revisit
+  conditions (baseline traffic, burn-step volume, aged epoch, pass volume)
+  unmet; /api/scan-stats flat since 03:50 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board still the single real pledge
+  (too_dumb, 1000 DUMB, unredeemed). (4) Demand-surface drift check
+  (grep-level): "never promise price" ×19, "5% instant burn" ×9 with
+  decomposition adjacent, scan-pass 100k-SENT/~95k-lands copy intact
+  (TokenScanner.tsx:932 + :1019), the only src "Robinhood" hits are the
+  standing blackout guardrail (knowledge.ts:130,147) — no drift anywhere.
+  (5) Considered and REJECTED: any demand move on the flat numbers
+  (sixteenth straight identical read, statistically meaningless,
+  confounded), acting on the single JP pv (indistinguishable from a stray
+  crawler — building signal from it would violate the honesty rules),
+  outbound or in-site demand nudges (hard boundary + no baseline), touching
+  src or shipping (nothing earned it). BULLISH-RESEARCH.md updated. Live
+  health: / /scan /burn /ai /plan /roots all 200 on the custom domain.
+  Zero wallet/signing/data-source/mascot touch, no new data sources. #8
+  stays open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 04:23 ET run: backlog #13 DONE (real-utility research, recurring) →
+  SHIPPED **Dumb AI knowledge-staleness fix: deep-scan paste-box wallet gate**
+  (src/data/dump.ts AI_QA scanner answer, one clause, zero other files) — the
+  knowledge-staleness check (23:33 precedent) found a genuine gap: the 03:33
+  ROADMAP ship correctly names the 2026-09-30 wallet gate ("pasted burn tx
+  must come from the connected wallet, no one else's hash accepted"), and the
+  rule is real in TokenScanner.tsx (:587/:593/:1026), but the AI_QA scanner
+  answer (dump.ts:403) said only "paste a manual burn tx" — a user asking "can
+  I paste someone else's burn hash for a deep-scan pass?" would get an answer
+  missing the rule. FIX: "paste a manual burn tx from your connected wallet —
+  someone else's burn hash won't count". Claim-canary re-verified: "never
+  promise price" ×19, "5% instant burn" ×3 in dump.ts, zero Robinhood refs
+  in dump.ts (blackout holds — only knowledge.ts guardrail hits). Tree quiet
+  (only the loop's own 03:33 dump.ts + 03:23 analytics.ts ships in-tree; zero
+  node/npm processes), so a deploy was safe. Pipeline: tsc clean, eslint
+  clean, build passed (patch-wrangler merged, ANALYTICS_KV binding intact),
+  deployed preview 6e29e4f3-4378-4930-ac60-8e6ddddecb7b (custom domain =
+  production — standing architecture note). LIVE VERIFIED (served bundle, not
+  the deploy log): /ai serves the dump corpus chunk carrying "someone else's
+  burn hash won't count" ×1, exact text intact; / /scan /burn /plan /roots
+  all 200 on the custom domain. Revisit scan: no ripened items —
+  /api/scan-stats flat since 03:50 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); pledge board still the single real pledge
+  (too_dumb, 1000 DUMB, unredeemed); /api/market 200 with real DexScreener
+  data through the 23:53 guards (dumb $0.000003976, correct pair address,
+  https chartUrl). Zero wallet/signing/data-source/mascot touch, no new data
+  sources. #8/#9/#10 stay open as recurring; #5 on Antonio's idea-only hold;
+  #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 04:13 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (zero src writes since the loop's own 03:33 dump.ts ship; zero
+  node/npm processes). (1) Done flags re-verified honest: 9 done:true / 4
+  done:false — byte-identical to the 03:33 verified state; the 03:33 "Honest
+  community activity" quote fix still clean (1 hit, no stray quote). (2)
+  Claim freshness re-verified: exact "never promise price" ×19 (matches the
+  01:23/01:43/03:13 reads), "5% instant burn" headline ×3 in dump.ts with
+  decomposition adjacent, scan-pass 100k-SENT/~95k-lands copy intact
+  (TokenScanner.tsx:931), zero Robinhood references in dump.ts (blackout
+  holds). (3) Nothing shipped since the 03:33 #10 is missing from the
+  ROADMAP: the 03:43 (#13), 03:53 (#8), and 04:03 (#9) runs were all
+  audit-only, and no src changed in between. (4) Considered and REJECTED: any
+  done-flag flip (none earned), a ROADMAP line for the #17 signed-session
+  authz residual (security fix needing a design, not a public line —
+  precedent), touching src (nothing earned it). Live health: / /plan /scan
+  /burn /ai /roots all 200 on the custom domain. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #8/#9/#13 stay open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29.
+- 2026-09-30 04:03 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — tree quiet (only the loop's
+  own 03:33 dump.ts roadmap ship in-tree ~30 min src-quiet; zero node/npm
+  processes). (1) TOKEN INTEGRITY MONITOR: FIRST CLEAN END-TO-END
+  CONFIRMATION (the deferred item from the 03:43 run) — ran
+  hidden_files/token-integrity-check.py (read-only eth_call, no signing):
+  DUMB fees()=600 dist=(3333,3333,1667,1667) owner=0x0, DAMP fees()=300
+  dist=(3333,0,3333,3334) owner=0x0 — every LOCKED claim the hub publishes
+  (hero, swap box, /story, /roots ProofStrip, whitepaper, Dumb AI knowledge)
+  still matches live chain state; exit 0, no deviation, loop stays GREEN.
+  Informational: DUMB supply 28B / dead 15,838,571,874 (56.6% burned), DAMP
+  supply 1B / dead 364,163,277 (36.4%). Took ~4.5 min — rpc-pulsechain.
+  g4mm4.io served most calls after the first retries hit the documented
+  rpc.pulsechain.com batch flakiness; no code touched to fix that (the
+  script's hardened retry/backoff handled it). (2) Served-layer health: /
+  /scan /burn /ai /plan /roots /trade /wallet all 200 on the custom domain;
+  /api/scan-stats flat since 03:50 09-29 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — honest, still traffic/distribution.
+  (3) Considered and REJECTED: a "claim last-verified" timestamp on public
+  surfaces (would imply a staleness guarantee the loop doesn't offer —
+  honest to keep the ProofStrip's live block + age figures instead);
+  touching src (nothing earned it). BULLISH-RESEARCH.md: nothing new to
+  log on a security pass. Zero wallet/signing/data-source/mascot touch, no
+  new data sources. #8/#10/#13 stay open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 03:53 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (all src mtimes = the loop's own prior ships: 03:33 dump.ts,
+  01:34 rag.ts, 03:23 analytics.ts, 03:03 ai-chat.ts; zero node/npm processes).
+  (1) FIFTEENTH traffic read (KV, read-only, day-scoped rerun after a scripting
+  slip that aggregated the 7-day window): 2026-09-29 final 230 pageviews / 83
+  events — byte-identical to the last nine reads (tenth straight, zero activity
+  since ~01:23 ET); 2026-09-30 since midnight: 9 pv (/ 3, /burn 3, /ai 1, /scan 1,
+  /story 1 — byte-identical to the 02:53 and 03:13 reads), events quick_scan 1 +
+  wallet_connect 1, countries US 9 + JP 1 (the same single anonymous JP pv, no
+  events — noise, not signal). The 09:23 "flat = traffic/distribution" thesis
+  stands for the fifteenth straight read; still confounded by Antonio's Pro
+  testing + auditor sessions. (2) Feedback inbox: no new entries — no fb keys on
+  09-29 or 09-30; the single known 2026-09-28 form test remains dismissed.
+  (3) Revisit scan: no ripened items — all conditions unmet; /api/scan-stats flat
+  since 03:50 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}).
+  (4) Demand-surface drift check (grep-level): "5% instant burn" ×9 (dump.ts ×3
+  with decomposition adjacent), "never promise" ×23, scan-pass 100k-SENT/~95k-lands
+  copy intact (TokenScanner.tsx:931-932), the only src "Robinhood" hits are the
+  standing blackout guardrail (knowledge.ts:130,147) — no drift anywhere.
+  (5) Considered and REJECTED: any demand move on the flat numbers (fifteenth
+  straight identical read, statistically meaningless, confounded), acting on the
+  single JP pv (indistinguishable from a stray crawler — building signal from it
+  would violate the honesty rules), outbound or in-site demand nudges (hard
+  boundary + no baseline), touching src or shipping (nothing earned it).
+  BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /plan /roots /trade
+  /wallet all 200 on the custom domain. Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #8 stays open as recurring; #5 on Antonio's idea-only
+  hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 03:43 ET run: backlog #13 DONE (real-utility research, recurring) →
+  SHIPPED **token integrity monitor as durable loop tooling** (no site code
+  touched, no deploy): `~/workspace/goals/pulsechain-dumb-damp-build-loop/hidden_files/token-integrity-check.py`
+  — read-only on-chain verification that the hub's LOCKED canonical claims
+  (DUMB fees()=600, DAMP fees()=300, the feesDistribution splits, owner
+  renounced on both) still match live chain state. Rationale (#13 evaluation):
+  the hub publishes these claims on many surfaces (hero, swap box, /story,
+  /roots ProofStrip, whitepaper, Dumb AI knowledge); every claim was verified
+  once on 2026-09-26/27 but nothing re-verified them — the monitor is the
+  institutional version of the standing honesty rule. Exit 0 = all match,
+  exit 1 = DEVIATION (alert: pause loop, tell Antonio), exit 2 = RPC
+  transport failure (not a deviation). Live evidence this run (read-only):
+  ALL MATCH — DUMB (600, (3333,3333,1667,1667), owner 0x0), DAMP (300,
+  (3333,0,3333,3334), owner 0x0); informational: DUMB supply 28B / dead
+  15.84B (56.6% burned), DAMP supply 1B / dead 364M (36.4%). NOTE: the
+  script's first two live executions hit the documented rpc.pulsechain.com
+  batch flakiness (dropped connections; one attempt hung ~7 min in retry
+  loops and was killed) — retry/backoff hardened per the AGENTS.md pattern
+  (1s between calls, 5 attempts, 3-15s backoff, 30s timeouts); a clean
+  end-to-end confirmation is deferred to the next #9 pass, where the script
+  is now a standing step (backlog #9 text updated). REJECTED as churn: a
+  user-facing "contract watch" strip (the #16 ProofStrip already gives every
+  visitor live figures + block + age at 60s refetch), asserting on
+  dead-balance totals (legitimately grow with burns), push-based on-chain
+  watchers (the loop is already the scheduler). Revisit scan: no ripened
+  items — /api/scan-stats flat since 03:50
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); pledge board
+  still the single real pledge (too_dumb, 1000 DUMB, unredeemed). Tree quiet
+  (all src mtimes = the loop's own prior ships; no stray processes); site
+  health / /scan /burn /ai /plan /roots /wallet /trade all 200 on the custom
+  domain. Zero wallet/signing/data-source/mascot touch, no new data sources.
+  BULLISH-RESEARCH.md updated. #13 stays open as recurring; #5 idea-only;
+  #6 ON HOLD; #8/#9/#10 stay open as recurring.
+- 2026-09-30 03:33 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED **two roadmap corrections on /plan** (src/data/dump.ts ROADMAP, only
+  file touched): (1) deep-scan pass item now names the 2026-09-30 wallet gate —
+  the paste fallback requires the burn tx to come from the connected wallet,
+  no one else's hash accepted; (2) Dumb AI Pro item gains the 2026-09-29
+  /terms + /privacy line (30-day pass, no refunds on irreversible burns;
+  anonymous visit counts only, no cookies, no wallet data). Verified NOT
+  stale: DripVault address in the roadmap matches pulsechain.ts DRIP_VAULT
+  (the /burn section's claim of a live contract is TRUE — loop records show
+  deployed block 27663330 on 2026-09-28 with at least one on-chain Drip fired;
+  MEMORY.md #34's "audited, NOT deployed" entry is stale — flagged in today's
+  daily log for the memory system, not edited). Curated swap list in the
+  roadmap byte-matches the code (PLS, HEX, TEDDY, SOLIDX, PCOCK, HELGO, INC,
+  PLSX, PRVX, pTGC, WBTC); Feed the Burn donation tokens match (WPLS, HEX,
+  INC, PRVX, PLSX); tax-flow visualizer, pledge board, scan-stats honesty
+  strip all confirmed present in src. No done:false items have shipped; burn
+  contests stay on Antonio's idea-only hold (#5); Pro session authz (#17
+  residual) is internal, not a roadmap item. Pipeline: tsc clean, eslint
+  clean, build passed, deployed preview 588e71e0
+  (custom domain = production — standing architecture note). LIVE VERIFIED:
+  /plan 200 with both new lines in the served HTML, / 200. Zero
+  wallet/signing/data-source/mascot touch, no new data sources.
+- 2026-09-30 03:23 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **public-counters abuse brake on /api/ping event beacons**
+  (src/server/analytics.ts, only file touched) — the one public-write surface
+  the loop hadn't closed: /api/ping is unauthenticated and the allowlist
+  gates event NAMES, not provenance, so anyone could POST
+  {event:"pass_burn_dumb"} in a loop and print invented community activity on
+  the PUBLIC /api/scan-stats counters ("N scan passes bought — at least M
+  DUMB destroyed"), directly against the standing honesty rules. FIX: the
+  three SCAN_STATS_EVENTS (deep_scan, pass_burn_dumb, pass_burn_pls) now
+  carry a per-visitor daily cap of 25 (salted SHA-256 IP hash, truncated,
+  never stored/logged — same privacy pattern as the AI rate limits; 1-day
+  TTL on the `pingle:{day}:{hash}` key). Over budget → silent 204, same as
+  every other ping path; fail-open on KV hiccup (brake, not gate). Other
+  events skip the brake (they feed only the passphrase-gated /stats, and
+  skipping saves KV writes). Tree was quiet (all src mtimes since 23:05 map
+  to the loop's own prior ships: 03:05 ai-chat.ts, 02:34 dump.ts, 02:25
+  analytics.ts, 01:34 rag.ts; zero node/npm processes), so a deploy was
+  safe. Pipeline: tsc clean, eslint clean (prettier --fix on the edit),
+  build passed, deployed preview ae0d4446-39ad-4766-ad6c-d70bec3c5983
+  (custom domain = production — standing architecture note). LIVE VERIFIED
+  at the served layer: (1) first deploy's all-events variant created 27
+  `pingle:` limiter keys in production — one per probe beacon — proving the
+  new code path executes live (keys carried the correct 86,400s TTL,
+  verified by epoch math); (2) after narrowing, a copy_contract beacon →
+  204 with ZERO new limiter keys (27→27) — the gate correctly skips
+  non-public events; (3) / /scan /burn /ai /plan /roots all 200;
+  /api/scan-stats still the honest {deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}. Probe noise fully cleaned from KV (27
+  pingle: keys deleted, the ev:2026-09-30:copy_contract probe key deleted —
+  baseline was 0 per the 03:13 read). NOTED, NOT CHURN: (a) the sandbox's
+  egress proxy rotates IPs per request, so the live cap test couldn't hold
+  one IP to 25 — real visitors have stable IPs; a rotating-proxy attacker
+  is the documented "not a proof of humanity" limitation; (b) KV's eventual
+  consistency loses some increments under rapid-fire writes (27 sequential
+  beacons landed ~7 ev: increments) — undercounting is the fail-safe
+  direction, and a sustained flood still converges into the cap; (c) the
+  03:03 ai-chat.ts quota fix re-reviewed line-by-line this run — HELD UP
+  (read-only global check → consume-after-success, off-topic bypasses caps
+  before the IP consume, KV-hiccup fail-open is deliberate and bounded by
+  OpenRouter's own 50/day key cap; cf-connecting-ip trustworthy through the
+  CDN per the 02:23 verification). Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #17 residual UNCHANGED (signed short-lived Pro
+  sessions still the planned design). #8/#10/#13 stay open as recurring; #5
+  on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 03:13 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing
+  earned a ship. Tree quiet (last src write = the loop's own 03:03 ai-chat.ts
+  quota fix, already deployed + live-verified that run; zero node/npm
+  processes). (1) FOURTEENTH traffic read (KV, read-only): 2026-09-29 final
+  230 pageviews / 83 events — byte-identical to the last eight reads (ninth
+  straight, zero activity since ~01:23 ET); 2026-09-30 since midnight: 9 pv
+  (/ 3, /burn 3, /ai 1, /scan 1, /story 1 — byte-identical to the 02:53 read),
+  events quick_scan 1 + wallet_connect 1, countries US 9 + JP 1 (the same
+  single anonymous JP pv, no events — logged as noise, not signal). The
+  09:23 "flat = traffic/distribution" thesis stands for the fourteenth
+  straight read; still confounded by Antonio's Pro testing + auditor sessions.
+  (2) Feedback inbox: no new entries — no fb keys on 09-29 or 09-30; the
+  single known 2026-09-28 form test remains dismissed. (3) Revisit scan: no
+  ripened items — all revisit conditions (baseline traffic, burn-step volume,
+  aged epoch, pass volume) unmet; /api/scan-stats flat since 03:50
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}). (4)
+  Demand-surface drift check (grep-level): "never promise" ×23 (byte-identical
+  to the 02:03 read — honest-framing copy only), "5% instant burn" headline in
+  dump.ts ×3 with decomposition adjacent (SwapBox/whitepaper/index/__root
+  hits intact), scan-pass 100k-SENT/~95k-lands copy intact
+  (TokenScanner.tsx:932 + :1019), the only src "Robinhood" hits are the
+  standing blackout guardrail itself (knowledge.ts:130,147) — no drift
+  anywhere. (5) Considered and REJECTED: any demand move on the flat numbers
+  (fourteenth straight identical read, statistically meaningless, confounded),
+  acting on the single JP pv (indistinguishable from a stray crawler — building
+  signal from it would violate the honesty rules), outbound or in-site demand
+  nudges (hard boundary + no baseline), touching src or shipping (nothing
+  earned it). BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai
+  /plan /roots /trade /wallet all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 03:03 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **free-tier AI quota accounting fix** (src/server/ai-chat.ts, only
+  file touched) — adversarial review of the /api/ai-chat free-tier write
+  path (the remaining un-audited public write surface after /api/ping
+  02:23, /api/feedback 00:53, /api/market 23:53, scan-explainer 01:33).
+  HELD UP: suggested-flag bypass impossible (server-side findSuggested
+  validation), scan-summary sanitization tight, history capped 6×600 with
+  validated roles, off-topic consumes no caps and makes no model call,
+  Pro paths unchanged (the #17 signed-session authz residual is a design
+  item, untouched). THE REAL GAP: the shared 40/day global free-model
+  counter (`aichatg:{day}`) was consumed BEFORE the OpenRouter call, so
+  every provider hiccup burned one of the hub's 40 daily free answers
+  while delivering nothing but local receipts — and the code's own three
+  "Live model hiccup" fallbacks prove hiccups happen (the OpenRouter free
+  tier is 50/day/key; Antonio's Pro testing + auditor sessions stress it
+  daily). FIX: global counter is now CHECKED read-only before the call and
+  consumed only after a SUCCESSFUL liveAnswer; per-IP 10/day stays
+  consume-before (it's the per-actor flood control — a read-only check
+  there would let one IP fire 100 concurrent calls past it). Failed calls
+  now cost only the IP counter (the user still got a local-receipt
+  answer), never the shared budget. Tree was quiet (only the loop's own
+  02:33/02:23 ships since 01:23; zero node/npm processes), so a deploy was
+  safe. Pipeline: tsc clean, eslint clean, prettier clean, build passed
+  (patch-wrangler merged, ANALYTICS_KV binding intact), deployed preview
+  a08bb2a7-66aa-46d8-9652-31a57c111447 (custom domain = production —
+  standing architecture note). LIVE VERIFIED at the SERVED layer (not just
+  the deploy log): / /ai /scan /burn /trade all 200 on the custom domain;
+  off-topic POST → 200 pro-nudge, no caps consumed; on-topic POST hit a
+  real provider hiccup → "Live model hiccup — served local receipts
+  instead." — the exact failure branch the fix targets, handled cleanly,
+  with the shared budget provably untouched by the new code path (global
+  consume sits after the successful liveAnswer return). Invisible server
+  internals — no ROADMAP line, per the 02:23 precedent. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8/#10/#13
+  stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29.
+- 2026-09-30 02:53 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing
+  earned a ship. Tree quiet (last src write = the loop's own 02:33 roadmap-copy
+  fix, already deployed + live-verified that run; zero node/npm processes).
+  (1) THIRTEENTH traffic read (KV, read-only): 2026-09-29 final 230 pageviews /
+  83 events — byte-identical to the last seven reads (eighth straight, zero
+  activity since ~01:23 ET); 2026-09-30 since midnight: 9 pv (/ 3, /burn 3,
+  /ai 1, /scan 1, /story 1 — / +1 since the 02:13 read), quick_scan 1,
+  wallet_connect 1, countries US 9 + JP 1 (one single anonymous pv, no events —
+  logged as noise, not signal). The 09:23 "flat = traffic/distribution" thesis
+  stands for the thirteenth straight read; still confounded by Antonio's Pro
+  testing + auditor sessions. (2) Feedback inbox: no new entries — no fb keys
+  on 09-29 or 09-30; the single known 2026-09-28 form test remains dismissed.
+  (3) Revisit scan: no ripened items — all revisit conditions (baseline
+  traffic, burn-step volume, aged epoch, pass volume) unmet; /api/scan-stats
+  flat since 03:50 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}).
+  (4) Demand-surface drift check (grep-level): "never promise price" ×19,
+  "5% instant burn" ×9 with decomposition adjacent, scan-pass copy intact, only
+  src "Robinhood" hits are the standing blackout guardrail (knowledge.ts) —
+  byte-consistent with prior runs. (5) Considered and REJECTED: any demand move
+  on the flat numbers (thirteenth straight identical read, statistically
+  meaningless, confounded), acting on the single JP pv (indistinguishable from
+  a stray crawler — building signal from it would violate the honesty rules),
+  outbound or in-site demand nudges (hard boundary + no baseline), touching src
+  or shipping (nothing earned it). BULLISH-RESEARCH.md updated. Live health: /
+  /scan /burn /ai /plan /roots /wallet /trade all 200 on the custom domain.
+  Zero wallet/signing/data-source/mascot touch, no new data sources. #8 stays
+  open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 02:43 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing
+  earned a ship. Tree quiet (last src write = the loop's own 02:33 roadmap-copy
+  fix, already deployed + live-verified that run; zero node/npm processes).
+  (1) Shared scan-report link surface read (code + served layer): HELD UP —
+  ?token= validates + auto-runs the quick scan; ?burn= is regex-gated, then
+  verifyDeepScanBurn does a FRESH RPC read of tx + receipt (direct transfer to
+  dead ≥ 100k DUMB, or PLS-fallback router swap decoded via the shared ABI
+  with actual dead-arrival ≥ 100k; fake/reverted hashes fail clean with
+  reasons), runs the deep scan for the viewer — and issues NO pass from a
+  shared link. Paste-box tx.from == connected-wallet binding already covers
+  the scan pass (narrower #17-adjacent fix). Served: /scan?token=<valid>,
+  ?token=garbage, ?token=<valid>&burn=<zeroed> all 200 (SSR robust on garbage
+  params). (2) Revisit scan: no ripened items — /api/scan-stats flat since
+  03:50 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); traffic
+  still confounded by Antonio's Pro testing + auditor sessions. (3) Considered
+  and REJECTED: fuzzy/Levenshtein copycat-name detection (exact-symbol
+  identity check already covers DUMB/DAMP + all 12 curated tokens — fuzzy
+  would accuse real contracts on a heuristic), burn CSV/tax export (real pain,
+  fails the utility bar — no burn/holding mechanism), pledge-board extensions
+  (1 real pledge, no demand base = churn), any demand move on flat confounded
+  numbers, outbound/in-site demand nudges (hard boundary), touching src (nothing
+  earned it). BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai
+  /plan /roots /wallet /trade all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8/#9/#10/#13
+  stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29.
+## Run log
+- 2026-09-30 02:33 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED **roadmap copy fix: stray leading quote on the "Honest community
+  activity" item** (src/data/dump.ts, one character, zero other files) — a
+  roadmap-hygiene scan caught a wart in the Token safety scanner group: the
+  "Honest community activity on the deep-scan card" bullet began with a
+  literal `"` that never closed (the only roadmap item with a dangling quote
+  — every other item renders cleanly), so the public /plan page rendered a
+  stray quote mark on the deep-scan honest-counters line. FIX: removed the
+  stray leading quote. Done flags re-verified honest (9 done:true / 4
+  done:false — byte-identical to the 01:53 verified state, no status flips
+  earned). Claim freshness re-verified: nothing shipped since 01:53 except
+  the 02:23 #9 /api/ping server hardening (invisible server internals, no
+  user-facing feature — no ROADMAP line, per precedent) and audit-only runs;
+  curated token lists, tax clauses, Robinhood blackout, scan-pass copy all
+  intact in src. No new planned/thinking items earned (the #17 signed-session
+  authz residual is a security fix needing a design, not a public line —
+  precedent). Tree was quiet (only the loop's own 02:23 ship since 01:53;
+  zero node/npm processes), so a deploy was safe. Pipeline: tsc clean,
+  eslint clean, build passed (patch-wrangler merged, ANALYTICS_KV binding
+  intact), deployed preview 6748a87a-e40c-4bc3-9166-a3e166a4c7e9 (custom
+  domain = production — standing architecture note). LIVE VERIFIED (served
+  bundle, not the deploy log): /plan 200 carries "Honest community activity"
+  ×1 with zero leading-quote hits; / /scan /burn /ai /roots /trade all 200
+  on the custom domain. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #8/#9/#13 stay open as recurring; #5 on Antonio's idea-only
+  hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 02:23 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **public-write-path hardening on /api/ping** (src/server/analytics.ts,
+  only file touched) — adversarial review of the first-party analytics write
+  path, the one public unauthenticated write surface the loop hadn't audited
+  end-to-end. HELD UP: shape validation tight (2048-byte body, path must
+  start with "/" ≤200 chars, referrer ≤500, ts finite, event from the 24-name
+  allowlist — bad input still silent-204); ev: keys bounded by the allowlist;
+  fb: already had the 200/day cap (verified 00:53). THE REAL GAP: two keys had
+  UNBOUNDED cardinality — pv:{day}:{path} (any 200-char path) and
+  cc:{day}:{country} (cf-ipcountry is client-spoofable on direct requests), so
+  a junk-path flood could burn KV write quota and silently crowd real paths
+  out of /api/analytics' 1000-key list reads — invented traffic in Antonio's
+  own stats. FIX: (1) distinct-path registry `pvreg:{day}` — new paths beyond
+  400/day get their pv: write dropped (site has ~25 real routes; fail-open:
+  any hiccup counts the ping as before, the cap is a brake, not a gate);
+  (2) country normalized to ^[A-Z0-9]{2}$ else "XX" so junk headers collapse
+  into one key. Noted: Cloudflare's edge overwrites cf-ipcountry on requests
+  through the CDN (my spoofed header was overwritten — verified live), so the
+  cc: guard is defense-in-depth; the pv: registry is the real protection.
+  Tree was quiet (last src write = the loop's own 01:33 rag.ts ship, ~50 min
+  src-quiet; zero node/npm processes), so a deploy was safe. Pipeline: tsc
+  clean, eslint clean (prettier --write on the edit), build passed, deployed
+  preview 03bb9988-bc12-4c90-9a31-94dd8cbc6d53 (custom domain = production —
+  standing architecture note). LIVE VERIFIED at the SERVED layer (not just the
+  deploy log): junk-path probe ping → 204 AND created pvreg:2026-09-30 with the
+  path registered (new-path branch executed in production); spoofed-country
+  ping → 204 with NO cc:* junk key minted; /api/scan-stats still 200 and flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); / /scan /burn /ai
+  /roots /plan all 200 on the custom domain. Probe noise cleaned from KV
+  afterwards (deleted the probe pv: key + registry entry; the 2 cc country
+  increments are indistinguishable from real traffic and trivial — left
+  untouched). Secrets sweep clean (zero literals; ANALYTICS_PASS + model wallet
+  remain env-binding reads). Zero wallet/signing/data-source/mascot touch, no
+  new data sources. #17 residual UNCHANGED (signed short-lived Pro sessions
+  still the planned design — needs a design, not a one-liner). #8/#10/#13 stay
+  open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29.
+- 2026-09-30 02:13 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (last src write 05:34 UTC = the loop's own 01:33 rag.ts
+  prompt-hardening ship, already deployed + live-verified that run; zero node/npm
+  processes). (1) THIRTEENTH traffic read (KV, read-only): 2026-09-29 final
+  230 pageviews / 83 events — byte-identical to the last five reads (sixth
+  straight identical read, zero activity since ~01:23 ET); 2026-09-30 since
+  midnight: 8 pv (/ 2, /ai 1, /burn 3, /scan 1, /story 1 — /burn +1 since the
+  01:23 read), 1 wallet_connect. The 09:23 "flat = traffic/distribution" thesis
+  stands for the thirteenth straight read; still confounded by Antonio's Pro
+  testing + auditor sessions. (2) Feedback inbox: no new entries — no fb keys
+  on 09-29 or 09-30; the single known 2026-09-28 form test remains dismissed.
+  (3) Revisit scan: no ripened items — every prior rejection's revisit condition
+  (baseline traffic, burn-step volume, aged epoch, pass volume) unmet;
+  /api/scan-stats flat since 03:50 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}). (4) Demand-surface drift check (grep-level):
+  exact "never promise price" ×19, "5% instant burn" headline ×9 with
+  decomposition adjacent, scan-pass 100k-SENT/~95k-lands copy intact — all
+  byte-consistent with prior runs; the only src "Robinhood" hits are the standing
+  blackout guardrail itself (knowledge.ts:130,147), not drift. (5) Considered
+  and REJECTED: any demand move on the flat numbers (sixth straight identical
+  09-29 read, statistically meaningless, confounded), outbound or in-site demand
+  nudges (hard boundary + no baseline), touching src/shipping (nothing earned
+  it). BULLISH-RESEARCH.md updated. Live health: / /scan /burn /ai /plan
+  /roots all 200 on the custom domain. Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #8 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay open as
+  recurring.
+- 2026-09-30 02:03 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (only the loop's own 01:33 rag.ts prompt-hardening ship
+  since 01:13 — deployed + live-verified that run; zero concurrent process).
+  (1) Burn-pledge board end-to-end security read (newest Pro-adjacent on-chain
+  surface the loop hadn't re-audited tonight): HELD UP — POST /api/pledge binds
+  with viem verifyMessage over buildPledgeMessage(token+amount+address+timestamp)
+  from the shared single module (src/lib/pledges.ts — zero client/server drift);
+  timestamp window → 401 on expiry, signature mismatch → 401, body cap 2048,
+  10/day per IP-hash rate limit, KV keys server-lowercased (zero user input in
+  keys), GET prunes expired/corrupt/invalid rows server-side and rewrites the
+  index; pledgeRedeemed flips only on verified on-chain voluntary burns
+  (arrival-leg accounting, per verified #1 math). Live-probed: GET /api/pledges
+  → 200 with ONE REAL pledge (0x3d5a3eab832bdf9659d0882daf1a146d228a9c67,
+  "too_dumb", DUMB 1000, pledged ~13.5h ago — genuine opted-in participation,
+  not seeded); malformed POST → designed 400. (2) AI freemium boundary re-
+  verified at the served layer through the 01:33 deploy: POST /api/ai-chat
+  {"question":"What is Dumb AI Pro?","suggested":true} → mode=local,
+  sources=["hub knowledge"], canned Pro answer intact, $0, no model call.
+  (3) /api/market 200 with real DexScreener data through both 23:53 guards
+  (dumb ok:true, correct pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186,
+  https chartUrl). (4) Claim canary reconciled: exact "never promise price"
+  ×19 case-insensitive in src — byte-identical to the 01:23/01:43 reads (the
+  ×17 first pass was my case-sensitive grep missing 2 capitalized hits, not
+  drift); all hits are legitimate honest-framing copy. "5% instant burn"
+  headline ×9 with decomposition adjacent; scan-pass 100k-SENT/~95k-lands copy
+  intact; the two src "Robinhood" hits are the standing blackout guardrail
+  (knowledge.ts), not drift. (5) Revisit scan: no ripened items — all prior
+  rejection conditions (baseline traffic, burn-step volume, aged epoch, pass
+  volume) unmet; /api/scan-stats flat since 03:50 ({deep_scans:3,
+  pass_burns:1, dumb_destroyed_min:100000}). (6) Considered and REJECTED:
+  pledge-board extensions (redeem nudges, leaderboard pledge fetch) — REJECTED:
+  1 real pledge, no demand base, building on it now is churn; next scanner
+  probe (trading-cooldown) — still DEFERRED (line 1724: family complete through
+  5n + measured tax; auditors asked for copy/IA, not scanner depth); any demand
+  move on flat confounded numbers; outbound/in-site nudges (hard boundary);
+  touching src/shipping (nothing earned it). Audit queue (IA merge, mobile
+  acceptance, preview/prod split) stays Antonio's call. Live health: / /scan
+  /burn /ai /plan /roots all 200 on the custom domain. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #13 stays open as recurring;
+  #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#9/
+  #10 stay open as recurring.
+- 2026-09-30 01:53 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (only the loop's own 01:33 rag.ts prompt-hardening ship in the last
+  30 min, already deployed + live-verified that run; zero concurrent process).
+  (1) Done flags re-verified honest: 9 done:true (6 "Now" groups + Week 1/2/3),
+  4 done:false (60/90 days + 2 Planned) — byte-identical to the 01:03 verified
+  state, no status flips earned. (2) Nothing shipped since the 01:03 #10 is
+  missing from the ROADMAP: the only ship since was the 01:33 rag.ts
+  prompt-injection hardening — an invisible model-prompt security rule (token
+  name is an untrusted label), not a user-facing feature; the Dumb AI Pro
+  group's existing scan-explainer item already covers the feature surface it
+  protects. The 01:13/01:23/01:43 runs were audit-only. (3) Claim freshness:
+  5o measured-tax clause intact (dump.ts ×2 — "not enough trades" + sell-side
+  "reads a touch low" caveat), 5n rescue/withdraw clause intact (dump.ts ×2),
+  zero Robinhood references in dump.ts (blackout holds), "5% instant burn"
+  headline ×3 with decomposition adjacent, honest "never promise" framing ×23
+  across src, scan-pass copy intact (TokenScanner.tsx ~:931 + ~:1019 — "Sends
+  exactly 100,000 DUMB … the 5% burn tax means ~95,000 lands at dead —
+  that's expected", manual path likewise), curated swap-input list matches
+  the 11-input + DUMB reality, /terms + /privacy stay compliance pages (no
+  ROADMAP group needed — precedent). (4) Considered and REJECTED: a ROADMAP
+  "Planned" entry for burn contests (#5 is on Antonio's idea-only hold — a
+  public line would overcommit a format he hasn't picked); a roadmap line for
+  the #17 signed-session authz residual (security fix needing a design, not
+  a public feature line — precedent); a line for the 01:33 prompt hardening
+  (invisible hardening is not a user-facing feature). (5) Live health: / /scan
+  /burn /ai /plan /roots all 200 on the custom domain; /api/scan-stats flat
+  since 03:50 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}).
+  Zero wallet/signing/data-source/mascot touch, no new data sources. #8/#9/
+  #13 stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29.
+- 2026-09-30 01:43 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (only the loop's own 01:33 rag.ts prompt-injection-hardening
+  ship in-tree, already deployed + live-verified that run; zero concurrent process).
+  (1) TWELFTH traffic read (KV, read-only): 2026-09-29 final 230 pageviews / 83
+  events — byte-identical to the 01:23 read (zero activity 01:23→01:43 ET);
+  2026-09-30 since midnight: 6 pv (/ 2, /ai 1, /burn 2, /story 1), 1
+  wallet_connect — byte-identical to the 00:03 read. The 09:23 "flat =
+  traffic/distribution" thesis stands for the twelfth straight read; still
+  confounded by Antonio's Pro testing + auditor sessions. Marginal value of
+  each read is ~zero at this point; the cadence stays because the charter
+  says so. (2) Feedback inbox: single entry only — the known 2026-09-28
+  {c:"bug",m:"Test",p:"/scan"} form test, already dismissed; nothing new,
+  nothing actionable. (3) Revisit scan: no ripened items — every prior
+  rejection's revisit condition (baseline traffic, burn-step volume, aged
+  epoch, pass volume) unmet; /api/scan-stats flat since 03:50
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}). (4) Demand-surface
+  drift check (grep-level): honest burn framing intact — the earlier in-run
+  ×23 "never promise" read was the broader pattern (honest never-promise-a-card
+  comments in tx-explain.ts, not price-framing drift); exact "never promise
+  price" ×19 matches the 01:23 count exactly; scan-pass copy intact
+  (TokenScanner.tsx:932 + :1019, the 100,000-SENT/~95,000-lands copy); "5%
+  instant burn" headline ×9 with decomposition adjacent; the two src
+  "Robinhood" hits are the standing blackout guardrail itself
+  (knowledge.ts:130,147), not drift. (5) Considered and REJECTED: any demand
+  move on the flat numbers (twelfth straight identical read, statistically
+  meaningless, confounded), outbound or in-site demand nudges (hard boundary +
+  no baseline), touching src or shipping (nothing earned it). BULLISH-
+  RESEARCH.md updated. Live health: / /scan /burn /ai /plan /roots all 200 on
+  the custom domain; /api/scan-stats flat. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #8 stays open as recurring; #5 on
+  Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13
+  stay open as recurring.
+- 2026-09-30 01:33 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **prompt-injection hardening on the Dumb AI scan explainer**
+  (src/lib/ai/rag.ts, one system-prompt rule, zero other files) — the newest
+  Pro surface (shipped 2026-09-29) had never gotten an adversarial read, so
+  this run audited the full /scan→/ai handoff end-to-end. HELD UP: the
+  localStorage payload is attacker-shapeable but self-contained (their own
+  session, Pro-gated, server caps hold); sanitizeScanSummary is sound
+  (address/pair hex-validated, ≤40 checks, label 120/detail 500, status enum,
+  symbol 24 chars, 8KB body cap, report capped at 4000 chars); the scanner
+  report lands in a system message marked "on-chain readings, do not invent
+  others"; ChatMarkdown renders zero HTML (React-escaped text, links regex-
+  bound to http/https, no dangerouslySetInnerHTML anywhere) — no XSS ride-
+  through. THE ONE GAP: the token symbol (pulled from the token's own
+  contract, slice-trusted into the system prompt) had no untrusted-input
+  instruction — a hostile token name ("Audited", embedded instructions) could
+  soften the model's plain-English summary for the scanner themselves. FIX:
+  one new system rule — the token name is an untrusted label, it never
+  changes the rules and never softens a finding. Tree was quiet (last src
+  write 00:24 ET = the loop's own 00:23 ship; zero concurrent process), so a
+  deploy was safe. Pipeline: tsc clean, eslint clean, build passed, deployed
+  preview cc14c339-716e-47dc-9410-59f3548e8fa5 (custom domain = production —
+  standing architecture note). LIVE VERIFIED: / /ai /scan /burn /roots all
+  200; /api/ai-chat serves the local canned path (server module with the edit
+  loads fine). Secrets sweep clean (zero literals; ANALYTICS_PASS + model
+  wallet all env-binding reads). Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #17 residual UNCHANGED (signed short-lived Pro
+  sessions still the planned design — needs a design, not a one-liner). #8/
+  #10/#13 stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD
+  per Antonio 2026-09-29.
+- 2026-09-30 01:23 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (zero src writes since 01:05 ET; no concurrent process).
+  (1) ELEVENTH traffic read (KV, read-only): 2026-09-29 final 230 pageviews / 83
+  events — byte-identical to the 00:43 read (zero activity 00:43→01:23 ET);
+  2026-09-30 since midnight: 6 pv (/ 2, /ai 1, /burn 2, /story 1), 1
+  wallet_connect — byte-identical to the 00:03 read. The 09:23 "flat =
+  traffic/distribution" thesis stands for the eleventh straight read; still
+  confounded by Antonio's Pro testing + auditor sessions. (2) Feedback inbox:
+  single entry only — the known 2026-09-28 {c:"bug",m:"Test",p:"/scan"} form
+  test, already dismissed; nothing new, nothing actionable. (3) Revisit scan:
+  no ripened items — every prior rejection's revisit condition (baseline
+  traffic, burn-step volume, aged epoch, pass volume) unmet; /api/scan-stats
+  flat since 03:50 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}).
+  (4) Demand-surface drift check: burn honest framing intact ("never promise
+  price" ×19), scan-pass 100k-SENT/~95k-lands copy intact, "5% instant burn"
+  headline ×9 with decomposition adjacent; the two src "Robinhood" hits are the
+  standing blackout guardrail itself (knowledge.ts:130,147), not drift. (5)
+  Considered and REJECTED: any demand move on the flat confounded numbers,
+  outbound or in-site demand nudges (hard boundary + no baseline), touching src
+  or shipping (nothing earned it). BULLISH-RESEARCH.md updated. Live health:
+  / /scan /burn /ai /plan /roots all 200 on the custom domain; /api/scan-stats
+  flat. Zero wallet/signing/data-source/mascot touch, no new data sources. #8
+  stays open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 01:13 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (src writes: none in the last 40 min; no node/npm processes;
+  this checkout has no .git — used mtime-based quiet checks, not ls-files).
+  (1) Revisit scan: no ripened items — every prior rejection's revisit condition
+  (baseline traffic, burn-step volume, aged epoch, pass volume) unmet;
+  /api/scan-stats flat since 03:50 ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}), honest, still traffic/distribution. Trading-
+  cooldown probe stays DEFERRED (line 1724): family complete through 5n +
+  measured tax; auditors asked for copy/IA, not scanner depth. (2) AI knowledge
+  staleness check (23:33 precedent): nothing new user-facing since the 00:23
+  ROADMAP ship; served-layer verified: POST /api/ai-chat {"question":"What is
+  Dumb AI Pro?","suggested":true} → mode=local, sources=["hub knowledge"], $0,
+  no model call — freemium boundary intact through the 00:23 deploy. (3)
+  /api/market incident noted, NOT a regression: two consecutive reads returned
+  the designed honest {"ok":false,"reason":"Market data unavailable."} (502 path);
+  direct DexScreener probe from here was 200 in 0.6s, and a third read ~1 min
+  later → 200 with real data through both 23:53 guards (dumb ok:true, correct
+  pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186, https chartUrl).
+  Worker-edge transient, self-recovered; the !ok client branch shows the honest
+  unavailable state, no $0.00 invented prices. Live health: / /scan /burn /ai
+  /plan /roots /terms /privacy all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #13 stays open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29;
+  #8/#9/#10 stay open as recurring.
+- 2026-09-30 01:03 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing earned a ship. Tree
+  quiet (src writes: none in last 20 min; only the loop's own 00:23 ship since
+  then — zero concurrent process). (1) Done flags re-verified honest: 9
+  done:true (8 "Now" groups + Week 1/2/3), 4 done:false (60/90 days + 2
+  Planned) — no status flips earned. (2) Claim freshness: 5o measured-tax
+  clause intact (dump.ts ×2, knowledge.ts ×1), 5n rescue/withdraw clause
+  intact (dump.ts ×2, knowledge.ts ×1), zero Robinhood references in dump.ts,
+  the two 23:33 AI_QA entries (Dumb AI Pro, terms/privacy) covered by the
+  existing Dumb AI Pro ROADMAP group, /roots dashboard line current per the
+  00:23 ship, curated swap-input list (PLS, HEX, TEDDY, SOLIDX, PCOCK, HELGO,
+  INC, PLSX, PRVX, pTGC, WBTC + DUMB = 12-token set) still matches the
+  11-input + DUMB reality; the 00:23 ROADMAP dashboard-line fix renders in
+  the same served bundle (no deploy since). /terms + /privacy stay compliance
+  pages, not ROADMAP features — no group needed. (3) Nothing shipped since
+  00:23 is missing from the roadmap: the 00:33 (#13), 00:43 (#8), 00:53 (#9)
+  runs were all audit-only. (4) Considered and REJECTED: a ROADMAP "Planned"
+  entry for burn contests (Antonio's 2026-09-29 call = idea-only, no format
+  pick, no build; AI_QA already answers the question honestly); a roadmap
+  line for the #17 authz residual (signed short-lived Pro sessions — a
+  security fix needing a design, not a public roadmap item). Live health:
+  / /scan /burn /ai /plan /roots all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8/#9/#13
+  stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29.
+- 2026-09-30 00:53 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — tree quiet (~30 min src-quiet
+  since the 00:23 ship; all recent touches are the loop's own; zero
+  concurrent process). One fresh surface audited end-to-end: the public
+  feedback write path (/api/feedback → KV fb:{day}:{id} → passphrase-gated
+  /stats inbox). HELD UP: POST bounds the body at 4096, category allowlist
+  (bug/feature/comment/other), message 4–2000 chars, page must start with "/"
+  and ≤200 chars, honeypot returns 204 pretend-success without writing, 200/
+  day global cap, the KV id is server-generated (zero user input in the key),
+  values JSON-serialized. The /stats inbox renders message/category/page/ts
+  via plain JSX interpolation — no dangerouslySetInnerHTML / innerHTML
+  anywhere in stats.tsx — so no stored XSS. Feedback appears only in the
+  passphrase-gated /api/analytics response; the public /api/scan-stats
+  returns only three coarse counts. Live-probed safely: honeypot-filled POST
+  → 204 (writes nothing), invalid category → 400. Guards verified at the
+  served layer, not just in src. Secrets sweep of src/ + scripts/: clean —
+  zero key-shaped literals; every secret reference (ANALYTICS_PASS,
+  OPENROUTER_API_KEY) is an env-binding read, never a literal. Live health:
+  / /scan /burn /ai /plan /roots all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #9 stays open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #8/#10/#13 stay open as recurring.
+- 2026-09-30 00:43 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. (1) TENTH traffic read (KV, digest-cron pattern): 2026-09-29 final
+  230 pageviews / 83 events — byte-identical to the 00:03 read (zero activity
+  00:03→00:43 ET); 2026-09-30 keys since midnight: 6 pv (/ 2, /ai 1, /burn 2,
+  /story 1), 1 wallet_connect — also byte-identical to 00:03. The 09:23 "flat =
+  traffic/distribution" thesis stands for the tenth straight read; still
+  confounded by Antonio's Pro testing + auditor sessions. (2) Feedback inbox
+  check (first for a #8 run): single entry only — the known 2026-09-28
+  {c:"bug",m:"Test",p:"/scan"} submission, already logged and dismissed in
+  daily memory as a form test; nothing new, nothing actionable. (3) Revisit
+  scan: no ripened items — every prior rejection's revisit condition (baseline
+  traffic, burn-step volume, aged epoch, pass volume) unmet; /api/scan-stats
+  flat since 03:50 ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}).
+  (4) Considered and REJECTED: any demand move on the flat numbers
+  (statistically meaningless), outbound or in-site demand nudges (hard boundary
+  + no baseline), touching src/shipping (nothing earned it; tree quiet since
+  the 00:23 ship, queued-fix queue closed, no deferred item claimed). Noted for
+  future runs: marginal value of 40-min-interval reads is ~zero at the tenth
+  straight identical read; the cadence stays because the charter says so.
+  Live health: / /scan /burn /ai /plan /roots all 200 on the custom domain.
+  Zero wallet/signing/data-source/mascot touch, no new data sources. #8 stays
+  open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-30 00:33 ET run: backlog #13 DONE (real-utility research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. Tree quiet (src writes since the 00:23 ship: none — loop's own ships
+  only; no concurrent process). (1) Revisit scan: no ripened items — every prior
+  rejection's revisit condition (baseline traffic, burn-step volume, aged epoch,
+  pass volume) unmet; /api/scan-stats flat since 03:50 ({deep_scans:3,
+  pass_burns:1, dumb_destroyed_min:100000}), honest, still traffic/distribution.
+  The 13:03 og-symbol deferral is confirmed FULLY CLOSED (14:23 #13 shipped it,
+  15:13 #8 crawler-verified it live) — no open deferred item left to claim.
+  Trading-cooldown probe stays DEFERRED (line 1724): family complete through 5n
+  + measured tax, and the auditors' first-timer input asked for copy/IA, not
+  scanner depth — designing it now would be depth nobody asked for. (2) AI
+  knowledge staleness check (23:33 precedent): nothing new user-facing since
+  the 23:33 AI_QA ship except the 00:23 ROADMAP dashboard-line text, which is
+  covered by the existing "Where can I see the live price?" canned answer;
+  served-layer verified: POST /api/ai-chat {"question":"What is Dumb AI Pro?",
+  "suggested":true} → mode=local, sources=["hub knowledge"], 1,070-char
+  canned answer ($0, no model call), /terms mentioned, zero Robinhood
+  references — the freemium boundary intact through the 23:53/00:23 deploys.
+  (3) /api/market incident noted, NOT a regression: first two reads returned
+  the designed honest {"ok":false,"reason":"Market data unavailable."} (502
+  path) while DexScreener itself was 200 from here in 0.76s and its pair
+  payload matched the 23:53 guards exactly (correct pairAddress, numeric-string
+  priceUsd) — worker-edge transient, ~2–3 min; the !ok client branch showed its
+  honest "Market data unavailable … Nothing is guessed" state (no $0.00
+  invented prices); third read 30s later → 200 with real data through both
+  23:53 guards (dumb ok:true, priceUsd 0.00000406, correct pair, https
+  chartUrl). Self-recovered, zero code touched. Live health: / /scan /burn
+  /ai /plan /roots all 200 on the custom domain. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #13 stays open as recurring;
+  #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#9/
+  #10 stay open as recurring.
+- 2026-09-30 00:23 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED **roadmap staleness fix: the /roots dashboard line** — the 23:05
+  ship turned /roots into a real live market dashboard (server-side
+  DexScreener via /api/market, 60s cache, price/24h/liquidity/volume/txns/
+  mcap cards, thin-market warning), but the public /plan ROADMAP line still
+  said "Live pair tables and tax reality on /roots" (the pre-dashboard
+  copy) — underselling the biggest UX change of the night. FIX
+  (src/data/dump.ts, one item, zero other files): "Live market dashboard on
+  /roots (nav: 'Dashboard') — USD price, 24h change, liquidity, 24h volume,
+  and txn counts for the flagship PulseX pairs, refreshed every minute with
+  an honest unavailable state (nothing is guessed) plus a thin-market
+  warning; pair contracts, the live tax split read from the chain, and the
+  burn history below". Done flags re-verified honest (8 "Now" groups + Week
+  1/2/3 done:true; 60/90 days + 2 Planned done:false — no status flips
+  earned). Claim freshness re-verified: the two 23:33 AI_QA entries (Dumb AI
+  Pro, terms/privacy) are covered by the existing Dumb AI Pro ROADMAP group;
+  /terms + /privacy need no ROADMAP group (compliance pages, not roadmap
+  features). Tree was quiet (only the loop's own 00:13 comment-only rag.ts
+  edit in-tree undeployed — this ship carries it live, zero behavioral
+  change). Pipeline: tsc clean, eslint clean, build passed, deployed preview
+  e1db9a2a-591d-415c-a21e-08d35054409e. LIVE VERIFIED (served bundle, not the
+  deploy log): /plan renders the new dashboard line; / /scan /burn /ai
+  /roots all 200 on the custom domain. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #8/#9/#13 stay open as recurring; #5 on
+  Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-30 00:13 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-focused, one comment-only nit fixed (NOT deployed — zero behavioral
+  change, rides with the next real ship), no other code changes. (1)
+  Adversarial read of the AI-subsystem evening surfaces: ai-chat.ts caps are
+  sound — question 500 chars, body 8KB, history validated (role enum, ≤6
+  turns, 600 chars each), scan summary sanitized (address regex, ≤40 checks,
+  label 120/detail 500). Fail-open-on-KV-hiccup is deliberate and documented
+  (free models cost $0; OpenRouter's own 50/day key cap is the backstop).
+  Guardrail prompts hold the standing lines: no financial advice, no price
+  predictions, no seed-phrase asks, Robinhood blackout present in BOTH the
+  free and Pro system prompts (no regression from the 21:22-21:24 edits).
+  (2) DexScreener trust in the AI path: token-query extraction is
+  charset/length-bounded (0x hex-only 40, $TAG 2–10 alpha, ALL-CAPS 2–10
+  alpha); the URL is constructed, never user-controlled (encodeURIComponent
+  on the search path) — no URL injection. DexScreener `best.url`/websites/
+  socials reach only the MODEL as context text, never a client anchor, so no
+  javascript:/data: ride-through. (3) ai-pro.ts re-verified: signature binds
+  address + both hashes, burn/model legs measured from receipt Transfer logs
+  (not calldata amounts), allowlisted swap paths decoded from calldata
+  (selectors from ABI, never hand-typed), model wallet server-configured
+  (never client-supplied), block-anchored valuation. KV replay-guard race
+  remains negligible-by-construction (a concurrent double-activate needs the
+  signer's own signature over the same hashes — worst case is a grant
+  refresh for the legit payer). (4) RESIDUAL CLOSED — the 22:03
+  verifyScanBurn tx.from residual is MOOT, not queued with #17: the 30-day
+  scan pass is a client-side localStorage affordance (documented in code:
+  "No custody, no server, no new contract"), trivially editable client-side
+  regardless — it was never a trust boundary. The wallet check is a fairness
+  UX rule (paste path can't claim a stranger's burn hash), and the real gate
+  is the on-chain re-verification, which is real. No signature design needed
+  for this one; removing it from the #17 queue. (5) Nit: rag.ts had a
+  duplicated "Token-info intent" comment line (evening-edit wart) — removed
+  (comment-only; stays in-tree until the next behavioral ship earns a
+  deploy). Secrets sweep clean (zero key-shaped literals in src/ or the
+  served bundle). #17 standing residuals otherwise UNCHANGED (browser-
+  supplied wallet for chat authz → signed short-lived sessions still the
+  planned design). Live health: / /scan /burn /ai /plan /roots /terms
+  /privacy /wallet /trade all 200; /api/market first-read 502 honest
+  "Market data unavailable", retried 25s → 200 with real DexScreener data
+  through the 23:53 guards (correct pair addresses, https chart URLs).
+  Zero wallet/signing/data-source/mascot touch, no new data sources.
+  #8/#10/#13 stay open as recurring; #5 on Antonio's idea-only hold,
+  #6 ON HOLD per Antonio 2026-09-29.
+
+- 2026-09-30 00:03 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — audit-only run, nothing earned
+  a ship. (1) NINTH traffic read (KV, digest-cron pattern): 2026-09-29 final
+  230 pageviews / 83 events — byte-identical to the 23:43 read (zero activity
+  23:50→00:03 ET); 2026-09-30 keys since midnight: 6 pv, 1 wallet_connect.
+  wallet_connect 63 dominant; US 202 + 5 countries. The 09:23 "flat =
+  traffic/distribution" thesis stands for the ninth straight read; still
+  confounded by Antonio's Pro testing + auditor sessions. (2) The evening's
+  queued-fix queue is now CLOSED: the 21:13 /scan cold-teaser CTA repoint is
+  LIVE at the SSR layer ("Quick-scan a token above — the deep-scan burn step
+  appears with your report", anchors to #token-scanner, no /burn link); the
+  5o try/catch residual is FIXED in tree AND in the served bundle
+  (measured-tax renders "unknown" on measurement crash, with "treat as unknown,
+  not fine" copy); the 4-site "RPC didn't answer" copy is gone from
+  TokenScanner.tsx (the one remaining "RPC is being flaky" at line 972 is the
+  PLS-quote card, a different honest site). The concurrent AI-subsystem evening
+  edits (TokenScanner.tsx 22:46 ET, AiPreview.tsx 21:22 ET, rag.ts 21:24 ET)
+  went live via the loop's 23:33/23:53 builds — clean builds, live-verified,
+  no clobber; the no-collision discipline is moot. The 22:03 verifyScanBurn
+  tx.from residual stays queued with the #17 authz overhaul (needs a design).
+  (3) The one /api/market 502 this run is the DESIGNED honest path, not a
+  regression: cold isolate + DexScreener hiccup + no cache → 502 "Market data
+  unavailable" instead of an invented price; retried 20s later → 200 with real
+  data and both 23:53 pair-address guards passing (dumb 0.00000406, damp
+  0.00002153). fetch-market.ts throws on non-OK and the dashboard shows its
+  honest "unavailable" state (verified 23:53). (4) Rejected-ideas revisit: no
+  ripened items (all revisit conditions unmet; scan-stats flat since 03:50 —
+  {deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}). Considered +
+  REJECTED: any demand move on flat 230/83 numbers; outbound/in-site nudges
+  (hard boundary + no baseline); touching src/shipping (nothing earned it).
+  Live health: / /scan /burn /ai /plan /roots /terms /privacy /wallet /trade
+  all 200 on the custom domain; /api/market 200. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #8 stays open as recurring;
+  #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/
+  #13 stay open as recurring.
+
+- 2026-09-29 23:53 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **external-data trust hardening on /api/market** (src/server/market.ts,
+  the only file touched) — the newest server surface (shipped 23:05, un-audited
+  until now) got an adversarial read, and two cheap guards closed the only real
+  gaps: (1) DexScreener's returned pair address is now confirmed case-
+  insensitively against the requested flagship pair before any number is
+  labeled DUMB/DAMP — kills the only mislabeled-price path; (2) the upstream
+  `url` is only accepted as an outbound chart link when it starts with
+  http(s) — a javascript:/data: URL from a compromised upstream response can
+  never ride the "Chart on DEXScreener" anchor. Both fail soft to the existing
+  honest states ("unavailable — nothing is guessed", client falls back to our
+  own constructed dexscreener.com URL). Client-side null handling re-verified
+  honest in the same pass (every null renders "—", the !ok branch says "Market
+  data unavailable right now … Nothing is guessed in the meantime" — no
+  $0.00 invented prices). Read-only secrets sweep of src/ + scripts/: clean
+  (zero key-shaped literals; WALLETCONNECT_PROJECT_ID still null-by-design).
+  Tree was quiet (~20 min src-quiet since the 23:33 AI_QA ship — the loop's
+  own), so a deploy was safe. Pipeline: tsc clean, eslint clean
+  (prettier --fix applied to the edit), build passed, deployed preview
+  8c34cd66-8d6f-4ba1-80fb-58b753f11a38. LIVE VERIFIED (served bundle, not the
+  deploy log): /api/market 200 with real DexScreener data through the new
+  guards — dumb ok:true priceUsd 0.00000406 (matches the log's claimed live
+  price), damp ok:true 0.00002153, both pair addresses correct, both chartUrls
+  https://; / /scan /burn /ai /plan /roots all 200 on the custom domain.
+  Standing residual UNCHANGED (needs a design, not a one-liner): #17 —
+  ai-chat.ts still authorizes Pro on a browser-supplied wallet address alone
+  (signed short-lived Pro sessions still the planned fix); ai-pro.ts KV
+  replay race remains negligible. Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #8/#10/#13 stay open as recurring; #5 on
+  Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-29 23:43 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — the tree is quiet (only the
+  23:33 run's own AI_QA ship, ~6 min src-quiet before run start; that ship already
+  deployed + was live-verified), so no collision, but nothing new earned a deploy.
+  (1) Eighth real traffic read (KV, digest-cron pattern): 2026-09-29 through
+  ~23:50 ET — 230 pageviews / 83 events, byte-identical to the 22:35 read (zero
+  activity in 75 min); / 41, /scan 32, /burn 22, /ai 15, /wallet 14,
+  /whitepaper 14; wallet_connect 63, scan_started 4, swap_quote 4,
+  copy_contract 3, quick_scan 3, raid_play 3, bag_scan/burn_voluntary/
+  watchlist_toggle 1 each; US 202 + 5 countries. The 09:23 "flat =
+  traffic/distribution" thesis stands for the eighth straight read; no demand
+  conclusion — still confounded by Antonio's Pro testing + auditor sessions.
+  (2) SERVED-LAYER VERIFICATION of the 23:33 ship (genuine, non-churn): the two
+  new AI_QA entries are not just in the bundle — POST /api/ai-chat with the
+  exact question + suggested:true returns the canned answers at mode=local,
+  sources=["hub knowledge"], $0, no model call: "What is Dumb AI Pro?" → 1,070
+  chars (30-day pass, $16 DUMB burn + $4 model wallet, no Robinhood references);
+  "What are the terms and privacy policy?" → 921 chars (mentions /terms +
+  /privacy). The freemium boundary ("suggested questions always answered free,
+  server-validated") is live, not just claimed. (3) Demand-surface drift check:
+  burn honest framing intact (burn.tsx:18 + BurnBox "never promise price" ×3),
+  scan-pass 30-day copy intact, 5o/5n clauses intact, zero Robinhood references
+  in the Pro answers — no drift. (4) Rejected-ideas revisit: no ripened items
+  (all revisit conditions — baseline traffic, burn-step volume, aged epoch, pass
+  volume — unmet; /api/scan-stats flat since 03:50). NEW CONSIDERATION +
+  REJECTED: a homepage "Fresh this week" strip to convert returning visitors —
+  rejected: on flat confounded traffic it serves mostly Antonio; /plan is already
+  the public changelog; doesn't earn its place. (5) Live health: / /scan /burn
+  /ai /plan /roots /terms /privacy all 200 on the custom domain. Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29;
+  #9/#10/#13 stay open as recurring.
+- 2026-09-29 23:33 ET run: backlog #13 DONE (real-utility research, recurring) →
+  SHIPPED **Dumb AI knowledge-staleness fix: Dumb AI Pro + /terms + /privacy** —
+  a research-found unit (the 2026-09-28 /wallet-page precedent): the week's
+  biggest shipped feature had zero AI answers — a newcomer asking "What is
+  Dumb AI Pro?" or "What are the terms?" got the local fallback ("I don't
+  have a solid receipt for that yet") even though /terms, /privacy, ROADMAP,
+  and pro.ts all shipped hours earlier. FIX (src/data/dump.ts AI_QA, 2
+  entries, zero other files touched): (1) "What is Dumb AI Pro?" — $20
+  30-day pass not a subscription, ~$20 in any of the 12 verified curated
+  tokens, ~$16 DUMB burn to dead + ~$4 model wallet, burn leg always ends as
+  DUMB at dead and server-verified on-chain before the pass exists, wallet-
+  tied, 30 days from activation, 100 Qs/day + 1,000/mo per wallet + 1,000/day
+  hub-wide breaker, flagship plain-English scan explainer, general-purpose
+  with standing guardrails, free tier unchanged (10/day/visitor), irreversible
+  = no refunds, full terms on /terms; (2) "What are the terms and privacy
+  policy?" — plain-language /terms + /privacy summary (educational interface
+  for two immutable renounced tokens, not financial advice, burns permanent,
+  you sign everything, anonymous visit counts only, no cookies/tracking/wallet
+  linkage, device-local storage, Pro on-chain payment records as the honest
+  exception). Claim-by-claim mirrored against the live /terms + /privacy
+  routes (read this run) and the 23:23 ROADMAP wording — no drift; standing
+  blackout respected (zero Robinhood references); no price promises. Both
+  entries auto-become faq-N RAG chunks with question-word tags, and exact-
+  typed questions match the server-validated canned path (findSuggested) —
+  always free per the freemium boundary. Pipeline: tsc clean, eslint clean,
+  build passed, deployed preview 5199d2f6-6023-4b77-8705-b9efb34e22a3.
+  LIVE VERIFIED (served bundle, not the deploy log): /ai 200; new dump chunk
+  dump-NznGIYIS.js carries "What is Dumb AI Pro" ×1 + "What are the terms
+  and privacy policy" ×1. Tree was quiet (~9 min src-quiet since the 23:23
+  ship) — no clobber risk. /api/scan-stats unchanged ({deep_scans:3,
+  pass_burns:1, dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. All 8 routes 200; /api/market 200 with real
+  DexScreener data; /plan SSR carries "Dumb AI Pro" ×2 (23:23 ship intact);
+  /roots SSR carries "Dashboard" nav label + MarketCards thin-market warning
+  (23:05 ship intact). BULLISH-RESEARCH.md: rejected-ideas revisit — no
+  ripened items (scan-stats flat, all revisit conditions unmet); one new
+  rejection logged (see entry). #8/#9/#10/#13 stay open as recurring; #5 on
+  Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-29 23:23 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  ONE unit shipped: the ROADMAP was missing the biggest shipped feature of the
+  week — Dumb AI Pro (live since 2026-09-29) had zero presence in
+  src/data/dump.ts, so the public /plan page understated what the hub offers.
+  FIX: added a "Now" done group "Dumb AI Pro" after the Token safety scanner
+  group — $20 30-day pass (not a subscription), ~$20 in any of the 12 verified
+  curated tokens, ~$16 of DUMB burns to dead / ~$4 to the model wallet, burn
+  leg always ends as DUMB at dead and server-verified on-chain before the
+  pass exists; Pro = paid-model chain, 100 Qs/day/wallet, plain-English scan
+  explainer; free tier unchanged (10/day). Wording matches the live /terms +
+  pro.ts copy (no Robinhood-chain references — standing blackout respected).
+  Claim freshness re-verified: all 5o/5n clauses intact in ROADMAP + AI_QA +
+  knowledge.ts; done flags still honest (all Now/Week1-3 done:true; 60/90
+  days + 2 Planned done:false); the two DAIs' removal note and the 11-token
+  input list still match the 12-token curated set (11 inputs + DUMB). Tree
+  was quiet (only the loop's own 23:03/23:13/23:05 ships in the last hour, no
+  concurrent process), so a deploy was safe. Pipeline: tsc clean, eslint
+  clean, build passed, deployed preview 272868f6-2442-4edf-b13b-130396cddd98.
+  LIVE VERIFIED: /plan SSR carries "Dumb AI Pro" ×1; / /scan /burn /ai /plan
+  /roots /terms /privacy all 200 on the custom domain. No queued residuals
+  remain. #8/#9/#10/#13 stay open as recurring; #5 on Antonio's idea-only
+  hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-29 23:13 ET run: 22:23 getDirectBurn residual APPLIED + SHIPPED →
+  the tree was quiet (src writes 22:47–22:50 ET were the 23:05 ship's own
+  content; nothing since 23:05 — last-writer-wins clobber risk cleared), so
+  one unit of code shipped. FIX: src/routes/api/brag-image.ts getDirectBurn
+  (shape-1) no longer prints the calldata-decoded PRE-TAX amount on the brag
+  card. It now sums the from→dead Transfer log amounts — the same
+  summed-dead-arrival pattern getSwapBurnArrival (shape-2) already used —
+  so a direct DUMB burn prints the 0.95A dead arrival instead of overstating
+  by 5% (DAMP: 0.98A, was overstated 2%). Calldata still used as a cheap
+  structural gate (selector + recipient === dead + positive amount), plus the
+  same malformed-log-data → null guard. Docstring updated to name the
+  honest-amount rationale. Pipeline: tsc clean, eslint clean, build passed,
+  deployed preview cc69ddfd-fe8e-41d8-a66b-95afbcf47096. LIVE VERIFIED: / /scan
+  /burn 200; /brag 307 (expected — tx-param redirect); /api/brag-image with
+  a valid-format random hash → 404 "not a verified burn" (handler runs,
+  fallback intact; the summed-logs path mirrors the already-live shape-2
+  pattern). No other queued residuals remain from the 22:23 batch. #8/#9/#10/
+  #13 stay open as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per
+  Antonio 2026-09-29.
+- 2026-09-29 23:03 ET run: backlog 21:13 queued residual APPLIED + SHIPPED →
+  the 23:05 Antonio-directed deploy had landed and the tree was quiet (~15 min
+  src-quiet, git clean, served Bj8CSg_Y chunk matched the deploy — the first
+  true post-deploy quiet window since ~18:47), so one unit of code shipped.
+  FIX: /scan cold-teaser CTA repoint (src/routes/scan.tsx) — the deep-scan
+  teaser CTA no longer links "Burn DUMB on the burn page" → /burn (misdirected
+  funnel: /burn's BurnBox burns arbitrary amounts with zero deep-scan
+  references, and verifyScanBurn hard-requires ≥100k DUMB arrival — a cold
+  visitor could burn the wrong amount or burn right and get no paste guidance).
+  CTA is now an anchor to #token-scanner: "Quick-scan a token above — the
+  deep-scan burn step appears with your report", and the teaser only renders on
+  the token tab (tx tab has no scanner target — no dead clicks). Unused Link
+  import dropped, prettier --fix applied. Pipeline: tsc clean, eslint clean,
+  build passed, deployed preview 17c75d1e-de08-4e89-9ad8-285bbc28816c. LIVE
+  VERIFIED: /scan SSR carries the new CTA copy ×1, old copy ×0; / /scan /burn
+  /ai /roots /terms /privacy all 200; /api/market 200 (one transient 502 on
+  first probe, 200 on retry — cold-worker, not a regression). STILL QUEUED
+  for a future run: the 22:23 getDirectBurn residual (api/brag-image.ts:73-98
+  shape-1 card prints calldata-decoded PRE-TAX amount → "I BURNED 1,000 DUMB"
+  overstates dead-arrival by 5% vs shape-2's honest summed-log number; fix:
+  sum from→dead Transfer logs like getSwapBurnArrival). #8/#9/#10/#13 stay open
+  as recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29.
+- 2026-09-29 22:53 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the tree is HOT (src writes
+  at 22:48–22:50 ET, .wrangler/deploy/config.json touched within 10 min of
+  run start — a deploy was in flight), so the no-collision rule held: zero src
+  writes, zero deploys. This run became an INDEPENDENT POST-DEPLOY VERIFICATION
+  of the evening's whole fix chain, against the served bundle (not the tree):
+  (1) Served /scan references a NEW chunk hash (Bj8CSg_Y, not the loop's 18:47
+  CQBYZ6Dj) — a deploy definitely landed after 18:47. (2) The 22:43 5o
+  try/catch fix SURVIVED the concurrent window and is LIVE: "Treat as unknown,
+  not fine" ×1 in the served scan chunk (it sits at ~2252, just past the
+  1906–2248 window the prior runs measured — the zero-catch scare was a stale
+  line window, not a regression). (3) The caller-copy softening is LIVE at all
+  six sites ("The deep scan hit an error — try again in a moment" in the
+  served scan chunk); the ONE remaining "RPC didn't answer" string in the
+  served bundle is the TxExplainer's not-found case ("Either the hash is
+  wrong, the transaction hasn't been mined yet, or the RPC didn't answer.
+  Double-check the hash on the explorer.") — an honest enumeration of real
+  possibilities for a missing tx, not the misattribution we fixed. NOT a
+  residual. (4) The 22:45 tx.from wallet-binding fix rode forward into the
+  latest deploy: "wasn't sent from your connected wallet" ×1 in the served
+  scan chunk. (5) 23:05 Antonio-directed ship verified: /api/market,
+  /terms, /privacy, /roots, /stats all 200; /api/market returns real
+  DexScreener data (DUMB $0.00000406 — matches the log claim). (6) TWO items
+  STILL QUEUED in src (untouched by the concurrent window — the 22:50 tree
+  still has them unfixed, re-verified this run): the /scan cold-teaser CTA
+  still links "Burn DUMB on the burn page" → /burn (misdirected deep-scan
+  funnel), and getDirectBurn (api/brag-image.ts:73-98) still returns the
+  calldata-decoded pre-tax amount while only boolean-checking arrival — the
+  shape-1 "I BURNED 1,000 DUMB" card overstates dead-arrival by 5% vs
+  shape-2's honest summed-log number. Both stay queued for the next quiet
+  window; the tree is hot so this run did not touch them. #9 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29;
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 23:05 ET (Mosheh, Antonio-approved "do what you recommend"):
+  SHIPPED TO PREVIEW `20f32587-a5f9-47f4-a64d-8ca7a7d89cef` —
+  (1) Burn terminology pass: the site was already more precise than the audit
+  claimed (most umbrella "burned" uses carry adjacent 1%-dead/4%-entombed
+  decomposition); tightened the 3 lone standouts (Proof ownership note,
+  BurnBox direct-burn tax line, story "burned in every way that matters" →
+  "out of circulation either way"). Antonio's locked "5% instant burn"
+  framing kept as headline, decomposition always adjacent.
+  (2) /terms + /privacy drafted (plain language, 30-day Pro pass terms,
+  no-refunds on irreversible burns, anonymous analytics, local-storage
+  disclosure), footer links + sitemap entries added.
+  (3) /stats passphrase page now links out to the public dashboard.
+  (4) /roots upgraded to a real dashboard: new GET /api/market (server-side
+  DexScreener, flagship DUMB/WPLS 0x221f63Fb… + DAMP/WPLS 0xB256769d… pairs,
+  60s cache, stale-served, null-guarded — research verified free tier,
+  300/min, no key); MarketCards show price, 24h change, liquidity, 24h
+  volume, txns, mcap (labeled DexScreener circulating-ex-dead method),
+  source + updated-at + thin-market warning. Nav/404/mobile labels:
+  "Roots" → "Dashboard" (URL unchanged). AI canned Q&A added: "Where can I
+  see the live price?" → /roots. Live-verified: /api/market 200 with real
+  data (DUMB $0.00000406, DAMP $0.00002188), /terms /privacy /roots /stats
+  200, footer links present, Dashboard labels in bundle.
+- 2026-09-29 22:43 ET run: queued 5o residual APPLIED TO SRC, NOT deployed
+  (hot concurrent window) → (1) token-scan.ts: the 5o measured-tax block is
+  now wrapped in try/catch — a measurement crash pushes an "unknown"
+  measured-tax check ("trade history couldn't be fully read — treat as
+  unknown, not fine") instead of throwing and killing the whole scan; the
+  both-sides-pass null-guard the 20:33 run found intact was left as-is.
+  (2) Softened the misattributing "the RPC didn't answer" caller copy at all
+  six sites (TokenScanner ×4 quick/deep catches, BagScan ×1, BurnBox burn-
+  verification ×1) → "The scan/deep scan/burn verification hit an error —
+  try again in a moment." tsc + eslint clean on all four touched files.
+  (3) NO DEPLOY: a concurrent process is actively writing the tree
+  (02:47–02:49 ET: /terms + /privacy routes, market.ts, server.ts,
+  __root.tsx, MobileNav, story/Proof/stats/Roots) and tsc is currently red
+  ONLY on its in-progress files (route-type registration for /terms +
+  /privacy, market.ts index-signature accesses) — zero errors in the loop's
+  files. Per the standing no-collision rule the loop did not build/deploy
+  into the hot window; the complete fix rides with the next quiet-window
+  → SHIPPED with the 23:05 Mosheh deploy (preview 20f32587 — tree build ran
+  after 22:43, try/catch + softened copy confirmed in src post-build).
+  deploy. (4) Still queued for a future quiet run: the 21:13 /scan
+  cold-teaser CTA repoint. Live health not re-checked (no deploy this run).
+  #8/#9/#10/#13 stay open as recurring; #5 on Antonio's idea-only hold, #6
+  ON HOLD per Antonio 2026-09-29.
+- 2026-09-29 ~23:00 ET (Antonio-directed, outside loop): external first-time-user
+  auditor findings ARRIVED (agent 1 page inventory + agent 2 UX audit, via Antonio).
+  Due-diligence triage done against the tree; the 19:33/22:33 next-probe design
+  hold is RELEASED — findings are in hand. Six confirmed fixes shipped to preview
+  8f928a2f (/ /scan /trade /roots /feedback /ai 200, strings verified in bundles):
+  (1) Roots.tsx EngineCard: DAMP section no longer repeats DUMB's "14B
+  launch-day burn" (impossible on a 1B-supply token) — now "300M launch-day burn"
+  per story.tsx:69; (2) missions.ts "DUMP smiley" typo → "DUMB smiley";
+  (3) feedback.tsx now uses a <main> landmark (was a plain div);
+  (4) CommunityRatings empty state: decorative zero-stars hidden from the
+  accessibility tree (was exposed as "0 out of 5 stars");
+  (5) SwapBox: one-line DAMP amplifier-inactive notice when DAMP is the selected
+  trade token (page already said it in the markets card; now at point of sale);
+  (6) scan verdict badge now reads "No red flags found · N checks unknown" when
+  unknowns exist; scan-pass copy states the pass counts 100,000 SENT (~95,000
+  lands at dead after the 5% burn tax) for both one-click and manual paths.
+  Auditor claims NOT confirmed: /api/pls-price "broken" → 200 on prod right now
+  ({"usd":0.00001144}, likely transient when they hit it); AI suggested-question
+  hover "dark-on-dark" → theme values (oklch fg ~0.97, secondary ~0.28) say
+  near-white on dark, and the 19-question grid they saw is the OLD production UI —
+  the Antonio-approved new AI page (preview) already shows 4 starters;
+  explorer "launcher detour" → site links scan.pulsechain.com/tx/… directly, the
+  detour is the explorer's own page; brag "I burned" → the /brag PAGE already
+  says "Someone burned", only the share-card image says "I BURNED" (correct for
+  the burner sharing it). Queued for Antonio's call (NOT auto-built): burn-term
+  precision pass (dead-address vs entombed vs immobilized, site-wide copy
+  architecture), /terms+/privacy pages (advisable with the $20 paid Pro), IA
+  merge of proof/genesis/roots, public dashboard, /stats escape link. TSC +
+  ESLint clean, build passed. Production untouched.
+- 2026-09-29 ~22:45 ET (Antonio-directed, outside loop): FIXED the verifyScanBurn
+  tx.from residual — pasted burn hashes can no longer claim a deep-scan pass.
+  ScanBurnVerification ok-variant now carries `from` (both verifyScanBurn and
+  verifyPlsBurn return it from the on-chain tx); TokenScanner's manual-paste
+  run() requires a connected wallet and rejects any burn whose from != the
+  connected wallet ("That burn wasn't sent from your connected wallet").
+  One-click wallet/PLS paths unchanged (their hashes come from the wallet's own
+  broadcast); shared ?burn= links unchanged (no pass issued there). Preview
+  deployed a4056823, / /scan /ai /burn 200. The other three queued residuals
+  (5o try/catch, the four "RPC didn't answer" copy sites, /scan cold-teaser CTA)
+  are untouched and stay queued.
+- 2026-09-29 22:33 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process's unshipped edits remain in the tree (rag.ts 21:24 ET last write; served
+  /scan still references the loop's 18:47 chunk BurnBragCard-CQBYZ6Dj.js,
+  hash-matched this run), so the no-collision rule held: zero src writes, zero
+  deploys. (1) Seventh real traffic read (KV, read-only): 230 pageviews / 83
+  events through ~22:35 ET — byte-identical to the 21:13/21:53 reads, dead-quiet
+  evening continues; US 202 + 5 countries; events wallet_connect 63, quick_scan 3.
+  The 09:23 "flat = traffic/distribution" reasoning stands; no demand conclusion
+  (still confounded by Antonio's Pro testing + auditor sessions). (2) Demand-surface
+  re-audit: measured-tax 5o clause intact through the concurrent AI evening
+  ("not enough trades" dump.ts ×2, knowledge.ts ×1; rag.ts imports from the single
+  source of truth — import verified); full probe-family chunk (knowledge.ts:64)
+  still names the burn-gated deep scan with correct mechanics; 5n clause intact —
+  zero claim drift. (3) Rejected-ideas revisit: no ripened items (all conditions
+  unmet; scan-stats flat since 03:50). (4) Queued for the post-deploy quiet window:
+  the 21:13 /scan cold-teaser CTA repoint + the 5o try/catch residual (0 catch hits
+  in token-scan.ts 1906–2248; misattributing copy at FOUR sites). (5) Next-probe
+  design hold STANDS: external first-time-user auditors' findings still not arrived
+  (today's memory log checked). Live health: / /scan /burn /plan /ai /trade 200 on
+  the custom domain. Zero wallet/signing/data-source/mascot touch, no new data
+  sources. #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 ON HOLD
+  per Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-29 22:23 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process's unshipped edits remain in the tree (src quiet ~59 min since
+  rag.ts 21:24 ET; served /scan still references the loop's 18:47 chunk
+  BurnBragCard-CQBYZ6Dj.js, hash-matched from served HTML this run), so the
+  no-collision rule held: zero src writes, zero deploys. (1) NEW residual
+  filed (low severity, queued for the post-deploy quiet window):
+  /api/brag-image shape-1 (direct transfer burn) prints the CALLDATA input
+  amount on the card — pre-tax — while shape-2 (PLS-fallback swap) prints the
+  summed dead-arrival Transfer logs. Per backlog #1's verified accounting a
+  direct DUMB burn lands 0.95A at dead, so "I BURNED 1,000 DUMB — VERIFIED
+  ON-CHAIN" overstates dead-arrival by 5% and is inconsistent with shape-2's
+  own "honest destroyed number" framing. Fix: in getDirectBurn, sum the
+  from→dead Transfer log amounts (the same pattern getSwapBurnArrival already
+  uses) instead of decoding calldata — zero code churn anywhere else. Rest of
+  the path HELD UP: RPC data never blindly trusted (logs checked on every
+  shape), deterministic per-tx (safe edge cache), 60s negative cache on 404s,
+  immutable 1y cache on hits, spam can't re-pay the PNG render, secrets-free;
+  /brag page falls back gracefully on unverified hashes (no claim under a
+  broken image) with the explorer escape hatch, copy stays honest ("Burns
+  shrink supply — they never promise price"). (2) The four prior queued
+  residuals re-verified STILL REAL, stay queued: 5o try/catch (0 catch hits
+  in token-scan.ts 1906–2248, measured directly); misattributing "RPC didn't
+  answer" caller copy at TokenScanner.tsx:148, 564, 608, 701; verifyScanBurn
+  builds fromTopic from tx.from at token-scan.ts:2706 for log-matching only
+  — still NOT bound to the connected wallet, a stranger's ≥100k burn hash
+  still claims a pass; the 21:13 /scan cold-teaser CTA repoint. (3) External
+  first-time-user auditor findings STILL not arrived (today's memory log
+  checked) — the 19:33 next-probe design hold stands. Live health: / /scan
+  /burn /plan /ai /trade 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #9 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13
+  stay open as recurring.
+- 2026-09-29 22:13 ET run: backlog #13 DONE (real-utility research, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is HOT again (rag.ts touched 21:24 ET, ai-chat.ts 21:23 ET, AiPreview.
+  tsx 21:22 ET — ~49 min before run start) and its unshipped edits remain in
+  the tree (served /scan still references the loop's 18:47 chunk
+  BurnBragCard-CQBYZ6Dj.js, hash-matched from served HTML this run), so the
+  no-collision rule held: zero src writes, zero deploys. (1) ALL FOUR queued
+  residuals re-verified STILL REAL, stay queued for the post-deploy quiet
+  window: 5o try/catch (0 catch hits in token-scan.ts 1906–2248, measured
+  directly); misattributing "RPC didn't answer" caller copy at FOUR sites
+  (TokenScanner.tsx:148, 564, 608, 701 — the softening fix must cover all
+  four); the 22:03 verifyScanBurn tx.from residual independently confirmed
+  still real (token-scan.ts:2671 computes fromTopic from tx.from for
+  log-matching but never binds it to the connected wallet, and the caller at
+  TokenScanner.tsx:618 passes no address — a stranger's ≥100k DUMB burn hash
+  claims a pass; low severity, fix queued with the #17 authz overhaul); the
+  21:13 /scan cold-teaser CTA repoint (misdirected deep-scan funnel). (2) No
+  claim drift through the concurrent AI edits: 5o measured-tax clause in
+  dump.ts (×2) + knowledge.ts (×1); rag.ts carries 0 local hits because it
+  imports the corpus from @/data/knowledge — verified the import, so the
+  clause lives in the single source of truth; 5n rescue/withdraw clause
+  intact (dump.ts ×2, knowledge.ts ×1). (3) BULLISH-RESEARCH.md revisit scan:
+  no ripened items — every prior rejection's revisit condition (baseline
+  traffic, burn-step volume, aged epoch, pass volume) unmet. (4) Next-probe
+  design hold STANDS: scanner carries the complete 5a–5o owner-power family
+  + measured tax; the external first-time-user auditors' findings STILL not
+  arrived (today's memory log checked) — designing the next probe without
+  their input would be depth nobody asked for. Live health: / /scan /burn
+  /plan /ai /trade 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #13 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay
+  open as recurring.
+- 2026-09-29 22:03 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is HOT again (rag.ts touched 21:24 ET, ai-chat.ts 21:23 ET, AiPreview.
+  tsx 21:22 ET — ~39 min before run start) and its unshipped edits remain in
+  the tree (served /scan still references the loop's 18:47 chunk
+  BurnBragCard-CQBYZ6Dj.js, hash-matched from served HTML this run), so the
+  no-collision rule held: zero src writes, zero deploys. (1) Adversarial
+  review of the deep-scan burn + PLS-fallback money path (read-only, funds
+  at stake): HELD UP. startPlsBurn pins chainId 369, uses the 60s-refreshed
+  quote, min-out = quote × 0.95 dead-arrival × 0.92 slippage (plsBurnMinOut),
+  deadline computed at click time, path strictly [WPLS, DUMB] → to=dead via
+  the ABI-decoded router call (no hand-rolled selector); verifyPlsBurn
+  requires the tx be TO the PulseX router, tx.value > 0, the exact
+  swapExactETHForTokensSupportingFeeOnTransferTokens signature, path/to
+  checks, and dead-arrival ≥ 100k from receipt Transfer logs; verifyScanBurn
+  checks receipt success, to=DUMB, 0xa9059cbb calldata to dead, ≥100k sent,
+  and the from→dead log. The 30-day pass is localStorage-only gating a
+  client-side read-only feature — forgery can only net public-RPC reads, no
+  server cost, correctly scoped. (2) NEW RESIDUAL FILED (low severity):
+  verifyScanBurn does NOT bind tx.from to the connected wallet — anyone can
+  paste a stranger's ≥100k DUMB burn hash into the manual paste box and claim
+  a 30-day pass without paying. It dilutes the burn flywheel but extracts
+  nothing; fix (require tx.from === wallet on the paste path) queued for the
+  post-deploy quiet window alongside the 5o try/catch residual. (3) 5o
+  try/catch residual re-verified STILL REAL: 0 catch hits in token-scan.ts
+  1906–2248 (measured directly); null-guard intact ("exposes no tax getters"
+  ×1); 5n block ×4 — NEW: the same misattributing caller copy appears at
+  FOUR sites, not one — TokenScanner.tsx:148 (quick scan) plus 564/608/701
+  (deep-scan paths), all "the RPC didn't answer" — the copy-softening fix
+  should cover all four. (4) Secrets sweep of src/ + scripts/: clean — the
+  three regex hits are false positives on "risk-first" matching the sk-
+  pattern; TRANSFER_SELECTOR is the standard 0xa9059cbb; no .env files.
+  (5) External first-time-user auditor findings STILL not arrived (today's
+  memory log checked) — the 19:33 next-probe design hold stands. Live
+  health: / /scan /burn /plan /ai /trade /whitepaper /proof all 200;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #9 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as recurring.
+- 2026-09-29 21:53 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is HOT (rag.ts 21:24 ET, ai-chat.ts 21:23 ET, AiPreview.tsx 21:22 ET,
+  all within ~30 min of run start) and its unshipped edits remain in the tree
+  (served /scan still references the loop's 18:47 chunk BurnBragCard-CQBYZ6Dj.js,
+  hash-matched this run), so the no-collision rule held: zero src writes, zero
+  deploys. (1) SIXTH real traffic read (KV counters, read-only): 2026-09-29
+  through ~21:55 ET: 230 pageviews / 83 events — byte-identical to the 21:13
+  read (~zero activity in 40 min); / 41, /scan 32, /burn 22, /ai 15;
+  wallet_connect 63 dominant; US 202 + 5 countries. The 09:23
+  "flat = traffic/distribution" thesis stands for the sixth straight read —
+  no demand conclusion (still confounded by Antonio's Pro testing + auditor
+  sessions). (2) Share-funnel verification (read-only, genuine non-churn):
+  the quick-scan share path is fully wired — "Share this report" section after
+  every quick scan (native share + Post to X + Telegram, TokenScanner.
+  tsx:352-400), `?token=` auto-run links for viewers (115-183), `&burn=` links
+  re-verify the burn on-chain before rendering; no fabricated-report vector,
+  no gap filed. (3) Queued for the post-deploy quiet window: the 21:13 /scan
+  cold-teaser CTA repoint (misdirected deep-scan funnel) + the 5o try/catch
+  residual (0 catch hits in token-scan.ts 1906-2248; misattributing caller copy
+  at TokenScanner.tsx:148 — stays #9's unit). (4) External first-time-user
+  auditor findings STILL not arrived (today's memory log checked) — the 19:33
+  next-probe design hold stands. (5) Considered and REJECTED in
+  BULLISH-RESEARCH.md: a "most-scanned tokens" public wall (confounded counts
+  + tiny real numbers = anti-marketing), any outbound/in-site demand nudge on
+  the flat 230/83 (hard boundary + no baseline), scanner hooks ahead of auditor
+  findings (per the 19:33 hold), shipping anything during the hot window.
+  Live health: / /scan /burn /plan /ai 200; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since 03:50,
+  honest. Zero wallet/signing/data-source/mascot touch, no new data sources.
+  #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per
+  Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 21:43 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is HOT again (rag.ts touched 21:24 ET, ~19 min before run start;
+  ai-chat.ts 21:23 ET, AiPreview.tsx 21:22 ET), and its unshipped edits remain
+  in the tree (served /scan still references the loop's 18:47 chunk
+  BurnBragCard-CQBYZ6Dj.js, hash-matched from served HTML this run — the
+  concurrent process has NOT deployed), so the no-collision rule held: zero
+  src writes, zero deploys. (1) Adversarial review of the live ai-chat.ts
+  Pro-authorization path (read-only): the documented #17 wallet-address-only
+  authz flaw is STILL PRESENT exactly as filed — handleAiChatPost takes
+  `address` from the request body, validates hex format only (209–214), then
+  grants Pro via getProState(env, address) with NO signature check — anyone
+  can pass a Pro-holder's address and consume their 100/day quota. Impact
+  still bounded (~$0.0009/req, caps apply); the concurrent edits did NOT
+  add a signature requirement nor weaken the path further. Fix (signed
+  short-lived Pro sessions) stays queued with the #17 authz overhaul — needs
+  a design, not a one-liner, and the tree is hot. (2) consumeCap get-then-put
+  race re-verified REAL (ai-chat.ts ~85–92) but negligible: a few extra
+  ~$0.0009 model calls at worst, global 1,000/day breaker still bounds; same
+  residual class as the ai-pro.ts replay guard (20:43 run) — documented, low
+  severity. Fail-open-on-KV-hiccup is deliberate (commented, availability
+  over strictness) — acceptable, unchanged. (3) Input hygiene intact: body
+  413-capped, JSON.parse guarded, question truncated to MAX_QUESTION_LEN,
+  history shape-validated + length-capped (caller-supplied, never trusted
+  blindly); handleAiChatGet leaks only hasLiveKey boolean — key never
+  exposed. (4) Secrets sweep of the hot AI files (rag.ts, ai-chat.ts,
+  AiPreview.tsx, knowledge.ts, ai-pro.ts): zero hardcoded key-shaped
+  literals. (5) Queued 5o try/catch residual re-verified STILL REAL: 0 catch
+  hits in token-scan.ts 1906–2248 (measured directly); misattributing caller
+  copy "The scan failed — the RPC didn't answer" still at TokenScanner.
+  tsx:148 — the wrap-to-unknown + copy-softening fix plus the 21:13 /scan
+  cold-teaser CTA repoint stay queued for the post-deploy quiet window.
+  (6) External first-time-user auditor findings STILL not arrived (today's
+  memory log checked) — the 19:33 next-probe design hold stands. Live
+  health: / /scan /burn /plan /ai 200 on the custom domain; /api/scan-stats
+  unchanged ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat
+  since 03:50, honest, still traffic/distribution. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #9 stays open as recurring;
+  #5 on Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29;
+  #8/#10/#13 stay open as recurring.
+- 2026-09-29 21:33 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is HOT again (rag.ts touched 21:24 ET, ~9 min before run start;
+  ai-chat.ts 21:23 ET, AiPreview.tsx 21:22 ET), and its unshipped edits remain
+  in the tree (served /scan still references the loop's 18:47 chunk
+  BurnBragCard-CQBYZ6Dj.js, hash-matched from the served HTML this run), so
+  the no-collision rule held: zero src writes, zero deploys. (1) Claim
+  freshness verified in src: ROADMAP "Token safety scanner" line
+  (dump.ts:231), the Dumb AI scanner answer (dump.ts:388), and the
+  knowledge.ts token-scanner chunk (:64) all still carry the 5o
+  measured-tax clause in each surface's own words — the concurrent dump.ts /
+  knowledge.ts edits this evening did NOT strip it; no drift, no churn
+  earned. (2) Done flags still honest: 8 done:true (5 "Now" + Week 1/2/3),
+  4 done:false ("60 days", "90 days", 2 "Planned") — no loop ships since the
+  20:13 #10, so no status flips earned. (3) Queued 5o try/catch residual
+  re-verified STILL REAL: 0 catch hits in token-scan.ts 1906–2248 (measured
+  directly); misattributing caller copy "The scan failed — the RPC didn't
+  answer" still at TokenScanner.tsx:148 — the wrap-to-unknown +
+  copy-softening fix stays queued for the post-deploy quiet window, as does
+  the 21:13 /scan cold-teaser CTA repoint. (4) External first-time-user
+  auditor findings STILL not arrived (today's memory log checked) — the
+  19:33 next-probe design hold stands. Live health: / /scan /burn /plan /ai
+  200 on the custom domain; /api/scan-stats unchanged ({deep_scans:3,
+  pass_burns:1, dumb_destroyed_min:100000}) — flat since 03:50, honest,
+  still traffic/distribution. Zero wallet/signing/data-source/mascot touch,
+  no new data sources. #10 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#13 stay open as
+  recurring.
+- 2026-09-29 21:23 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is HOT right now (rag.ts touched 21:23:35 ET, seconds before run
+  start; ai-chat.ts 21:22 ET, AiPreview.tsx 21:22 ET), and its unshipped edits
+  remain in the tree (served /scan still references the loop's 18:47 chunk
+  BurnBragCard-CQBYZ6Dj.js, hash-matched this run), so the no-collision rule
+  held: zero src writes, zero deploys. (1) Queued 5o try/catch residual
+  re-verified STILL REAL in src: 0 catch hits in token-scan.ts 1906–2248
+  (measured directly); misattributing caller copy "The scan failed — the RPC
+  didn't answer" still at TokenScanner.tsx:148; 5o null-guard intact
+  ("exposes no tax getters" ×1); 5n owner-rescue-withdraw block present (×4)
+  — the wrap-to-unknown + copy-softening fix stays queued for the
+  post-deploy quiet window. (2) Read-only secrets sweep of the HOT AI files
+  the concurrent process is editing (rag.ts, ai-chat.ts, ai-pro.ts,
+  AiPreview.tsx, knowledge.ts): zero hardcoded key-shaped literals; env
+  reads go through the documented request.runtime.cloudflare.env /
+  globalThis.__env__ getEnv() pattern only; server logging emits model names
+  + HTTP statuses only (rag.ts:231–242) — no secrets, no wallet PII in logs;
+  no bearer/auth handling added in the hot files. Nothing regressed in the
+  concurrent tree from a security posture. (3) Live health: / /scan /burn
+  /plan /ai 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. (4) External first-time-user
+  auditor findings STILL not arrived (today's memory log checked) — nothing
+  to sift. Zero wallet/signing/data-source/mascot touch, no new data
+  sources. #9 stays open as recurring; #5 on Antonio's idea-only hold, #6 ON
+  HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as recurring.
+- 2026-09-29 21:13 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — the concurrent
+  AI-subsystem process STILL has not deployed (its unshipped src edits from
+  17:03–20:00 ET remain in the tree; served /scan still references the loop's
+  18:47 chunk BurnBragCard-CQBYZ6Dj.js, hash-matched this run; src quiet 40+
+  min), so the no-collision rule held: zero src writes, zero deploys.
+  (1) FIFTH real traffic read (KV counters, read-only): 2026-09-29 UTC day
+  through ~21:15 ET: 230 pageviews / 83 events — identical to the 20:33 read,
+  i.e. ~zero activity in 30 min; / 41, /scan 32, /burn 22, /ai 15;
+  wallet_connect 63, scan_started 4, swap_quote 4, quick_scan 3; US 202 + 5
+  countries. The 09:23 "flat = traffic/distribution" thesis stands (5th
+  straight read); no demand conclusion — still confounded by Antonio's Pro
+  testing + auditor sessions. (2) GENUINE FUNNEL FRICTION FILED (queued, not
+  shipped): the /scan cold teaser (src/routes/scan.tsx ~117-136) CTAs "Burn
+  DUMB on the burn page" for the deep-scan burn, but the purpose-built
+  deep-scan burn flows (one-click wallet burn, PLS fallback, manual paste)
+  live INSIDE the DeepScanPanel post-quick-scan; /burn's BurnBox burns any
+  amount with zero deep-scan references and verifyScanBurn hard-requires ≥
+  100k DUMB arrival — a cold visitor following the teaser can burn the wrong
+  amount and learn the hard way, or burn right and get no paste guidance.
+  Fix (repoint CTA at the in-panel flow) queued for the post-deploy quiet
+  window alongside the 5o try/catch residual (0 catch hits in
+  token-scan.ts 1906–2248; misattributing caller copy at TokenScanner.
+  tsx:148 — re-verified STILL REAL this run). (3) External first-time-user
+  auditor findings STILL not arrived (today's memory log checked) — the
+  19:33 next-probe design hold stands. Live health: / /scan /burn /plan
+  /ai /trade 200; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #8 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+- 2026-09-29 21:03 ET run: backlog #13 DONE (real-utility research, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process STILL has not deployed (its unshipped src edits from 17:03–20:00 ET
+  — AiPreview.tsx, TokenScanner.tsx, knowledge.ts, dump.ts, rag.ts, ai-pro.ts,
+  pro.ts — remain in the tree; served /scan still references the loop's 18:47
+  chunk BurnBragCard-CQBYZ6Dj.js, hash-matched this run), so the no-collision
+  rule held: zero src writes, zero deploys. (1) Queued 5o try/catch residual
+  re-verified STILL REAL in src: 0 catch hits in token-scan.ts 1906–2248;
+  misattributing caller copy "The scan failed — the RPC didn't answer" still
+  at TokenScanner.tsx:148; 5o null-guard intact ("exposes no tax getters"
+  ×1); 5n owner-rescue-withdraw block present (×4) — the wrap-to-unknown +
+  copy-softening fix stays queued for the post-deploy quiet window. (2) No
+  claim drift through the concurrent edits: ROADMAP scanner line
+  (dump.ts:231), Dumb AI scanner answer (dump.ts:388), and the knowledge.ts
+  token-scanner chunk (:64) all still carry the 5o measured-tax clause in
+  each surface's own words — the concurrent knowledge.ts 19:47 ET edit did
+  NOT strip it. (3) BULLISH-RESEARCH.md checked for ripened "revisit" items:
+  none — the deep-scan count badge, 5o loud-promotion, /ai-views, and price-cut
+  ideas all stand REJECTED with reasons. (4) Next-probe design hold STANDS:
+  the external first-time-user auditors' findings still have not arrived
+  (today's memory log checked) — designing beyond the complete 5a–5o
+  owner-power family + measured tax would be depth nobody asked for. Live
+  health: / /scan /burn /plan /ai /trade 200 on the custom domain;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #13 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay open as recurring.
+- 2026-09-29 20:53 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is STILL unshipped (src quiet 53 min since rag.ts 20:00 ET; served
+  /scan still references the loop's 18:47 chunk BurnBragCard-CQBYZ6Dj.js,
+  hash-matched from the served HTML this run), so the no-collision rule held:
+  zero src writes, zero deploys. (1) Claim freshness verified in src: ROADMAP
+  "Token safety scanner" line (dump.ts:231), the Dumb AI scanner answer
+  (dump.ts:388), and the knowledge.ts token-scanner chunk (:64) all still
+  carry the 5o measured-tax clause in each surface's own words — the
+  concurrent knowledge.ts 19:47 ET edit did NOT strip it; no drift, no churn
+  earned. (2) Done flags still honest: 8 "Now" groups done:true, the four
+  future-phase groups correctly done:false. (3) Served-content verification
+  (independent): /plan SSR carries the 5o clause ("measured buy tax and sell
+  tax") and the 5n rescue/withdraw clause — the concurrent process has NOT
+  deployed, so the 18:53 claim-verifications stand byte-identical. (4) No
+  loop ships since the 20:13 #10 (only the concurrent tree moved, outside
+  this loop's charter) — no status flips earned. (5) Queued 5o try/catch
+  residual re-verified STILL REAL: 0 catch hits in token-scan.ts 1906–2248;
+  misattributing caller copy "The scan failed — the RPC didn't answer" still
+  at TokenScanner.tsx:148 — the wrap-to-unknown + copy-softening fix stays
+  queued for the post-deploy quiet window. (6) External first-time-user
+  auditor findings STILL not arrived (today's memory log checked) — the
+  19:33 next-probe design hold stands. Live health: / /scan /burn /plan /ai
+  /trade 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #10 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per Antonio
+  2026-09-29; #8/#9/#13 stay open as recurring.
+- 2026-09-29 20:43 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is still unshipped (rag.ts 20:00 ET, 43 min before run start; served
+  /scan still references the loop's 18:47 chunk BurnBragCard-CQBYZ6Dj.js,
+  hash-matched via served HTML this run), so the no-collision rule held: zero
+  src writes, zero deploys. (1) Queued 5o try/catch residual re-verified STILL
+  REAL in src: 0 try/catch hits in token-scan.ts 1906–2248 (measured directly);
+  misattributing caller copy "The scan failed — the RPC didn't answer" still
+  at TokenScanner.tsx:147–148; 5o null-guard fix intact (:2203–2208), 5n block
+  4 hits — the wrap-to-unknown + copy-softening fix stays queued for the
+  post-deploy quiet window. (2) Adversarial read of the Pro KV replay guard
+  (ai-pro.ts:583–664): the documented get-then-put race is accurately
+  described — two concurrent activations with the same hashes could both pass
+  the check before either marker lands — but impact is negligible: the grant
+  is keyed per-wallet (`aipro:{address}`) and the signature check binds both
+  tx hashes to the claimant, so a race can at most double-grant the SAME
+  address the SAME 30-day pass — no value extraction, no cross-wallet ride.
+  Documented residual, low severity, fix stays queued with the #17
+  authz overhaul (signed short-lived Pro sessions). (3) Secrets sweep of
+  src/ + scripts/: zero hardcoded secrets, no .env files — every "seed
+  phrase"/"private key" hit is user-facing safety copy, never a credential.
+  (4) Live health: / /scan /burn /plan /ai /trade 200 on the custom domain;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest. (5) External
+  first-time-user auditor findings STILL not arrived (today's memory log
+  checked) — the 19:33 next-probe design hold stays. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #9 stays open as recurring;
+  #5 on Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29;
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 20:23 ET run: backlog #13 DONE (real-utility research, recurring)
+  → audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is STILL hot (rag.ts touched 20:00 ET, 23 min before run start;
+  AiPreview.tsx 19:50 ET, ChatMarkdown.tsx 19:48 ET, knowledge.ts 19:47 ET),
+  and its edits remain UNSHIPPED (served /scan still references
+  BurnBragCard-CQBYZ6Dj.js — the loop's 18:47 hash — verified live this run),
+  so the loop wrote zero src and did not deploy, per the standing
+  no-collision rule. (1) Served-bundle verification (independent): the live
+  scan chunk carries measured-tax ×4, "Buy/sell tax, measured" ×5, the 5o
+  null-guard copy ×1, the direction-aware fail copy ×1, "thin history is not
+  proof of fairness" ×3, and the 5n owner-rescue-withdraw block ×4 — counts
+  match the 20:13 verification exactly; the 18:47 ship is intact at the
+  user-served layer. (2) Queued 5o try/catch residual re-verified STILL REAL
+  in src: 0 catch hits in token-scan.ts 1906–2248 (measured directly); the
+  misattributing caller copy "The scan failed — the RPC didn't answer" still
+  at TokenScanner.tsx:148; the 5o null-guard fix intact (:2206) and 5n block
+  present (4 hits) — the wrap-to-unknown + copy-softening fix stays queued
+  for the post-deploy quiet window. (3) Next-probe design HOLD STANDS: the
+  scanner carries the complete 5a–5o owner-power family + measured tax; the
+  two external first-time-user auditors' findings STILL not arrived (today's
+  memory log checked) — designing the next probe without their input would
+  be depth nobody asked for. Live health: / /scan /burn /plan /ai /trade 200
+  on the custom domain; /api/scan-stats unchanged ({deep_scans:3,
+  pass_burns:1, dumb_destroyed_min:100000}) — flat since 03:50, honest,
+  still traffic/distribution. Zero wallet/signing/data-source/mascot touch,
+  no new data sources. #13 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay open as
+  recurring.
+
+- 2026-09-29 20:13 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process is STILL hot (rag.ts touched 20:00 ET, 13 min before run start;
+  AiPreview.tsx 19:50 ET, ChatMarkdown.tsx 19:48 ET, knowledge.ts 19:47 ET),
+  so the loop wrote zero src per the standing hot-window rule. (1) Claim
+  freshness verified in src: ROADMAP "Token safety scanner" line
+  (dump.ts:231), the Dumb AI scanner answer (dump.ts:388), and the
+  knowledge.ts token-scanner chunk (:64) all still carry the 5o
+  measured-tax clause in each surface's own words — the concurrent
+  knowledge.ts 19:47 edit did NOT strip it; no drift, no churn earned.
+  (2) The filed 5o try/catch residual re-verified STILL REAL: 0 try/catch
+  hits in token-scan.ts 1906–2248 (measured directly); the misattributing
+  caller copy "The scan failed — the RPC didn't answer" still at
+  TokenScanner.tsx:148 — the wrap-to-unknown + copy-softening fix stays
+  queued for the post-deploy quiet window. (3) Served-bundle verification
+  (independent): live /scan still references BurnBragCard-CQBYZ6Dj.js —
+  the loop's 18:47 deploy hash, byte-unchanged — so the concurrent process
+  has NOT deployed; the chunk carries measured-tax ×4, "Buy/sell tax,
+  measured" ×5, the null-guard copy "exposes no tax getters claiming
+  otherwise" ×1, the direction-aware fail copy ×1, and the 5n
+  owner-rescue-withdraw block ×4. /plan SSR carries the 5o roadmap clause
+  ("measured buy tax and sell tax"). (4) Live health: / /scan /burn /plan
+  /ai /trade 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. (5) External first-time-user
+  auditor findings STILL not arrived (today's memory log checked) —
+  nothing to sift. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #10 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 20:03 ET run: backlog #9 DONE (security pass, recurring) ->
+  audit-only, NO code changes, no build/deploy - concurrent process is HOT again
+  (rag.ts touched 20:00 ET, 3 min before run start; AiPreview.tsx 19:50 ET,
+  knowledge.ts 19:47 ET - its AI-subsystem edits remain UNSHIPPED), so the loop
+  wrote zero src per the standing hot-window rule. (1) Queued 5o try/catch
+  residual re-verified STILL REAL in src: 0 catch hits in token-scan.ts
+  1906-2248 (measured directly); misattributing caller copy "The scan failed -
+  the RPC didn't answer" still at TokenScanner.tsx:148 - stays queued for the
+  post-deploy quiet window. (2) Served bundle verified independently: live /scan
+  still references BurnBragCard-CQBYZ6Dj.js (the loop's 18:47 hash,
+  byte-unchanged - the concurrent process has NOT deployed); the downloaded
+  chunk carries the 5o null-guard fix (measured-tax id, "Buy/sell tax,
+  measured", "exposes no tax getters") + the 5n owner-rescue-withdraw block.
+  (3) Read-only secrets sweep: clean - zero hardcoded secrets in src; every
+  secret hit (OPENROUTER_API_KEY, ANALYTICS_PASS, apiKey params) is a
+  parameter name or env-binding read, never a literal; no .env files in the
+  tree. (4) Live health: / /scan /burn /plan /ai /trade 200 on the custom
+  domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) - flat since 03:50, honest, still
+  traffic/distribution. External first-time-user auditor findings STILL not
+  arrived - nothing to sift. Zero wallet/signing/data-source/mascot touch, no
+  new data sources. #9 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as recurring.
+
+
+- 2026-09-29 19:43 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — the concurrent
+  AI-subsystem process STILL has not deployed (src quiet 43 min since
+  rag.ts 19:00 ET, but its unshipped edits remain in the tree; served /scan
+  still references BurnBragCard-CQBYZ6Dj.js, the loop's 18:47 hash,
+  byte-unchanged) — no-collision rule held again: zero src writes, zero
+  deploys. (1) Third real traffic read (KV counters, read-only, digest
+  pattern): 2026-09-29 through ~19:45 ET: 227 pageviews / 80 events (vs
+  224/81 at ~18:55 — dead-quiet evening); US 199 + 6 countries; / 41, /scan
+  30, /burn 22, /ai 14, /whitepaper 14, /wallet 14, /proof 13, /trade 10;
+  events wallet_connect 60 dominant, scan_started 4, swap_quote 4, singletons
+  burn_voluntary 1 / bag_scan 1 / watchlist_toggle 1. Still confounded
+  (Antonio's Pro testing + the two external auditors' sessions) — NO demand
+  conclusion drawn; the 09:23 "flat = traffic/distribution" thesis stands
+  for the third straight read. (2) Demand-surface re-audit: byte-identical
+  served bundle + static src outside the concurrent tree = every 18:53
+  claim-verification still current — ROADMAP + both Dumb AI answers carry
+  the 5o clause, share-report copy is counts-only and dynamic, /scan cold
+  teaser + Try DUMB chip live; nothing undersells the 5n/5o ships. (3) The
+  18:47 null-guard fix re-verified intact in src (2203 both-sides branch
+  guarded; 1 "exposes no tax getters" hit); the queued 5o try/catch residual
+  confirmed still real (0 catch hits in token-scan.ts 1906–2248;
+  misattributing caller copy still at TokenScanner.tsx:148) — stays queued
+  for the post-deploy quiet window. (4) External auditor findings STILL not
+  arrived — the 19:33 hold on next-probe design stays. Live health: / /scan
+  /burn /plan /ai /trade 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest. Zero wallet/signing/data-source/mascot touch, no new data
+  sources. #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 ON
+  HOLD per Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 19:33 ET run: backlog #13 DONE (real-utility research, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent process has
+  NOT deployed (window not closed): src quiet 33 min (last touch rag.ts
+  23:00 UTC / 19:00 ET; token-scan.ts untouched since the loop's 18:47 ship),
+  but its 22:12–23:00 UTC AI-subsystem edits remain unshipped and the served
+  /scan still references BurnBragCard-CQBYZ6Dj.js — the loop's own 18:47
+  deploy hash, byte-unchanged — so a loop deploy now would still push another
+  agent's uncommitted work to the preview worker (last-writer-wins clobber
+  risk; AI subsystem outside loop charter per the 17:23 precedent). (1) The
+  filed 5o try/catch residual re-verified STILL REAL in src: zero try/catch
+  in the 5o block (1906–2248, measured directly — 0 catch hits in range), and
+  the caller copy "The scan failed — the RPC didn't answer. Try again in a
+  moment." still lives at TokenScanner.tsx:148. The queued unit stands: wrap
+  the 5o block → "unknown" measured-tax check, soften the caller copy — needs
+  a post-deploy quiet window; applying to src without deploying was REJECTED
+  (uncommitted state in a tree another agent is working in, zero user benefit
+  until a deploy). (2) Real-utility consideration: the scanner now carries
+  the full 5a–5o owner-power family + measured-tax probe + burn-gated deep
+  scan — a complete Safemoon-fork checklist. Designing the next probe now
+  would be building in the dark: Antonio's two external first-time-user
+  auditors are reviewing the hub and their findings (not arrived — checked
+  today's memory log) are the input Antonio wants sifted first. HELD: no new
+  probe design until their input lands. (3) Live health: / /scan /burn /plan
+  /ai 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #13 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay
+  open as recurring.
+
+- 2026-09-29 19:23 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent process has
+  23 min of src quiet (last touch rag.ts 23:00 UTC / 19:00 ET) but its
+  22:12–23:00 AI-subsystem edits (rag.ts, knowledge.ts, AiPreview.tsx,
+  ai-pro.ts, pro.ts, ai-chat.ts, dump.ts, pls-price.ts, routes) remain
+  UNSHIPPED, and token-scan.ts itself was touched at 22:46 — a loop deploy
+  now would push another agent's uncommitted work to the preview worker
+  (last-writer-wins clobber risk; AI subsystem outside loop charter per the
+  17:23 precedent). The filed 5o try/catch residual STAYS QUEUED for the next
+  run after the concurrent process deploys. (1) 18:47 #13 null-guard fix
+  VERIFIED INTACT in src: both-sides pass branch (2203) mirrors the single-side
+  guard (claimed !== null, 2232); all f1(claimed) sites guarded. (2) Served
+  bundle verified independently: live /scan still references
+  BurnBragCard-CQBYZ6Dj.js — the 18:47 deploy hash, byte-unchanged — and the
+  downloaded chunk carries all six markers (`measured-tax` id, "Buy/sell tax,
+  measured" title, "exposes no tax getters claiming otherwise", "cheap to
+  enter, expensive to leave", "thin history is not proof of fairness",
+  sell-side "don't emit transfer events", and the 5n `owner-rescue-withdraw`
+  block). (3) 5o has no enclosing try/catch — residual confirmed still real;
+  caller catch still misattributes a future code throw as an RPC outage, so
+  the queued unit stands: wrap the 5o block → "unknown" measured-tax check,
+  soften caller copy. (4) Live health: / /scan /burn /plan /ai 200 on the
+  custom domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. (5) External first-time-user auditor findings STILL
+  not arrived — nothing to sift. Zero wallet/signing/data-source/mascot touch,
+  no new data sources. #9 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 19:13 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — a concurrent process edited
+  the AI subsystem during the run (rag.ts 23:00 UTC / 19:00 ET, 13 min before
+  run start; knowledge.ts 22:58 UTC), so the loop wrote zero src per the
+  standing hot-window rule. (1) One ship since the 18:43 #10: the 18:47 #13
+  one-line 5o null-guard fix — a crash fix with NO user-visible copy change,
+  so no ROADMAP/AI text change was earned. Verified claim-by-claim: ROADMAP
+  "Token safety scanner" line (dump.ts:231) still carries the measured-tax
+  clause in the component's own words ("reads ~100k blocks of real PulseX
+  swap history ... direction-aware ... the sell side reads a touch low
+  because reflections don't emit transfer events, and thin history honestly
+  reports 'not enough trades' instead of guessing") — matches the shipped
+  5o block; both Dumb AI scanner answers carry the clause in each surface's
+  own words (dump.ts:388 "measured-tax check ... the sell side reads a touch
+  low because reflections don't emit transfer events; thin history gets an
+  honest 'not enough trades', never a guess"; knowledge.ts:64 "measures the
+  real buy/sell tax from ~100k blocks ... thin history reports 'not enough
+  trades', never a guess") — no drift, and the 5o clause survived the
+  concurrent knowledge.ts edit (22:58 UTC) intact. (2) Served-content
+  verification (independent): /plan SSR carries the roadmap's measured-tax
+  clause ("measured buy tax and sell tax"); live scan chunk
+  BurnBragCard-CQBYZ6Dj.js (byte-unchanged from the 18:47 deploy — the
+  concurrent process has NOT deployed) carries measured-tax id, "Buy/sell
+  tax, measured" title, the null-guard copy "exposes no tax getters
+  claiming otherwise", the direction-aware "cheap to enter, expensive to
+  leave", and the 5n owner-rescue-withdraw block. (3) Done flags honest:
+  8 "Now" groups done:true, four future-phase groups done:false. (4) No src
+  touched since the 18:47 ship except the AI-subsystem files (outside this
+  loop's charter per the 17:23 precedent) — nothing needs a status flip.
+  Live health: / /scan /burn /plan /ai 200 on the custom domain;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch, no
+  new data sources. NOT CHURN: no claim changed, no copy change earned. #10
+  stays open as recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per
+  Antonio 2026-09-29; #8/#9/#13 stay open as recurring (the 5o try/catch
+  residual from 19:03 is #9's next ship unit, needs a quiet window).
+
+- 2026-09-29 19:03 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — concurrent process is STILL
+  actively editing the AI subsystem (AiPreview.tsx, knowledge.ts, rag.ts
+  touched within minutes of run start), so the loop wrote zero src per the
+  standing hot-window rule. (1) Adversarial review of the 18:47 #13 ship
+  (the 5o both-sides null-guard fix): VERIFIED CORRECT. The both-sides pass
+  branch (token-scan.ts:2203-2208) now mirrors the single-side guard
+  (claimed !== null) and renders "no tax either way, and the contract
+  exposes no tax getters claiming otherwise" for getterless tokens.
+  (2) Exhaustive null-guard sweep of the ENTIRE 5o block (1906–2248) for the
+  18:33 defect class (tsc-invisible `as number` null crashes): every
+  f1(claimed) call site is guarded (2200 claimTxt ternary; 2205 inside the
+  claimed!==null ternary; 2229 claimTxt; 2232 inside `verdict==="pass" &&
+  claimed!==null`); every buy/sell access sits behind `buy &&` / `sell &&` /
+  `buy || sell` narrowing; taxPct can't divide by zero (gross > 0n guard,
+  null on net>gross); every RPC read goes through tryRead (retry ×3 → null,
+  never throws); null logIndex/transactionHash rows skipped; summarize()
+  index access guarded (tsc's noUncheckedIndexedAccess already enforces);
+  band() is pure arithmetic. Zero remaining instances of the crash class in
+  the block — mechanically verified, not trusted from the diff. (3) ONE
+  STRUCTURAL RESIDUAL FILED FOR A QUIET RUN (not fixed this run): the 5o
+  block has NO enclosing try/catch — verified directly (the per-probe tries
+  at 1665/1830 close before line 1906; no catch spans the block; the caller's
+  try/catch in TokenScanner runScan is the only net). Today that's a
+  degraded scan, not a crash, because the caller catches — but the catch
+  copy says "The scan failed — the RPC didn't answer", which MISATTRIBUTES a
+  future code bug as an RPC outage. Recommendation: wrap the 5o block so an
+  internal throw degrades to an "unknown" measured-tax check (the block's
+  own honest vocabulary) instead of killing the whole scan, and soften the
+  caller copy. One small unit, needs a quiet window + tsc/build/deploy. (4)
+  Served-bundle verification (independent): live chunk
+  BurnBragCard-CQBYZ6Dj.js is byte-unchanged from the 18:47 deploy — the
+  concurrent AI process has NOT redeployed since, so scanner surfaces are
+  exactly as the 18:53 run verified — carries the guard copy, the
+  measured-tax id, and the 5n owner-rescue-withdraw block intact. (5) Live
+  health: / /burn /plan /ai /trade 200 on the custom domain; /api/scan-stats
+  unchanged ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) —
+  flat since 03:50, honest, still traffic/distribution. The external
+  first-time-user auditor findings haven't arrived yet — nothing to sift.
+  Zero wallet/signing/data-source/mascot touch, no new data sources. #9
+  stays open as recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per
+  Antonio 2026-09-29; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 18:53 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — quiet window (no src
+  touched since the 18:47 deploy; the concurrent AI-subsystem work has
+  shipped with zero loop collision — verified intact through the deploy).
+  (1) POST-SHIP LIVE VERIFICATION — closes the 18:33 finding end to end:
+  the 18:47 #13 ship's null-guard fix for the both-sides 5o pass-branch
+  crash was verified in the SERVED bundle, not trusted from the deploy log.
+  Live scan chunk BurnBragCard-CQBYZ6Dj.js (new hash, this deploy) carries
+  the check id `measured-tax`, the title "Buy/sell tax, measured", the
+  null-guard copy "exposes no tax getters claiming otherwise", the
+  direction-aware fail copy "cheap to enter, expensive to leave", the
+  sell-side blind-spot caveat "don't emit transfer events", and the
+  thin-history honesty line "thin history is not proof of fairness" —
+  with the 5n `owner-rescue-withdraw` block intact through the same
+  deploy. The 18:33 → 18:43 → 18:47 chain (found → deferred → fixed) is
+  now closed at the user-served layer. (2) SECOND REAL TRAFFIC READ (KV
+  counters, read-only, digest-cron pattern): 2026-09-28 final 93
+  pageviews / 54 events (recount matches the 17:03 read); 2026-09-29
+  through ~18:55 ET: 224 pageviews / 81 events; countries US 196 + 6
+  others today. Top pages: / 41, /scan 28, /burn 22, /whitepaper 14,
+  /wallet 14, /ai 13, /proof 13; events: wallet_connect 57, swap_quote 4,
+  raid_play 3, quick_scan 3, copy_contract 3, burn_voluntary 1, plus
+  singletons. Thesis: today's numbers are heavily confounded (Antonio's
+  own Pro-payment testing + his two external first-time-user auditors) —
+  NO demand conclusion drawn; the 09:23 "flat = traffic/distribution"
+  finding stands until the weekly digest gives a baseline.
+  (3) Demand-surface audit: no undersell — the 18:43 run verified
+  ROADMAP + both Dumb AI answers carry the 5o clause in each surface's
+  own words; share-report copy is counts-only and dynamic (5n/5o flow
+  through with zero churn). Considered and REJECTED with reasons in
+  BULLISH-RESEARCH.md: a visible "deep scans so far" count badge
+  (3/30 days reads as low adoption, anti-marketing), louder 5o promotion
+  on /scan cold view (teaser + Try DUMB chip already live), acting on
+  /ai's 13 views (confounded + outside charter), deep-scan price cut
+  (stands rejected from 15:13). Live health: / /scan /burn /plan /ai
+  200; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest. Zero wallet/
+  signing/data-source/mascot touch, no new data sources. NOT CHURN: no
+  code change earned. #8 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay
+  open as recurring.
+
+- 2026-09-29 18:47 ET run (18:35 scheduled handoff, completed late): applied
+  the deferred 5o crash fix the 18:43 run left for the next quiet run — the
+  both-sides pass branch's `f1(claimed as number)` threw on getterless tokens
+  (18:33 finding). Now null-guarded like the single-side branch: claimed null
+  + both-sides pass renders "no tax either way, and the contract exposes no
+  tax getters claiming otherwise" (token-scan.ts:2203). Also completed the
+  handoff worker's timed-out tail: removed .tmp-diag/, tsc clean, eslint 0
+  errors, npm run build clean, deployed preview version
+  0481098f-24b1-439c-bcd8-b9f5d0ab48e9, live-verified / /scan
+  /api/ai-pro/config all 200. The concurrent Pro-payment work that kept the
+  18:33/18:43 runs hands-off has shipped — window closed, no collision. No
+  new spending, contracts, or data sources; zero wallet/signing/mascot touch.
+
+- 2026-09-29 18:43 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — a concurrent process is STILL
+  actively editing + deploying (AiPreview.tsx 18:42 ET, 90s before run start;
+  dump.ts + knowledge.ts 18:32 ET), so the loop wrote zero src. Verified every
+  claim from the 18:27 5o "Measured buy/sell tax" ship, in src AND served
+  content. (1) ROADMAP "Token safety scanner" line (dump.ts:231) carries the
+  measured-tax clause in the component's own words ("buy/sell tax measurement
+  (reads ~100k blocks of real PulseX swap history ... direction-aware ... the
+  sell side reads a touch low because reflections don't emit transfer
+  events, and thin history honestly reports 'not enough trades' instead of
+  guessing)") — matches token-scan.ts:1906-2242 claim-by-claim. (2) Both Dumb
+  AI scanner answers (dump.ts:388, knowledge.ts:64) carry the clause in each
+  surface's own words, no drift ("measured-tax check (it reads ~100k blocks
+  of real PulseX swap history ... direction-aware so an asymmetric tax can't
+  hide..." / "It also measures the real buy/sell tax from ~100k blocks of
+  PulseX swap history ... the sell side reads a touch low because reflections
+  emit no transfer events; thin history reports 'not enough trades', never a
+  guess"). (3) Served-content verification (independent): the live scan chunk
+  BurnBragCard-CKNBmXwK.js carries the full 5o block (measured-tax id ×4,
+  "Buy/sell tax, measured" title ×5 — incl. the unknown branches and the
+  both-sides verdict text) alongside the 5n owner-rescue-withdraw probe ×4.
+  Caught a mid-deploy race honestly: the first /plan SSR fetch (18:44)
+  carried the 5n clause but zero 5o hits — the concurrent process deployed
+  between fetches; a re-fetch ~10s later carried the 5o clause too, so the
+  ship's public claims are now exactly served. (4) Documented the exact
+  deferred fix for the next quiet run (from the 18:33 finding): token-scan.
+  ts:2203, the both-sides PASS branch — `f1(claimed as number)` has no
+  `claimed !== null` guard (the single-side pass branch at 2227 HAS it), so a
+  getterless token with claimed=null + ≥5 buys & ≥5 sells measuring <10% with
+  ≤4pp spread throws TypeError inside the template literal and the whole
+  quick scan dies (no enclosing try/catch; tsc's `as number` cast hides it).
+  Fix = guard the branch like 2227 and say "no tax either way, and the
+  contract's getters claim no transfer tax." NOT FIXED THIS RUN — the
+  concurrent window is still hot; the loop does not collide. Live health: /
+  /scan /burn /plan 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #10 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#13
+  stay open as recurring (the 5o one-line guard is #13's next ship unit).
+
+- 2026-09-29 18:33 ET run: backlog #13 slot (#9 review-of-ship lens, audit-only,
+  NO code changes, no build/deploy) → the pending 5o ship turn was found
+  ALREADY SHIPPED by the concurrent process (token-scan.ts 18:27 edit: 5o block
+  lines ~1906-2242, check id `measured-tax`; roadmap dump.ts:231 + both Dumb AI
+  answers (dump.ts:388, knowledge.ts:64) already describe the measured-tax check
+  in each surface's own words, no drift). This run became the review-of-ship
+  per the 15:43 → 16:03 precedent. VERDICT: SHIP FAITHFUL TO THE APPROVED DESIGN
+  + ONE REAL BUG FOUND. (1) R1 ✓ — direction-aware fail copy: the
+  spread ≥ 10 branch templates per which side is higher ("cheap to enter,
+  expensive to leave" vs "expensive to enter, cheap to leave"). (2) R2 ✓ —
+  logIndex-scoped attribution: funding = greatest logIndex below the Swap's in
+  the same tx; claimedFunding set prevents double attribution on multi-swap txs;
+  buy side takes the exact single direct Transfer(pair→to) before the Swap or
+  the closest aggregator-forward after it; direct.length > 1 → skip; unknown
+  recipients, inner fundings, absurd leg sums → skip. Topic0s derived via
+  parseAbiItem — no hand-typed hashes. (3) R3 ✓ — IQR > 3 → warn with min/max,
+  no median reported. (4) R4 ✓ — no stale "comes with the deep scan" copy
+  anywhere in src; the old line-476 pointer is gone and every surface describes
+  the measured check. Verdict bands match the design ([claimed−4, claimed+3]
+  sell, fail at claimed+10). The {pair, token, dead, zero} recipient set is in
+  place with the zero-address burn-leg comment. Block sits after 5n before #6
+  pause, inside the outer `if (address !== WPLS)`. (5) BUG FOUND (new, real):
+  the both-sides PASS branch crashes on getterless tokens — `claimed` is null
+  when the token has no fees()/taxFee() getters, and the
+  `bb === "pass" && bs === "pass" && spread <= 4` branch calls
+  `f1(claimed as number)` → TypeError: Cannot read properties of null
+  (reading 'toFixed') — the `as number` cast silences tsc, so type checks can't
+  catch it. Scenario: any token without tax getters + ≥5 buys and ≥5 sells
+  measuring < 10% with ≤ 4pp spread — the whole quick scan THROWS instead of
+  rendering a pass, because the 5o block has no enclosing try/catch (the single-
+  side pass branch HAS the `claimed !== null` guard; the both-sides pass branch
+  doesn't). Reproduced mechanically in node with the exact branch logic.
+  Suggested fix: guard the branch like the single-side one and say "no tax
+  either way, and the contract's getters claim no transfer tax." NOT FIXED THIS
+  RUN — the concurrent process is STILL editing (ai-pro.ts 18:37, AiPreview.tsx
+  18:38); the loop does not write into an active concurrent deploy window. NEXT
+  QUIET RUN: one-line guard + tsc + build + deploy + live verify. (6) 5n
+  surfaces intact through the concurrent AI-subsystem deploys: the block is
+  present in src (1767+, `owner-rescue-withdraw` ×4), the served /plan SSR
+  carries the rescue/withdraw clause verbatim, and both AI answers carry it.
+  Live health: /scan 200; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since 03:50,
+  honest, still traffic/distribution. Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #13 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay open as
+  recurring.
+
+- 2026-09-29 17:53 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial review of the
+  17:33 #13 "Measured buy/sell tax" probe (5o) design, per the 16:23→16:33→
+  16:43 precedent (design → review → ship). VERDICT: APPROVED WITH TWO
+  REQUIRED REFINEMENTS. Independently verified (not trusted from the design):
+  (1) topic0s re-derived in code via viem keccak256 — Swap
+  0xd78a…d822, Transfer 0xddf2…b3ef, exact match; (2) ground truth
+  re-measured from scratch vs live RPC — DUMB buy n=11 median 5.99% (all
+  6.0%), sell n=28 median 5.30% — reproduces the design within window slide;
+  (3) pre-write diff re-confirmed zero measured-tax coverage (only the
+  aspirational line-476 deep-scan pointer); (4) the 5o slot (after 5n ~1903,
+  before #6 pause at 1905) is clean and the section-8 outer `pair` is in
+  scope; (5) the deep scan does apply the CLAIMED tax symmetrically and
+  labels it as the claim (token-scan.ts:2239) — the gap statement is
+  accurate; (6) the claim model is symmetric-only (fees()/taxFee(), "X%-of-
+  every-transfer"). REQUIRED R1 — direction-aware fail copy: the design's
+  |buy−sell|≥10pp fail copy hardcodes "cheap to enter, expensive to leave",
+  which is factually backwards for a buy-heavy-tax token — template per
+  which side is higher. REQUIRED R2 — logIndex-scoped Swap↔Transfer
+  attribution: the design's "all exactly 5.3%" sell claim does NOT survive
+  re-derivation — the window holds outlier samples (4.5%, 5.0%, ~0%) from
+  contract-driven swaps (an aggregator, the WBTC/DUMB pair multihopping)
+  where multiple Transfer(to==pair) events share one tx and first-match
+  attribution misfires (measured 4.55% on a true-6% taxed transfer). The
+  median is robust (28 samples → 5.30%), but on low-activity tokens (n≈5)
+  misattribution can move the median — the ship run must match the funding
+  transfer by logIndex (greatest logIndex below the Swap's, same tx; buy
+  side: closest-after) or skip when ambiguous. RECOMMENDED R3 —
+  spread/bimodality signal: exempt wash-traders and mid-window tax hikes
+  surface as high dispersion, not a shifted median; warn on inconsistent
+  tax (e.g. IQR > 3pp) instead of reporting the median — the anti-gaming
+  complement to the 5c fee-setter probe. RECOMMENDED R4 — the ship run must
+  update the line-476 quick-scan copy ("Real vs claimed comparison comes
+  with the deep scan" goes stale once the quick scan measures it). Notes:
+  the {pair, token, dead, zero} recipient set is load-bearing — the 1% burn
+  leg lands on the ZERO address (verified in outlier legs); the design's own
+  DAMP buy n=3 exercises the n<5 gate (buy side "unmeasured" — the ship
+  e2e should use DAMP as the one-side case); the fixed verdict bands assume
+  ~1pp eventless-leg blind spots (DAMP matched the (t−r)/(1−r) model at
+  2.02% vs 2.08% observed; fail at claimed+10pp keeps 6pp+ headroom).
+  CAUTION: a concurrent process edited token-scan.ts during this review —
+  the ship run must re-run the pre-write diff, not trust these line
+  numbers. Full review in BULLISH-RESEARCH.md (17:53 entry). Live health:
+  / /scan /burn /plan 200; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #9 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per Antonio
+  2026-09-29; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 17:33 ET run: backlog #13 (real-utility research, recurring) →
+  DESIGN pass, NO code changes, no build/deploy — zero repo writes beyond the
+  two log files (a concurrent process was actively editing + deploying the AI
+  subsystem all run: ContentEngine.tsx, AiPreview.tsx, TokenScanner.tsx,
+  packs.ts, dump.ts, knowledge.ts, rag.ts, pro.ts, pls-price.ts). Designed the
+  "Measured buy/sell tax" probe (5o): the scanner has never measured the REAL
+  buy/sell tax — the transfer-tax check reports only the contract's claim and
+  the deep scan applies that claim symmetrically, so the soft-rug shape (cheap
+  buys, expensive sells) is invisible. Settled method (read-only, 2 getLogs /
+  100k-block window): buy tax = 1 − Transfer(pair→user)/Swap.amountOut (exact);
+  sell tax = 1 − Transfer(to==pair)/Σ-user-outflows (known ~0.7–0.9pp low blind
+  spot — reflections emit no Transfer event — calibrated into tolerance).
+  Ground truth vs live RPC: DUMB buy n=10 median 5.99%, sell n=29 median 5.35%
+  (claimed 6%/6%); DAMP buy n=3 median 2.99%, sell n=39 median 2.08% (claimed
+  3%/3%). Rejected with reasons: debug_traceCall (−32601 on public RPC),
+  reserve-ratio benchmark (TESTED: read −1.8% vs true +6% — drift noise swamps
+  signal), reflectionFromToken view, directional getter shapes, a deployed
+  helper contract (hard boundary), and a standalone quick-scan copy fix
+  (superseded — the probe makes the "Real vs claimed" line true). Recon lesson:
+  hand-typed topic hashes failed twice this run (31-byte Transfer hash, wrong
+  Swap/Sync hashes → silent zero results); all hashes re-derived via viem
+  keccak256 and the ship run must derive topic0s in code. Full design, verdict
+  bands, and pre-ship validation list in BULLISH-RESEARCH.md (17:33 entry).
+  Also corrected a 1000x arithmetic slip in the 15:13 run's log text (live
+  re-read: 186.6M WPLS / 504.4M DUMB = 0.370 WPLS/DUMB, matching the repo
+  AGENTS.md's verified 0.3738 — site pricing unaffected). Next #13 run can
+  take 5o through the design → review → ship precedent. Live health: / /scan
+  /burn /plan 200; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest. #13 stays open
+  (defers to a ship run); #5 idea-only hold, #6 ON HOLD per Antonio 2026-09-29;
+  #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 17:23 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — and deliberately NO repo
+  writes this run (a concurrent process is actively editing + deploying; the
+  loop must not collide). Every claim from the one ship since the 16:13 #10
+  (the 16:43 #13 5n "Owner rescue/withdraw power" probe) verified accurate,
+  in src AND in served content on the custom domain. (1) ROADMAP "Token
+  safety scanner" line (dump.ts:231) carries the rescue/withdraw clause in
+  the component's own words ("a rescue/withdraw probe ... a hit is the
+  slow-rug tax-jar drain"), matching token-scan.ts claim-by-claim (6 shapes,
+  read-only eth_call impersonating the live owner, dead + 1-wei fail-safe
+  args, control-first, capability-level warn, pass with the family caveat,
+  renounced skip). (2) Both Dumb AI scanner answers (dump.ts:388, knowledge.
+  ts:64) carry the clause in each surface's own words with no drift — the
+  served warn copy ("power, not proven abuse") matches src exactly.
+  (3) Served-content verification (independent): /plan SSR carries the
+  roadmap clause; served scan chunk BurnBragCard-DG64rCkE.js carries the
+  owner-rescue-withdraw check id, title, all 6 sigs, and the fail-safe caveat;
+  served dump (dump-pmQ9zEcI.js, hash unchanged since the 16:43 ship) +
+  served ai (ai-BvRtthSR.js) chunks carry the 5n clause. (4) Done flags
+  still honest: 8 "Now" groups done:true, the four future-phase groups
+  correctly done:false — the 12:53 count correction holds. NOTABLE: between
+  17:03 and 17:23 ET a concurrent process edited + deployed the AI
+  subsystem (AiPreview.tsx, TokenScanner.tsx, rag.ts, ai-chat.ts, pro.ts,
+  ai-pro.ts, server.ts — new scan chunk DG64rCkE.js and ai chunk
+  BvRtthSR.js live by 17:23); MEMORY.md was updated in the same window with
+  the new Dumb AI Pro multi-token 80/20 design. That work is outside this
+  loop's charter (payment/authz mechanics — hard boundary) — the loop's
+  5n scanner surfaces were verified intact THROUGH the new deploy, zero
+  collisions. The audit-only runs (16:53/17:03 #8, 17:13 #9) carried zero
+  loop src churn, correctly. Live health: / /scan /burn /plan 200 on the
+  custom domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Also backfilled the missing 17:13 run-log entry
+  below (the run wrote its BULLISH-RESEARCH.md entry but no BUILD_LOOP.md
+  entry). #10 stays open as recurring; #5 on Antonio's idea-only hold, #6
+  ON HOLD per Antonio 2026-09-29; #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 17:13 ET run: backlog #9 DONE (security pass, recurring) →
+  [BACKFILLED — the run wrote its full review to BULLISH-RESEARCH.md but no
+  BUILD_LOOP.md entry; transcribed faithfully from that entry, no new
+  claims.] audit-only, NO code changes, no build/deploy — adversarial
+  review-of-ship of the 16:43 #13 5n probe, per the 15:43 → 16:03
+  precedent. VERDICT: APPROVED, no required revisions. Independently
+  verified: (1) pre-write diff (5n block genuinely new, zero pre-existing
+  rescue/withdraw coverage); (2) arg encoding recomputed fresh in node —
+  6 distinct keccak256 selectors matching the ship log, calldata 4B/36B/
+  36B/68B/68B/68B with dead-address + 1-wei fail-safe args; (3) all four
+  16:33 ship-run notes honored (check id owner-rescue-withdraw, family
+  pass-caveat wording adapted verbatim, PLS-vs-tokens warn tailoring per
+  shape arity, block after 5m before #6 pause); (4) ROADMAP line (dump.ts:
+  231) + both Dumb AI scanner answers (dump.ts:388, knowledge.ts) carry
+  the 5n clause in each surface's own words, no drift; (5) served-bundle
+  verification — live scan chunk BurnBragCard-BSdvZfJd.js carries the check
+  id ×4, title ×4, all 6 sigs, the fail-safe caveat, and the full warn
+  copy; /plan SSR carries the roadmap clause. 14:03-class hunt: no missed
+  defects (fail-safe args hold, permissive-fallback control first,
+  revert→absent/noise→unknown triage, capability-level warn, liveOwner
+  gating, RPC budget per design). Two family-wide residuals filed (selector
+  collision; balance-gated rescues on empty contracts) — NOT required
+  revisions, a redesign touches all owner probes per the 11:33/12:43
+  standing. Live health: / /scan /burn /plan 200; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution (thirteenth confirmation of
+  the 09:23 reasoning). Zero wallet/signing/data-source/mascot touch, no
+  new data sources. #9 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 17:03 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine audit unit with
+  the loop's FIRST real traffic read. (1) DeepScanPanel gating audit: the panel
+  mounts only when `result.pair` is truthy (TokenScanner.tsx:305) — hypothesized
+  a dead end for tokens with no WPLS pair, but FALSE: the quick scan already
+  reports the no-pair liquidity warn (token-scan.ts:1975-1986) and deepScan()'s
+  no-pair branch is a defensive fallback the UI never reaches; gating is the
+  honest design (no liquidity = nothing to simulate). (2) Copy-freshness audit:
+  ROADMAP line (dump.ts:231), Dumb AI scanner answer (dump.ts:388), and
+  knowledge.ts scanner body (:64) all carry the 5n rescue/withdraw probe — no
+  stale enumeration, no churn. (3) FIRST REAL TRAFFIC READ (KV counters, read-only,
+  the digest-cron pattern): 2026-09-28: 93 pageviews / 54 events; 2026-09-29
+  through ~17:06 ET: 88 pageviews / 37 events; country spread (US 81 + 6 countries
+  today; US 55 + 6 yesterday) = genuine multi-country human traffic, not just
+  Antonio's testing. Per-page today: / 29, /burn 16, /scan 9, /wallet 9,
+  /proof 6, /trade 5 — burn funnel + scanner get real eyes. Events:
+  wallet_connect 31, swap_quote 4, bag_scan 1, copy_contract 1. Thesis update:
+  the 09:23 "flat = traffic/distribution" finding now has its positive reading —
+  small-but-real traffic with real interactions; distribution remains the
+  bottleneck; no surface change justified by conversion data. (4) API correction:
+  the telemetry query's `"view":"logs"` now 400s (valid views are
+  traces/events/calculations/invocations/requests/agents); neither events nor
+  invocations surfaced console.log lines — KV counters are the reliable source;
+  corrected in the repo AGENTS.md analytics section. Considered and REJECTED
+  with reasons in BULLISH-RESEARCH.md: acting on the 31/day wallet_connect
+  count (can't separate Antonio's testing; two days = no baseline), in-site
+  "share the hub" prompts (per-context share surfaces already exist; outbound
+  feel), deep-scan price cut (stands rejected from 15:13 — scanner already gets
+  eyes). Zero wallet/signing/data-source/mascot touch, no new data sources.
+  #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per
+  Antonio 2026-09-29; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 16:53 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine audit unit.
+  (1) Health: / /scan /burn /plan /raid /ai /trade all 200 on the custom
+  domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution (twelfth confirmation of the 09:23 reasoning). (2)
+  Post-5n scanner-depth audit: the quick scan now carries the full 5a–5n
+  owner-power family, and no demand surface undersells it — share-report
+  copy is counts-only and fully dynamic (red-flag/caution counts), so 5n
+  flows through with zero churn; hero SSR carries 3 /scan funnels (nav +
+  "Scan any token" CTA + feature card); /scan cold view carries the "Deep
+  scan is live — burn-gated" teaser + Try DUMB chip, both live in served
+  SSR. (3) No roadmap/AI churn: the 16:43 ship carried its own ROADMAP +
+  both-Dumb-AI extensions, and the 16:13 #10 verified the pre-5n state —
+  correctly one surface change per ship. Considered and REJECTED with
+  reasons in BULLISH-RESEARCH.md: static probe-count copy on hero/teaser
+  (goes stale every few runs), a second scanner changelog on /scan (the
+  ROADMAP on /plan already does this), off-site promotion of the scanner
+  (outbound comms = hard boundary), deep-scan price cut (stands rejected
+  from 15:13 — no baseline). Zero wallet/signing/data-source/mascot touch,
+  no new data sources. NOT CHURN: no code change earned — the surfaces
+  already describe the 16:43 ship exactly. #8 stays open as recurring; #5
+  on Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13
+  stay open as recurring.
+
+- 2026-09-29 16:43 ET run: SHIPPED **the "Owner rescue/withdraw power" probe
+  (5n) on the token safety scanner** — the ship run for the 16:23 #13 design
+  + 16:33 #9 review (approved, no required revisions), per the 10:33/11:23/
+  13:03 precedent (design → review → ship). All five pre-ship validation
+  requirements met: (1) pre-write diff re-confirmed zero rescue/withdraw
+  coverage (0 hits — every "rescue" in src was DUMB-immutability copy);
+  (2) independent arg-encoding check — 6 distinct keccak256 selectors
+  (0xf5648a4f, 0xd201b01e, 0xcb963728, 0x57376198, 0xd28e3ed4, 0x8980f11f),
+  calldata 4B/36B/36B/68B/68B/68B, dead-address + 1-wei fail-safe args
+  round-trip; (3) shipped quickScan end-to-end in node (esbuild bundle) vs
+  live RPC — DUMB (renounced) → check correctly absent, INC + WBTC (live
+  owners) → present with the pass-with-caveat, matching the 16:23 recon;
+  (4) ROADMAP "Token safety scanner" line (dump.ts) + both Dumb AI scanner
+  answers (dump.ts AI_QA, knowledge.ts) extended in each surface's own
+  words; (5) tsc + eslint clean, built, deployed to dump-money-hub-preview,
+  served-bundle verified on the custom domain. The probe (token-scan.ts, id
+  "owner-rescue-withdraw"): 6 rescue shapes (withdrawStuckETH(),
+  withdrawStuckETH(address), withdrawStuckTokens(address),
+  rescueTokens(address,uint256), transferForeignToken(address,uint256),
+  recoverERC20(address,uint256)), read-only eth_calls impersonating the
+  live owner, fail-safe dead-address arg on (address) shapes and
+  (dead, 1 wei) on (address,uint256) shapes (the impossible executed case
+  can only burn, never steal), all four 16:33 ship-run notes honored —
+  check id owner-rescue-withdraw, family pass-caveat wording adapted
+  verbatim ("Custom rescue functions could hide under other names, or
+  reject the probe's fail-safe test value"), PLS-vs-tokens tailoring in
+  the warn per shape arity (no-arg → "PLS", address-taking → "tokens"),
+  block placement after 5m before #6 pause. Warn at capability level,
+  never accusation ("the owner can pull accumulated PLS/tokens out of the
+  contract" + the airdrop-dust-hygiene acknowledgment); renounced skip;
+  warn on setter hit, unknown on fallback/all-noise, pass with caveats
+  otherwise; 7-typical/13-worst RPC budget. NOTE: a mid-run service restart
+  wiped /tmp — recovered by re-bundling and re-running the e2e from
+  durable paths; nothing half-written (the repo edit is atomic and was
+  verified before the restart wiped scratch). Live health: / /scan /burn
+  /plan 200 on the custom domain; served scan chunk BurnBragCard-BKu1fFs2
+  .js (new hash — this deploy) carries the check id (4 hits), title (4),
+  setter shapes, and the pass caveat; /plan SSR carries the roadmap
+  clause (2 hits); served dump (dump-pmQ9zEcI.js) + ai (ai-CO7_fgZV.js)
+  chunks carry the new AI clauses; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #5 on Antonio's idea-only
+  hold, #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 16:33 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial review of the
+  deferred 16:23 #13 "Owner rescue/withdraw power" probe (5n) design, per the
+  15:23 precedent (design → review → ship). VERDICT: APPROVED, no required
+  revisions. Independently verified (not trusted from the design): (1) the
+  pre-write diff — zero rescue/withdraw coverage in token-scan.ts (all
+  "rescue" hits are DUMB-immutability copy); the `if (liveOwner)` gating is
+  the established family pattern. (2) Recon re-run read-only vs live RPC —
+  all 6 shapes revert honestly under owner impersonation on INC + WBTC, zero
+  machinery in the curated set, zero false-positive risk. (3) Family-pattern
+  fit vs the shipped 5m block (impersonation, keccak256 selectors, dead-arg
+  fail-safe, control-first, revert→absent/noise→unknown, capability-level
+  warn, pass-with-caveats). The 14:03-class hunt: the dead address has no
+  code, so a rescue impl's inner high-level calls hit an EOA — if solc 0.8
+  reverted on empty returndata, the probe would systematically false-negative.
+  Settled by compiling both canonical rescue patterns with solc 0.8.28 and
+  disassembling the external-call epilogue: RETURNDATACOPY + MLOAD from
+  zero-filled memory, NO minimum-size check — empty returndata zero-pads
+  (balanceOf→0, transfer→false), matching the known mainnet USDT behavior.
+  So balance-sweep and unchecked fixed-amount impls report "found" honestly;
+  only require-checked-return impls revert into the family's pass-with-caveat
+  (honest bucket; via-IR codegen noted as an exotic residual the caveat
+  covers). Confirmed sound: 7/13 RPC budget, control-first → unknown,
+  renounced skip, R5 warn posture (capability level, no rescued balance
+  named), all three design rejections. Ship-run notes (non-blocking):
+  suggest check id `owner-rescue-withdraw`, keep family pass-caveat wording
+  verbatim, optional per-shape PLS/tokens tailoring in the warn, block after
+  5m. The 16:23 pre-ship validation list stands — the next #13 run ships it.
+  Full review in BULLISH-RESEARCH.md (16:33 entry). Live health: / /scan
+  /burn /plan 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #9 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13
+  stay open as recurring.
+
+- 2026-09-29 16:23 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — the design pass for the
+  NEXT scanner probe: **"Owner rescue/withdraw power" (5n)**. The last classic
+  Safemoon-fork owner vector the family (5a–5m + #6 pause) never asks: can
+  the live owner pull accumulated value out of the contract? (withdrawStuckETH
+  / sweepToken / transferForeignToken-class — the slow-rug "tax jar" drain;
+  DUMB's own buckets are entombed, but the scanner's job is arbitrary pasted
+  addresses). Pre-write diff (09:53 standing lesson): zero rescue/withdraw
+  coverage in token-scan.ts. Ground truth (read-only recon, live RPC): all 6
+  candidate shapes reverted honestly under owner impersonation on INC (live
+  owner 0xb2ca…302d4) + WBTC (live owner 0xca06…ebeb7) — zero machinery in the
+  curated set, zero false-positive risk there; DUMB (owner 0x0) skips anyway.
+  Settled design for the future ship run: 6 shapes via read-only eth_call
+  impersonating the live owner, keccak256 selectors, inside `if (liveOwner)`;
+  fail-safe args = dead address (+ 1 wei on (address,uint256) shapes — the
+  impossible executed case burns, never steals); permissive-fallback control
+  gates first → unknown; hit → warn at capability level (15:23 R5 — sweeping
+  airdrop dust is legitimate, so power, never accusation, and the warn names
+  no rescued balance since the scan doesn't read one); all-revert → pass with
+  the family caveat; all-noise → unknown; RPC budget 7 typical / 13 worst.
+  Rejected in the design: real-token+real-amount probes, two-arg variants
+  (pass-with-caveat, 5m precedent), naming a balance at risk, a balance-getter
+  pair (balance ≠ drainability). Pre-ship validation requirements logged in
+  BULLISH-RESEARCH.md (arg-encoding check, end-to-end node run vs DUMB/INC/
+  WBTC, ROADMAP + both AI answers, tsc/eslint/build/deploy + served-bundle
+  verify). DEFERRED to its own build run per the 10:33/11:23/13:03 precedent
+  (design → #9 review → #13 ship). Live health: / /scan /burn /plan 200 on the
+  custom domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #13 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#10 stay open
+  as recurring.
+
+- 2026-09-29 16:13 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the one
+  ship since the 15:33 #10 verified accurate, in src AND in served content
+  on the custom domain. (1) The 15:43 #13 "Owner fee-wallet redirect power"
+  probe (5m): ROADMAP "Token safety scanner" line (dump.ts:231) matches
+  token-scan.ts:1613-1775 claim-by-claim — 5 wallet-setter shapes
+  (setMarketingWallet / setMarketingWalletAddress / updateMarketingWallet /
+  setFeeWallet / setDevWallet), read-only eth_calls impersonating the live
+  owner, fail-safe dead-address arg, keccak256 selectors, getters gated on
+  !fallbackBlind with NO wallet named under fallbackBlind (R1), named-
+  recipient-not-proven-flow copy (R2), zero-address getters reported
+  honestly (R3), pass branch carries the custom-names + rejected-test-value
+  caveat (R4), warn at capability level never accusation (R5). Both Dumb AI
+  scanner answers (dump.ts:388, knowledge.ts:64) carry the clause in each
+  surface's own words with no drift. (2) Served-content verification
+  (independent): /plan SSR carries the roadmap's fee-wallet clause
+  verbatim; the live scan-logic chunk BurnBragCard-CBoUT1o8.js (same hash
+  the 16:03 run verified) carries the owner-fee-wallet check id + title
+  (4 hits each). (3) Done flags still honest: 8 "Now" groups done:true,
+  the four future-phase groups correctly done:false — the 12:53 count
+  correction holds. (4) The 15:53 #8 and 16:03 #9 audit runs were audit-only
+  with zero src changes — correctly no churn, per their logs. Live health:
+  / /scan /burn /plan all 200 on the custom domain; /api/scan-stats
+  unchanged ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) —
+  flat since 03:50, honest, still traffic/distribution (tenth confirmation
+  of the 09:23 reasoning). Zero wallet/signing/data-source/mascot touch,
+  no new data sources. NOT CHURN: no code change earned — the roadmap and
+  both AI answers already describe the 5m ship exactly. #10 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 on mascot approval (ON HOLD
+  per Antonio 2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 16:03 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial review of the
+  15:43 #13 ship (the "Owner fee-wallet redirect power" probe, 5m), per the
+  design → review → ship → review-of-ship precedent (15:03 → 15:23 → 15:43 →
+  this run). All five 15:23 refinements verified HONORED in shipped code
+  (token-scan.ts:1613-1775): R1 — getter reads gated on `!fallbackBlind`
+  (mirror 5l), setter probe loop breaks under fallbackBlind, and the
+  fallbackBlind unknown branch names NO wallet ("can't tell whether a real
+  redirect setter is hiding in there" — no garbage-state recipient named);
+  R2 — warn copy names the current recipient as "the contract names 0x… as
+  the marketing/fee wallet" and adds "the named recipient, not a proven
+  flow" — flow never asserted, at capability level ("the owner can redirect
+  where the fee wallet points", never accusation — R5); R3 — clean
+  zero-address getter reads reported honestly ("no X wallet currently set
+  (zero address) — that fee leg may be disabled, burned, or pointed
+  elsewhere"), never silently omitted; R4 — pass branch carries the family
+  caveat verbatim ("Custom setters could hide under other names, or reject
+  the probe's fail-safe test value"). Reviewed for a 14:03-class missed
+  defect: none — the warn's "fee-wallet setter" label is ACCURATE here
+  (unlike the 12:43 5k case, foundSig can only be one of the 5 setter shapes;
+  no getter shape is probed, so no getter/setter mislabel is possible); the
+  dead-address fail-safe arg, read-only eth_call impersonation, keccak256
+  selectors, revert→absent/noise→unknown triage, liveOwner gating, and the
+  9-typical/14-worst-case RPC budget all match the 15:23 spec; mixed
+  absent+RPC-noise lands on pass-with-caveat per the family-wide standing
+  (11:33/12:43 — a redesign touches all owner probes, not this ship). Served-
+  bundle verification (independent): the live scan chunk BurnBragCard-
+  CBoUT1o8.js (new hash — this deploy) carries the check id (1 hit), title,
+  setter shapes, the R2/R3/R4 strings ("the named recipient, not a proven
+  flow", "currently set", "may be disabled, burned, or pointed elsewhere",
+  "fail-safe test value"), the warn copy, and the fallbackBlind unknown
+  copy; /plan SSR carries the roadmap's fee-wallet clause (1 hit) —
+  matching the 15:43 ship's ROADMAP + both-AI-answers extension, and no src
+  changed since (mtimes 15:47–15:50 ET = the ship's own edits). Live health:
+  / /scan /burn /plan 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution (ninth confirmation of the 09:23
+  reasoning). Zero wallet/signing/data-source/mascot touch, no new data
+  sources. NOT CHURN: no code change earned — the review found the ship
+  exactly as strong as the 15:43 log claimed. #9 stays open as recurring; #5
+  on Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13
+  stay open as recurring.
+
+- 2026-09-29 15:53 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine audit unit.
+  (1) Health: / /scan /burn /plan /raid /ai /trade all 200 on the custom
+  domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution (eighth confirmation of the 09:23 reasoning). (2)
+  Deep-scan discovery audit — the hypothesized gap did not exist: the
+  in-flow DeepScanPanel mounts only after a quick scan of a token with a
+  WPLS pair, but scan.tsx:118-138 already carries an unconditional static
+  "Deep scan is live — burn-gated" teaser in the default /scan view (the
+  deliverable, the 100,000 DUMB burn price, on-chain verification before the
+  report renders, supply-shrink rationale) linking to /burn, where the
+  30-day pass + PLS fallback live. The 13:13 deliberate decision stands
+  confirmed again: teaser stays lean, pass/PLS paths stay in the panel +
+  /burn. (3) Demand surfaces re-verified in served SSR: hero "Scan any
+  token" CTA, /scan deep-scan teaser, "No address handy? Try DUMB" chip —
+  all live. Share-report copy re-audited in src: counts-only text, no
+  enumerated checks — the 5m probe family ships flow through the counts
+  automatically, nothing undersold. Considered and REJECTED with reasons in
+  BULLISH-RESEARCH.md: quick-scan brag-card image export (static scan card
+  can go stale — the 13:53 precedent; the re-running share link is the
+  honest surface), a Telegram scanner bot (new infra + reply surface in
+  Antonio's community space, no demand signal), "scan of the day" featured
+  token (endorsement optics on a neutral safety tool), watchlist push alerts
+  (new external dependency, speculative churn), curated-token chip row on
+  /scan (clutters the primary input, drive-by RPC temptation). Zero
+  wallet/signing/data-source/mascot touch. #8 stays open as recurring; #5
+  on Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 15:43 ET run: SHIPPED **the deferred "Owner fee-wallet redirect
+  power" probe (5m) on the token safety scanner** — the ship run for the
+  15:03 #13 design + 15:23 #9 review, per the 10:33/11:23/13:03 precedent
+  (13:03 design → 13:23 review → 13:43 ship). All five pre-ship validation
+  requirements met: (1) pre-write diff re-confirmed zero wallet-redirect
+  coverage (only setMarketingFee(uint256), 5c's fee-AMOUNT job);
+  (2) independent arg-encoding check — 5 distinct keccak256 selectors, 0x +
+  72 hex chars (4B selector + 32B arg), dead-address arg round-trips;
+  (3) shipped quickScan end-to-end in node vs live RPC — DUMB renounced →
+  check correctly absent, INC + WBTC (live owners) → present with the
+  pass-with-caveat ("custom names, or reject the probe's fail-safe test
+  value" — R4 honored); (4) ROADMAP "Token safety scanner" line (dump.ts:231)
+  + both Dumb AI scanner answers (dump.ts AI_QA, knowledge.ts) extended in
+  each surface's own words; (5) tsc + eslint clean, built, deployed to
+  dump-money-hub-preview, served-bundle verified on the custom domain. The
+  probe (token-scan.ts, id "owner-fee-wallet"): 5 wallet-setter shapes
+  (setMarketingWallet / setMarketingWalletAddress / updateMarketingWallet /
+  setFeeWallet / setDevWallet), read-only eth_call impersonating the live
+  owner, fail-safe dead-address arg (redirect-to-burn, never to a thief),
+  all four 15:23 refinements honored — getters gated on !fallbackBlind with
+  NO wallet named under fallbackBlind (R1), named-recipient-not-proven-flow
+  copy (R2), clean zero-address getter reads reported honestly (R3), pass
+  branch carries custom-names + rejected-test-value caveat (R4), warn at
+  capability level never accusation (R5). Renounced owners skip; warn on
+  setter hit, unknown on fallback/all-noise, pass with caveats otherwise.
+  Live health: / /scan /burn /plan 200 on the custom domain; served scan
+  chunk carries owner-fee-wallet id + setter shapes + pass copy; /plan SSR
+  carries the roadmap clause; both served ai + dump chunks carry the new AI
+  clause; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #5 on Antonio's idea-only hold, #6 on mascot approval (ON
+  HOLD per Antonio 2026-09-29); #8/#9/#10/#13 stay open as recurring.
+
+- 2026-09-29 15:33 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the runs
+  since the 14:53 #10 verified accurate, and the interim runs correctly
+  carried zero churn. (1) The 15:03 #13 deferred "Owner fee-wallet redirect
+  power" design (5m): 0 hits for fee-wallet / marketing wallet / redirect
+  power in dump.ts and knowledge.ts — correctly NO roadmap/AI surface for a
+  design pass, per the standing deferred-design precedent (13:33/14:13/
+  14:53). (2) The 15:23 #9 review's claims verified: its full review entry
+  exists in BULLISH-RESEARCH.md (CONTEXT + independent src verification +
+  R1–R5 refinements for the ship run); the src-verification claim holds —
+  independently confirmed zero wallet-redirect coverage in token-scan.ts
+  (no marketingwallet/feewallet/devwallet/teamwallet/feereceiver matches,
+  only setMarketingFee(uint256), the fee-AMOUNT setter, 5c's job). (3) The
+  15:13 #8 audit's BULLISH-RESEARCH.md entry exists with its rejection
+  entries. (4) No src file touched since 14:53 ET (UTC-cutoff find over src/
+  returned empty) — the 15:03/15:13/15:23 audit- and research-only runs
+  genuinely shipped nothing, so no churn was earned anywhere. (5) ROADMAP
+  "Token safety scanner" line (dump.ts:229-231) matches shipped state
+  claim-by-claim — concentration, fee-setter, permissionless-fee, fee-
+  exemption, exclusion-setter, mint, blacklist, sell-limit, cooldown,
+  exemption, trading-toggle (with the corroboration-gated freeze wording),
+  paused(), LP-burn %, identity, upgradeability, sell simulation, deep
+  scan — no 5m line, correct since 5m is deferred. (6) Done flags still
+  honest: 8 "Now" groups done:true (dump.ts:141-228), the four future-
+  phase groups (247/258/269/279) correctly done:false — the 12:53 count
+  correction holds. Live health: / /scan /burn /plan all 200 on the custom
+  domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch.
+  #10 stays open as recurring; #5 on Antonio's idea-only hold, #6 on
+  mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay open as
+  recurring.
+
+- 2026-09-29 15:23 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial design review of
+  the deferred 15:03 #13 "Owner fee-wallet redirect power" probe (5m),
+  following the 13:23 precedent (design → review → ship with the revision).
+  Independently verified in src: the 5m pre-write diff claim holds — zero
+  wallet-redirect coverage in token-scan.ts (only setMarketingFee(uint256),
+  the 5c fee-amount job); the 5l fallbackBlind getter-suppression pattern is
+  confirmed in shipped code. VERDICT: APPROVED WITH FOUR REFINEMENTS for the
+  ship run (no false-FAIL trust risk — failure modes are warn/unknown only):
+  R1 (closest to required, mirror 5l) — gate the wallet getters on
+  !fallbackBlind and name NO wallet in the unknown branch, since a
+  permissive fallback would feed garbage-state recipients to the report —
+  naming one would invent a data point; R2 — soften "today's tax money flows
+  to 0x…" to "the contract names 0x… as the marketing/fee wallet" (chain
+  state shows the named recipient, not proven flow); R3 — a clean
+  zero-address getter read reports "no wallet currently set" rather than
+  being silently omitted; R4 — the pass branch carries the family's
+  custom-names-plus-rejected-test-value caveat (a real setter could revert
+  on the dead-address arg); R5 — the warn stays at capability level
+  ("the owner can redirect where the fee wallet points"), never accusation.
+  Confirmed sound: fail-safe dead-address arg (impossible-execution case can
+  only redirect tax to burn; non-zero so zero-checks pass), read-only
+  eth_call owner impersonation, liveOwner gating, revert→absent /
+  noise→unknown triage, keccak256 selectors, control gates first, and all
+  three design rejections. Full review in BULLISH-RESEARCH.md (15:23 entry).
+  Live health: / /scan /burn /plan 200 on the custom domain; /api/scan-stats
+  unchanged ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat
+  since 03:50, still honest, still traffic/distribution. Zero wallet/
+  signing/data-source/mascot touch, no new data sources. #9 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 on mascot approval (ON HOLD
+  per Antonio 2026-09-29); #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 15:13 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine audit unit:
+  (1) health green: / /scan /burn /plan /raid /ai /trade all 200 on the custom
+  domain; /api/scan-stats still {deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000} — flat since 03:50, still honest, still
+  traffic/distribution (seventh confirmation of the 09:23 reasoning). (2)
+  On-chain swap-health re-verified read-only: WPLS/DUMB pair
+  0x221f63…0d186 holds ~186,122 WPLS / ~505.5M DUMB, token0=WPLS; DAMP/WPLS
+  0xB256…a863 holds ~52.1M DAMP / ~104.3M WPLS, token0=DAMP — both deep,
+  both matching the swap box's per-token reserve handling; implied prices
+  ~0.000368 WPLS/DUMB and ~2.00 WPLS/DAMP, both in sane range. (3) The 14:23
+  symbol-only unfurl personalization verified LIVE at crawler level: a shared
+  DUMB report link serves og:title + <title> "DUMB — live safety report on
+  Dumb Money Hub" with og:url carrying the lowercased token; a valid-but-
+  non-curated address and plain /scan both fall back to the generic card
+  ("Token Safety Scanner — Dumb Money Hub") with the full generic
+  description — the 13:53 honesty gate holds in served HTML (symbol only,
+  never a verdict, so a cached card can never go stale or lie). (4) /trade
+  gas guide re-audited — three PLS paths honest, the lookalike-bridge
+  warning and no-endorsement disclaimer intact, no churn. (5) Hero
+  ProofStrip re-audited (src): client-side live reads with honest loading/
+  error/empty states, nothing invented, no churn. Considered and REJECTED
+  with reasons in BULLISH-RESEARCH.md: lowering the 100k-DUMB deep-scan
+  price (≈36.8 WPLS at current on-chain ratio — the friction is the burn
+  step and discovery, not the token amount; and with 3 deep scans/30 days
+  there's no baseline to optimize against — 09:23 precedent), bolting share the
+  ProofStrip (its job is trust-at-first-glance, not conversion; scan share
+  surfaces already exist). Zero wallet/signing/data-source/mascot touch.
+  #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 on mascot
+  approval (ON HOLD per Antonio 2026-09-29); #9/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 15:03 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — the design pass for the
+  NEXT scanner probe: **"Owner fee-wallet redirect power" (5m)**. The gap the
+  family doesn't ask: where does the tax money GO? A live owner who can
+  redirect the fee/marketing wallet turns the project's stated use-of-funds
+  into fiction — holders believe the tax funds marketing/buybacks while the
+  dev points the wallet at themselves. Adjacent slow-rug vector to 5e/5f.
+  Ground truth (read-only recon, live RPC): INC and WBTC are the only curated
+  tokens with live owners; all 6 candidate setter shapes + all 5 candidate
+  getter shapes reverted honestly on both under owner impersonation with a
+  dead-address arg — zero machinery in the curated set, zero false-positive
+  risk there; shapes grounded in documented Safemoon-fork auditor checklists
+  (setMarketingWallet / setDevWallet / setFeeReceiver-class under
+  fee-manipulation checks). Pre-write diff per the 09:53 standing lesson:
+  only setMarketingFee(uint256) matches in token-scan.ts — a fee AMOUNT
+  setter (5c's job), not a wallet redirect — genuinely uncovered. Settled
+  design for the future ship run: 5 setter shapes (setMarketingWallet,
+  setMarketingWalletAddress, updateMarketingWallet, setFeeWallet,
+  setDevWallet; setTeamWallet/setFeeReceiver dropped as rarer), read-only
+  eth_calls impersonating the live owner, keccak256 selectors, inside
+  `if (liveOwner)`; FAIL-SAFE arg = the dead address (the impossible executed
+  case redirects tax proceeds to burn, never to a thief — cannot steal, can
+  only redirect-to-burn); getters marketingWallet()/feeWallet()/devWallet()
+  read plainly so the report names the CURRENT recipient (never asserts it
+  "belongs to the owner" — chain state can't prove wallet ownership);
+  matrix = permissive-fallback control gates first → unknown, setter hit →
+  warn naming the current wallet when readable, all-revert → pass with the
+  custom-names caveat, all-noise → unknown, renounced skip. RPC budget 9
+  typical / 14 worst case, bounded like the family. Rejected in the design:
+  owner-assertion of the current wallet, two-arg share-split setter variants
+  (revert into the honest pass caveat), amount setters (5c's job). Pre-ship
+  validation requirements logged in BULLISH-RESEARCH.md (arg-encoding check,
+  end-to-end node run vs DUMB/INC/WBTC, ROADMAP + both AI answers, tsc/eslint/
+  build/deploy + served-bundle verify). DEFERRED to its own build run per the
+  10:33/11:23/13:03 precedent. Live health: / /scan /burn /plan all 200 on the
+  custom domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, still honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #13 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#10 stay open
+  as recurring.
+
+- 2026-09-29 14:53 ET run: backlog #10 DONE (roadmap hygiene, recurring) ->
+  audit-only, NO code changes, no build/deploy - verified every claim from the
+  two ships since the 14:13 #10, in src AND in served content on the custom
+  domain. (1) The 14:23 #13 symbol-only unfurl personalization: ROADMAP
+  "Shareable report cards" line (dump.ts:233) matches src claim-by-claim -
+  page-meta.ts:69 shareSymbolFor (curated-map-only symbol, exact 42-char hex
+  gate) + scan.tsx:31-37 head() personalization; both Dumb AI scanner answers
+  (dump.ts:388, knowledge.ts:64) carry the clause in each surface's own words
+  with no drift - "symbol only, never the verdict, so a cached card can never
+  go stale" on both, verdict-in-unfurl rejection untouched. (2) Served-content
+  verification (independent): /plan SSR carries the roadmap clause verbatim;
+  served ai (ai-DAvpbM6l.js) + dump (dump-DX76jzVy.js) chunks carry the new AI
+  clauses (correct asset path is /assets/, not /_build/assets/). (3) The 14:33
+  #8 /raid CTA fix ("Join the Telegram crew") correctly carries NO ROADMAP
+  churn - the roadmap names only "Meme contest seasons" as a future-phase line
+  (dump.ts:251, still done:false), never the button label; zero "Enter in
+  Telegram" hits remain anywhere in src or served /raid SSR. (4) The 14:43 #9
+  audit run was audit-only with zero src changes - correctly no churn, per its
+  log. (5) Done flags still honest: 8 "Now" groups done:true, the four
+  future-phase groups done:false - the 12:53 count correction holds. Live
+  health: / /scan /burn /plan /raid /ai /trade all 200 on the custom domain;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) - flat since 03:50, honest, still
+  traffic/distribution. Zero wallet/signing/data-source/mascot touch. #10 stays
+  open as recurring; #5 on Antonio's idea-only hold, #6 on mascot approval (ON
+  HOLD per Antonio 2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 14:43 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial review of the
+  14:23 #13 ship (symbol-only unfurl personalization on shared /scan report
+  links), reviewed clean with independent live-verification on the custom
+  domain. (1) The `shareSymbolFor` gate is airtight: a symbol is returned
+  ONLY for exact 42-char hex (`^0x[0-9a-fA-F]{40}$`) addresses present in the
+  curated map, and the symbol itself is a literal from the map ("DUMB",
+  "TEDDY", etc.) — nothing attacker-controlled ever reaches <head>. (2)
+  og:url + canonical interpolate only `token.toLowerCase()` AFTER the
+  format gate — pure hex, no injection vector; live check confirms
+  `/scan?token=0xe65112...b7ff8d` (lowercased, address verified). (3)
+  Adversarial inputs all fall back to the generic card with ZERO raw-input
+  reflection in <head>: garbage strings, non-hex 42-char addresses, valid
+  non-curated addresses, an XSS-shaped `token=0x"><script>alert(1)</script>`
+  (generic title, og:url/canonical = bare /scan), and repeated `?token=`
+  params (307 normalize redirect to /scan — the router's own undefined-param
+  normalization, no reflection). React SSR escaping confirmed live
+  (og:description renders `&#x27;` for the apostrophe). (4) Zero RPC at crawl
+  time: head() runs a synchronous map lookup only — a crawler can't turn
+  shared links into RPC amplification. (5) The cached-card honesty property
+  from the 13:53 design holds: no verdict or result anywhere in the card
+  (title/description verified in served SSR), so a cached preview can never
+  go stale or lie; the symbol always names the address actually being
+  scanned (map keyed by address — no spoofing a label onto a different
+  token). (6) &burn= params are ignored by head() — a shared deep-scan link
+  still gets the symbol-only card ("live safety report", which the deep
+  scan still is), no verdict promise added. NOT CHURN: no code change earned
+  — the review found the gate exactly as strong as the ship log claimed.
+  Live health: / /scan /burn /plan 200; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, honest, still traffic/distribution. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #9 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 14:33 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **an honest CTA fix on the /raid Smiley Meme Contest card** — the
+  card carries the "Season 1 soon" badge and the blurb "The first meme season
+  is still being set up", but the button read "Enter in Telegram" — a tap
+  promised entry into a contest that hasn't opened. Now it reads "Join the
+  Telegram crew": still funnels people to the community where the season will
+  open, but no longer pretends the contest is accepting entries. The label
+  lives on MEME_CONTEST in packs.ts (data-driven, next to status/blurb/rules —
+  one edit keeps them consistent if the season ever opens; the season itself
+  stays Antonio's call to launch, not this loop's). Four-lens: better (the
+  click now delivers what it promises), safer (no misleading contest-entry
+  promise on a demand surface), more secure (zero new surface — same link,
+  same destination), fun (plain brand voice). Considered and REJECTED with
+  reasons in BULLISH-RESEARCH.md: softening the badge instead (the badge was
+  already honest — the button was the mismatch), removing the card until the
+  season opens (kills the only discoverable path to the contest; the season
+  reveal would be quieter), a "notify me" feature (needs a subscription
+  backend — speculative churn for a season that doesn't exist yet). tsc +
+  eslint clean, built, deployed to dump-money-hub-preview — / /raid /scan
+  /burn 200 on the custom domain; served /raid SSR carries the new CTA (1
+  hit) with 0 hits for the old; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — flat since
+  03:50, still traffic/distribution. Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #8 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29);
+  #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 14:23 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **symbol-only unfurl personalization on shared /scan report
+  links** — the deferred 13:53 #8 item, now closed. A shared report link for
+  one of the site's 13 verified curated tokens (DUMB/DAMP/WPLS/HEX/TEDDY/
+  SOLIDX/PCOCK/HELGO/INC/PLSX/PRVX/pTGC/WBTC) now unfurls on X/Telegram as
+  e.g. "DUMB — live safety report on Dumb Money Hub" instead of the generic
+  scanner card; every other address (and plain /scan) falls back to the
+  generic card. Honesty gate from the 13:53 deferral holds exactly: the
+  symbol is the ONLY personalization — no verdict, no result — so a cached
+  preview can never go stale or lie (the 11:53 verdict-in-unfurl rejection
+  stands untouched). Zero RPC at crawl time: a synchronous curated map in
+  page-meta.ts (symbols are literals — the UI's own display symbols, TEDDY
+  per Antonio's call, not the on-chain "TEDDY BEAR ㉾" — never user input),
+  the ?token= param is format-validated and only ever a map key, og:url +
+  canonical carry the lowercase token, og:image stays the generic root card.
+  The description carries no verdict either ("It flags the obvious traps;
+  it can't bless a token as safe") and its "re-runs the scan live on-chain"
+  claim is TRUE (TokenScanner auto-runs shareToken links at view time —
+  verified in src). ROADMAP "Shareable report cards" line + both Dumb AI
+  scanner answers (dump.ts, knowledge.ts) extended by one clause in each
+  surface's own words. Validation: tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — live-verified on the custom domain: DUMB/WPLS/
+  TEDDY links personalize, plain /scan + non-curated address + garbage token
+  all fall back generic; / /scan /burn /plan /trade /ai 200;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}); /plan SSR carries the new roadmap clause.
+  Deferred 13:53 entry → RESOLVED. Zero wallet/signing/data/mascot touch, no
+  new data sources. #13 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#10
+  stay open as recurring.
+
+- 2026-09-29 14:13 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the two
+  ships since the 13:33 #10 verified accurate, in src AND in served content
+  on the custom domain. (1) The 13:43 #13 "Owner trading-toggle power" probe
+  (5l): ROADMAP "Token safety scanner" line (dump.ts:231) matches
+  token-scan.ts:1417-1580 claim-by-claim — the whole probe inside
+  `if (liveOwner)` (skipped when renounced), read-only eth_call
+  impersonating the owner (never commits), 4 common (bool) toggle-setter
+  shapes (setTradingActive/setTradingEnabled/setTradingStatus/setTrading),
+  fail-safe enable-only probe value (arg true), selectors via keccak256, the
+  permissive-fallback control gating FIRST with getter reads suppressed on
+  fallbackBlind (the 5j wart of appending the getter note not copied), the
+  3 toggle getters read plainly, and the corroboration-gated matrix:
+  setter hit + halted flag uncontested → fail ("a freeze verdict requires
+  BOTH the setter and a halted flag to corroborate each other"), lone halted
+  flag → unknown naming the evidence ("never fail"), setter hit alone →
+  warn, all-noise → unknown, all-revert → pass with the custom-names +
+  rejected-test-value caveat. (2) Both Dumb AI scanner answers (dump.ts:388,
+  knowledge.ts:64) carry the 5l clause in each surface's own words with no
+  drift — the fail-safe, corroboration-gated, renounced-skip points all
+  present. (3) The 14:03 #9 contested-getters fix (fail now requires
+  `foundSig && haltEvidence && !enabledEvidence`; contested degrades to
+  warn with the disagreement named) correctly carries NO ROADMAP/AI churn:
+  the roadmap clause describes the corroboration gating faithfully at the
+  right scale, and neither AI answer claims anything the contested branch
+  contradicts — branch-level reporting fix, same scale as the 11:33/12:43
+  precedent. (4) Done flags still honest: 8 "Now" groups done:true
+  (dump.ts:141-228), the four future-phase groups (247/258/269/279)
+  correctly done:false — the 12:53 count correction holds. (5) Served-content
+  verification (independent): /plan SSR HTML carries the roadmap's
+  trading-toggle clause verbatim; the live scan chunk
+  BurnBragCard-matwn7XW.js (same hash the 14:03 deploy verified) carries the
+  owner-trading-toggle check id, the fail copy, and both contested strings;
+  the served dump (dump-Ch18OoUs.js) + ai chunks carry the new AI clauses.
+  (6) The 13:53 #8 run was audit-only with zero src changes — correctly no
+  churn, per its log. Live health: / /scan /burn /plan all 200 on the
+  custom domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, traffic/
+  distribution. Zero wallet/signing/data-source/mascot touch. #10 stays
+  open as recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 14:03 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **a contested-getters honesty fix on the 5l trading-toggle probe**
+  — the adversarial review of the 13:43 ship found one real defect: when the
+  probe reads two toggle getters and they DISAGREE (one `false` = halted,
+  another `true` = enabled), the shipped code fired the fail branch on the
+  halted flag alone and asserted "trading is frozen right now" as fact —
+  hiding the contradictory signal it had already computed. Under the 13:23
+  review's own principle (fail needs the freeze proven; a false FAIL is
+  trust-eroding), contested evidence isn't proof. Fix: fail now requires
+  `foundSig && haltEvidence && !enabledEvidence`; the contested case
+  degrades to warn with the disagreement named ("The toggle flags disagree
+  — X reports false, but Y reports true — so the 'halted' signal is
+  contested; treated as a warning, not a frozen verdict") plus the deep-scan
+  tiebreaker. The setter hit still earns the warn (machinery exists and
+  answers the owner); plain warn and its enabled-note untouched. Reviewed
+  clean, no change needed: all five 13:23 matrix branches landed exactly as
+  specified (corroboration-gated fail, setter-only warn, no-setter+halted
+  unknown, no-setter pass, fallbackBlind unknown with getters suppressed
+  and NO getter note — the 5j wart not copied), Findings B + C documented in
+  the code comment, fail-safe arg true, keccak256 selectors,
+  revert→absent/noise→unknown triage, liveOwner gating, ≤12-call RPC budget,
+  tryRead swallows bool-decode throws (uint8 getters no-signal, as
+  documented). Validation: tsc + eslint clean, decision-tree logic test 9/9
+  (all verdict branches). Built + deployed to dump-money-hub-preview —
+  / /scan /burn /plan 200 on the custom domain; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}); served chunk
+  BurnBragCard-matwn7XW.js (new hash — this deploy) carries the check id
+  (6 hits), the fail copy, and both new contested strings. No ROADMAP/AI
+  churn (branch-level reporting fix, same scale as 11:33/12:43). Zero
+  wallet/signing/data/mascot touch, no new data sources. #9 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 13:53 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine audit unit:
+  crawler-level unfurl audit (new — what X/Telegram bots actually receive).
+  (1) Served /scan SSR carries the full generic OG suite (og:title
+  "Token Safety Scanner — Dumb Money Hub", og:description, og:image
+  og-card.png 1200×630 + alt, twitter:card summary_large_image) — healthy
+  baseline. (2) A REAL shared report link (/scan?token=0x…&burn=…) unfurls
+  byte-identically generic: shared reports show no token name and no verdict
+  in the card; the verdict lives only in the share TEXT (which already names
+  it honestly). The gap is real but small — the text does the persuasive
+  work. (3) Considered and REJECTED: verdict-in-unfurl per-token OG tags —
+  stands from 11:53, and the decisive new reason: a cached verdict card can
+  go STALE, contradicting the family's rule that a shared link "re-runs live
+  so a stale link can never lie"; the verdict in uncached share text is the
+  more honest design. (4) Considered and DEFERRED (to a #13 utility run, not
+  rejected): symbol-only personalization ("DUMB — live safety report", no
+  verdict, one cheap symbol resolution + cache, SSR head personalization) —
+  friendlier to outsiders without the staleness sin. Health: / /scan /burn
+  /plan /trade /ai all 200; /api/scan-stats unchanged ({deep_scans:3,
+  pass_burns:1, dumb_destroyed_min:100000}) — flat since 03:50, still
+  traffic/distribution, sixth confirmation of the 09:23 reasoning. Zero
+  wallet/signing/data-source/mascot touch. #8 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 13:43 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner trading-toggle power" probe (5l) in the /scan quick
+  scan** — the deferred 13:03 design, now carrying the 13:23 #9 review's
+  REQUIRED revision (corroboration-gated fail). The flagship Safemoon-fork
+  honeypot shape the family didn't name: an owner-controlled trading switch
+  (tradingActive/tradingEnabled/tradingStatus) — the pre-launch trap (buys
+  open, sells never enabled) and re-halt at will (exits freeze mid-pump).
+  The #6 "Pause switch" reads ONLY OZ paused() — a fork toggle was
+  completely invisible to today's scan. Probes 4 (bool) setter shapes
+  (setTradingActive/setTradingEnabled/setTradingStatus/setTrading) with
+  read-only eth_calls impersonating the live owner; probe arg `true` =
+  fail-safe (the impossible executed case can only ENABLE trading);
+  selectors via keccak256. The 13:23 revision as shipped: fail requires
+  corroboration (setter hit AND a toggle getter reading false — machinery
+  proven AND armed); setter hit alone → warn (the design's warn copy stands);
+  NO setter hit + halted flag → unknown with the evidence named (never
+  fail); no setter + enabled/absent → pass with the custom-names caveat;
+  permissive-fallback → unknown with the getter reads SUPPRESSED entirely
+  (the 5j wart of appending the getter note to the unknown branch is NOT
+  copied — the control runs FIRST here, unlike the other owner probes).
+  Code comments document Finding B (tradingStatus-as-uint8 state machines:
+  bool decode throws, read() swallows, silently skipped — benign) and
+  Finding C (tradingOpen/tradingPaused deliberately NOT read — inverted
+  semantics would invert the verdict, so a future run must not "helpfully"
+  add them). Deliberate rejections (unchanged from design): disableTrading
+  (not fail-safe), swapEnabled shapes (auto-liquidity switch, not a user
+  halt — would false-positive), no-arg enableTrading (already-enabled
+  tokens revert it, indistinguishable from absent). Pre-write diff confirmed
+  zero existing toggle coverage. Pre-ship validated: (1) independent
+  arg-encoding check — 4 distinct keccak256 selectors (0x959bd6c2,
+  0xc2e5ec04, 0x379ba1d9, 0x8f70ccf7), 36-byte calldata each, arg=true
+  round-trips; (2) the SHIPPED quickScan run end-to-end in node against live
+  RPC — DUMB (renounced) → check correctly absent, INC (live owner) →
+  check present, PASS with caveat (all 4 shapes reverted under owner
+  impersonation; all 3 getters reverted, no fabricated signal), HEX (no
+  live owner) → correctly skipped. ROADMAP "Token safety scanner" line
+  (dump.ts:231) + both Dumb AI scanner answers (dump.ts:388,
+  knowledge.ts:64) extended in each surface's own words. tsc + eslint
+  clean, built, deployed to dump-money-hub-preview — / /scan /burn /plan
+  /ai 200 on the custom domain; served bundle verification: live scan-logic
+  chunk BurnBragCard-C0auRVqm.js (new hash — this deploy) carries the
+  owner-trading-toggle check id (6 hits, all verdict branches), the "Owner
+  trading-toggle power" title, and the "trading-toggle halt" fail copy;
+  /plan SSR carries the roadmap clause; served dump (dump-Ch18OoUs.js) + ai
+  (ai-CMUHxGmd.js) chunks carry the new AI clauses; /api/scan-stats
+  unchanged ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}).
+  BULLISH-RESEARCH.md deferred 5l entry marked resolved → shipped. Zero
+  wallet/signing/data/mascot touch, no new data sources. #13 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 on mascot approval (ON HOLD
+  per Antonio 2026-09-29); #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 13:33 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the runs
+  since the 12:53 #10 verified, and the deferred 5l probe correctly has zero
+  roadmap/AI surface. (1) The 13:03 #13 deferred "Owner trading-toggle
+  power" design: grep over src confirms NO trading-toggle setter shapes
+  shipped (only the shipped 5j setTradingCooldown(uint256) matches "trading"
+  in token-scan.ts) and zero "trading toggle / setTradingActive / trading
+  switch" hits in dump.ts/knowledge.ts — correctly no ROADMAP/AI churn for
+  a design pass, per the standing deferred-design precedent. (2) The 13:23
+  #9 review's "full review + matrix in BULLISH-RESEARCH.md" claim verified:
+  the 13:23 entry exists with Findings A (the required corroboration-gated
+  fail matrix), B (uint8 tradingStatus decode docs), C (tradingOpen/
+  tradingPaused exclusion rationale) and the confirmed-sound list — the
+  future ship run inherits the revision. (3) The 13:13 #8 audit's
+  BULLISH-RESEARCH.md entry exists with all four rejection entries. (4)
+  Done flags honest: 8 "Now" groups done:true, the four future-phase groups
+  (247/258/269/279) done:false — the 12:53 count correction holds. Live
+  health: / /scan /burn /plan all 200 on the custom domain;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, traffic/
+  distribution. Zero wallet/signing/data-source/mascot touch. #10 stays open
+  as recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 13:23 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial design review of
+  the deferred 13:03 #13 "Owner trading-toggle power" probe (5l), so the ship
+  run inherits a hardened design. Verdict: APPROVED WITH ONE REQUIRED
+  REVISION. The revision: the design's `fail` branch ("trading halted RIGHT
+  NOW" from a plainly-read getter) can't cite the pause check's paused()-TRUE
+  branch as precedent — paused() is OZ-standardized, while tradingActive()/
+  tradingEnabled()/tradingStatus() have no standard (fork semantics vary,
+  name collisions across contract types are real). A false `false` → FAIL
+  would be trust-eroding, and with no setter hit the getter is the ONLY
+  evidence — a permissive-fallback contract returning zero-ish garbage could
+  fabricate a FAIL on a contract the control already flagged un-probeable.
+  The ship run must use the corroboration-gated matrix: setter hit + getter
+  halted → fail; setter hit + getter enabled/unclear → warn; NO setter hit +
+  getter halted → unknown with the evidence named (never fail); no setter +
+  getter enabled/absent → pass with the custom-names caveat; permissive-
+  fallback → unknown AND getter reads suppressed entirely (do NOT copy 5j's
+  wart of appending the getter note to the unknown branch). Documentation
+  notes for the ship run: tradingStatus-as-uint8 state machines decode-fail
+  as bool → read() swallows → silently skipped (benign, document it);
+  tradingOpen/tradingPaused getter shapes stay excluded BECAUSE of inverted
+  semantics — say so in the code comment so no future run "helpfully" adds
+  them. Confirmed sound: fail-safe arg true, keccak256 selectors,
+  revert→absent / noise→unknown triage, liveOwner gating (DUMB/DAMP renounced
+  skip), all three rejections (disableTrading, swapEnabled, no-arg
+  enableTrading), honest warn copy, ≤12 RPC calls per live-owner scan.
+  Full review + matrix in BULLISH-RESEARCH.md (13:23 entry). Live health:
+  / /scan /burn 200 on the custom domain; /api/scan-stats still
+  {deep_scans:3, pass_burns:1, dumb_destroyed_min:100000} — flat since 03:50,
+  still honest, still traffic/distribution. Zero wallet/signing/data-source/
+  mascot touch, no new data sources. #9 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 13:13 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine audit unit.
+  (1) Health: / /scan /burn /plan /trade /roots /ai all 200 on the custom
+  domain; /api/scan-stats still {deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000} — flat since 03:50, still honest, still a
+  traffic/distribution matter, not a copy or funnel defect (09:23 reasoning,
+  fifth confirmation). ScanActivity stays honest in src (renders nothing at
+  zero, "privacy tools undercount" disclaimer). (2) Funnel-affordance
+  regression audit — served SSR + src, ALL INTACT: hero "Scan any token" CTA
+  (external Explorer CTA correctly gone), "Try DUMB" chip on /scan, "No hash
+  handy? See a real burn" chip in TxExplainer (tx tab only, deep-linkable via
+  /scan?tx= — absent from default-tab SSR by design, not a regression),
+  the 11:13 watcher-honesty copy ("Nothing drips on a timer right now") and
+  the "Top volunteer donors" board heading (no invented donors) on /burn,
+  TxExplainer input still aria-labeled with share surfaces. (3) Deep-scan
+  static block copy audit (claim-by-claim, served SSR): SOUND — names the
+  deliverable (simulated 1 WPLS buy + sell-back + depth probe, "the real
+  round-trip cost in plain English"), the price (100,000 DUMB burn), the
+  on-chain verification before the report renders, and the supply-shrink
+  rationale; "Burn DUMB on the burn page" links to /burn, the correct
+  destination. REJECTED: price-in-heading churn, pass/PLS paths in the teaser
+  block (teaser job; panel + /burn carry them — no measurable baseline with
+  3 deep scans/30 days), any deep-scan copy rewrite (fourth confirmation),
+  loop-run community ritual scheduling (#5 stays Antonio's idea-only hold).
+  Zero wallet/signing/data-source/mascot touch. #8 stays open as recurring;
+  #5 on Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 13:03 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — the design pass for the
+  NEXT scanner probe: **"Owner trading-toggle power" (5l)**. The single most
+  common Safemoon-fork honeypot shape the probe family doesn't name: an
+  owner-controlled trading switch (tradingActive/tradingEnabled/tradingStatus)
+  — the pre-launch trap (buys open, sells never enabled) and re-halt at will
+  (exits freeze mid-pump). The existing check #6 "Pause switch" reads ONLY
+  OpenZeppelin's standard paused() — a fork-style toggle is completely
+  invisible to today's quick scan. Ground truth (read-only recon, live RPC):
+  9 toggle getter shapes × 9 tokens (DUMB/DAMP/INC/TEDDY/SOLIDX/PCOCK/HELGO/
+  PLSX/PRVX) all reverted honestly — no toggle machinery in the curated set,
+  so no signal there; but the scanner's job is arbitrary pasted addresses and
+  the toggle is the flagship owner-power rug vector, so family coverage earns
+  its place. Pre-write diff per the 09:53 standing lesson: zero existing
+  coverage (owner-mint/blacklist/limit-setter/fee-exemption/exclusion-setter/
+  cooldown-setter/txlimit-exemption, fee-setter, fee-setter-anyone, pause —
+  none names a fork toggle). Settled design for the future ship run: 4
+  (bool)-setter shapes (setTradingActive/setTradingEnabled/setTradingStatus/
+  setTrading) impersonating the live owner, fail-safe arg TRUE (enable — the
+  impossible executed case can only unfreeze); the 5j getter-honesty pattern
+  (tradingActive/tradingEnabled/tradingStatus read plainly — "halted right
+  now" = fail, "owner can halt" = warn); keccak256 selectors; permissive-
+  fallback control gates first; revert→absent / noise→unknown; renounced
+  owners skip. Deliberately REJECTED in the design: disableTrading() (not
+  fail-safe — impossible-execution case freezes trading), swapEnabled shapes
+  (auto-liquidity switch, not a user-trading halt — would false-positive),
+  no-arg enableTrading() (already-enabled tokens revert it, indistinguishable
+  from absent). DEFERRED to its own build run per the 10:33/11:23 precedent —
+  pre-ship validation requirements logged in BULLISH-RESEARCH.md (end-to-end
+  node run vs DUMB/INC/HEX, independent arg-encoding check, ROADMAP + both AI
+  answers extended, deploy + served-bundle verify). Live health: / /scan /burn
+  200 on the custom domain; /api/scan-stats still {deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000} — flat funnel, traffic/distribution matter.
+  Zero wallet/signing/data-source/mascot touch. #13 stays open as recurring;
+  #5 on Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 12:53 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the one ship
+  since the 12:13 #10 verified accurate, in src AND in served content on the
+  custom domain. (1) The 12:23 #13 "Owner limit-exemption power" probe (5k):
+  ROADMAP "Token safety scanner" line (dump.ts:231) matches token-scan.ts:
+  1283-1397 claim-by-claim — read-only eth_calls impersonating the live owner
+  (inside `if (liveOwner)`, so renounced/absent owners skip), 4 exemption
+  shapes (setIsTxLimitExempt/setTxLimitExempt (address,bool), excludeFromTxLimit
+  (address), isTxLimitExempt getter) via keccak256 selectors, fail-safe probe
+  arg (dead address + true — could only "free" an address that can never move
+  tokens), the permissive-fallback control gating first, warn copy "the owner
+  can lift the buy/sell limits for chosen wallets while everyone else stays
+  gated... That's the insider lane" = roadmap's "a hit is the insider lane:
+  the throttle applies to everyone except whoever the owner lets through".
+  Both Dumb AI scanner answers (dump.ts:388, knowledge.ts:64) carry the clause
+  in each surface's own words with no drift. (2) The 12:43 #9 honesty fix
+  ("An exemption SETTER" → "An exemption FUNCTION" in the warn) correctly
+  carries NO ROADMAP churn — the roadmap clause never names setter vs
+  function, and the served warn now reads honest. (3) Served-content
+  verification (independent): /plan SSR carries the roadmap's exemption-probe
+  clause verbatim; the live scan-logic chunk on the custom domain carries
+  "An exemption function" (the fixed copy, 1 hit) + check id
+  "owner-txlimit-exemption" + title "Owner limit-exemption power". NOTE: the
+  served chunk hash is BurnBragCard-IfH1aEuG.js, not the CEsoW1kz.js the
+  12:43 log recorded — substance verified live (carries the fix), the
+  discrepancy is a log typo, not a content gap; the one "exemption setter"
+  hit in the chunk is the unknown branch's pre-existing "real limit-exemption
+  setters are hiding in there" copy, not the fixed warn. (4) Done flags still
+  honest: scanner "Now" group done:true (5k is an iteration of the done
+  group), the four future-phase groups (247/258/269/279) correctly done:false.
+  COUNT CORRECTION: past runs said "16 Now groups done:true" — the actual
+  ROADMAP has 12 groups (8 done:true, 4 future-phase done:false); no flip
+  earned, nothing stale. Live health: /plan /scan 200 on the custom domain.
+  Zero wallet/signing/mascot/data-source touch. #10 stays open as recurring;
+  #5 on Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #8/#9/#13 stay open as recurring.
+- 2026-09-29 12:43 ET run: backlog #9 DONE (security pass, recurring) →
+  adversarial review of the 12:23 #13 "Owner limit-exemption power" probe
+  (5k) in token-scan.ts, then SHIPPED one honesty fix found by the review.
+  Reviewed: fail-safe probe args (dead address + true could only "free" an
+  address that can never move tokens; getter arg state-harmless), read-only
+  eth_call owner impersonation (no signing, no state committed — eth_call
+  never commits), keccak256-derived selectors (independently verified: 4
+  distinct selectors, 68-byte calldata for the (address,bool) shapes,
+  36-byte for the (address) shapes, dead-address arg ABI-encodes
+  correctly), permissive-fallback garbage-selector control gating before any
+  probe (fail-closed to unknown), revert→absent / retry-once→unknown triage
+  matching the family standard, renounced/absent owners skip (DUMB/DAMP
+  correctly skip), ≤9 RPC calls per live-owner scan (bounded). THE FIX: the
+  warn copy said "An exemption SETTER (${foundSig})" — but foundSig can be
+  the `isTxLimitExempt(address)` GETTER shape (probed last, clean return =
+  machinery exists, per the settled 5h design), so a getter hit would be
+  mislabeled as a setter in the user report. Warn now reads "An exemption
+  FUNCTION" — matching the 5h precedent, which deliberately says
+  "blacklist function" for the same reason. Deliberately NOT churned: the
+  getter/setter machinery-existence warn itself (the settled 5h design
+  decision — setter shapes probed first, getter last, code comment explains;
+  the report now names it honestly as a function), the mixed absent+RPC-
+  noise pass classification (family-wide standing, per the 11:33 note —
+  redesigning it means touching all owner probes). No ROADMAP/AI churn (the
+  5k line's claim is unchanged). tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /burn 200 on the custom domain;
+  /api/scan-stats still {deep_scans:3, pass_burns:1, dumb_destroyed_min:
+  100000}; served chunk BurnBragCard-CEsoW1kz.js (new hash — this deploy)
+  carries "An exemption function" with 0 hits for the old "exemption
+  setter" phrasing. Zero wallet/signing/data-source/mascot touch, no new
+  data sources. #9 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#10/#13 stay
+  open as recurring.
+
+
+- 2026-09-29 12:33 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — a genuine audit unit.
+  (1) Health: / /scan /burn /plan /trade /roots /ai all 200 on the custom
+  domain; /api/scan-stats still {deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000} — flat since 03:50, still honest, still a
+  traffic/distribution matter, not a copy defect (09:23 reasoning holds,
+  fourth confirmation). (2) The 12:23 #13 probe (5k limit-exemption) verified
+  live: /plan SSR carries the roadmap clause; the 12:23 run verified the
+  served scan/dump/ai chunks. (3) Demand surfaces re-audited, all sound:
+  the "Try DUMB" chip in served /scan SSR, the "Scan any token" hero CTA in
+  served homepage SSR, the 11:13 watcher-honesty fix ("Nothing drips on a
+  timer right now") in served /burn SSR, the "Top volunteer donors" board
+  renders with chain-fed rows only (no invented donors). (4) VAULT FLYWHEEL
+  RE-VERIFIED STALLED: on-chain read (node + viem, retried past the known
+  rpc.pulsechain.com flakiness) shows exactly ONE Drip event ever
+  (block 27664149) and the vault's PLSX balance still exactly 225,000 —
+  nothing dripped in ~19.5 hours. The 11:13 finding stands unchanged: true
+  autopilot needs Antonio's caller-wallet rotation + gas funding +
+  end-to-end test; the loop must never sign or hold keys. Considered and
+  REJECTED (in BULLISH-RESEARCH.md): a "days remaining" indicator for
+  30-day pass holders (only 1 pass exists — speculative churn), adding share
+  buttons to the scan share report (VERIFIED already shipped:
+  TokenScanner.tsx:382 + 1060), a deep-scan copy rewrite (third
+  confirmation: no measurable baseline). No churn earned anywhere; nothing
+  broken. #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 on
+  mascot approval (ON HOLD per Antonio 2026-09-29); #9/#10/#13 stay open as
+  recurring.
+
+
+- 2026-09-29 12:23 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner limit-exemption power" probe (5k) in the /scan quick
+  scan** — the insider-lane vector: 5i covers the owner CHANGING the
+  maxTx/maxWallet limits, but in Safemoon-fork tokens the limits apply to
+  everyone EXCEPT wallets the owner exempts — the owner throttles everyone's
+  exits, then lifts the gate for chosen wallets and dumps through the open
+  lane. Probes 4 exemption shapes (setIsTxLimitExempt(address,bool),
+  setTxLimitExempt(address,bool), excludeFromTxLimit(address),
+  isTxLimitExempt(address)) with read-only eth_calls impersonating the live
+  owner; probe arg is the dead address + true (could only "free" an address
+  that can never move tokens in the impossible executed case); selectors via
+  keccak256, never hand-typed. Clean return = warn ("the throttle applies to
+  you, not to them"); all-revert = pass with the honest custom-names caveat;
+  all-RPC-noise = unknown ("treat as risky"); the permissive-fallback
+  garbage-selector control gates first; renounced/absent owners skip —
+  DUMB/DAMP correctly skip. Design honesty (same as the 5h precedent): the
+  getter shape may be a plain mapping rather than a setter — either way a
+  clean return proves the exemption machinery EXISTS, so the warn never
+  false-positives on getter/setter ambiguity. Pre-write diff per the 09:53
+  standing lesson confirmed zero existing tx-limit-exemption coverage (5e is
+  the owner SELF-exempt from fees, 5f is reward-exclusion — neither is
+  about limit exemptions for arbitrary wallets). Pre-ship validated: the
+  SHIPPED quickScan run end-to-end in node against live RPC — DUMB
+  (renounced) → check correctly absent; INC (live owner) → check present,
+  pass with caveat (all 4 shapes reverted under owner impersonation); HEX
+  (no live owner per owner()) → correctly skipped. Independent arg-encoding
+  check: 4 distinct selectors, 68-byte calldata for the two (address,bool)
+  shapes, 36-byte for the two (address) shapes, dead-address arg round-trips.
+  ROADMAP "Token safety scanner" line (dump.ts) + both Dumb AI scanner
+  answers (dump.ts AI_QA, knowledge.ts:64) extended in each surface's own
+  words. BULLISH-RESEARCH.md updated. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /burn /plan 200 on the custom domain
+  (one transient stale-edge read on /plan cleared on retry, the known
+  pattern); served bundle verification: live scan-logic chunk
+  (BurnBragCard-5sz493Bs.js) carries the owner-txlimit-exemption check id +
+  title + warn copy; /plan SSR carries the roadmap clause; served dump
+  (dump-mjLtVgss.js) + ai (ai-DpdmLpqN.js) chunks carry the new AI clauses;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}). Zero wallet/signing/data/mascot touch, no new
+  data sources. #13 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#10 stay open
+  as recurring.
+
+- 2026-09-29 12:13 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — verified every claim from the
+  ships since the 11:43 #10, and confirmed the interim runs carried no churn.
+  (1) The 11:53 #8 demand-surface audit and 12:03 #9 username-registry review
+  were both audit-only with zero src changes — correctly no ROADMAP/AI churn;
+  their log claims verified (BULLISH-RESEARCH.md carries the 11:53 rejection
+  entries; no file touched by either). (2) The two most recent SHIPS (11:23
+  #13 cooldown probe 5j, 11:33 #9 armed-note fix) re-verified accurate, in
+  src AND in served content: ROADMAP "Token safety scanner" line (dump.ts:
+  231) carries the probe clause in the component's own words (4 setter
+  shapes, fail-safe args, cooldown getters distinguishing armed cooldown
+  from owner's power, slow-rug tempo-trick warn copy, renounced skip); both
+  Dumb AI scanner answers (dump.ts:388, knowledge.ts:64) carry the clause in
+  each surface's own words with no drift; served /plan SSR HTML carries the
+  roadmap clause; the served scan-logic chunk (BurnBragCard-ClJxRVrA.js —
+  same hash the 11:33 deploy verified, nothing deployed since) carries the
+  owner-cooldown check id + title + BOTH updated unknown branches with the
+  armed-note interpolation. (3) Done flags still honest: 16 "Now" groups
+  done:true (scanner group at 228 = true), the four future-phase groups
+  (247/258/269/279) correctly done:false. (4) Served-content verification
+  (independent): / /scan /burn /plan 200 on the custom domain;
+  /api/scan-stats live with the same honest aggregates (3 deep scans, 1 pass,
+  >=100,000 DUMB floor). No wallet/signing/mascot/data-source touch. #10
+  stays open as recurring; #5 on Antonio's idea-only hold, #6 on mascot
+  approval (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 12:03 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial re-review of the
+  wallet-linked username registry (shipped 2026-09-28, "security-reviewed and
+  live tested") under the four-lens check, line-by-line against
+  src/server/username.ts + src/lib/username.ts + UsernameCard.tsx. Reviewed
+  clean: (1) signature binding holds — buildSet/ClearUsernameMessage embed
+  name + address + timestamp in the signed text, verifyMessage requires the
+  recovered signer to equal the claimed address, and wagmi's EIP-191 prefix
+  means a captured signature can never become a transaction; (2) client and
+  server use the IDENTICAL builder functions (imported from src/lib/
+  username.ts on both sides — no drift possible); (3) the 10-min freshness
+  window bounds replay, and a replayed set-signature is idempotent (same
+  name, same wallet) while a replayed clear only re-clears the same wallet
+  within the window — the shipped tradeoff stands; (4) no impersonation
+  path: the signer IS the claimant, renames free the old index, clear deletes
+  both keys, and the 409 message interpolates only the already-validated
+  `^[a-zA-Z0-9_-]+$` name; (5) GET re-validates records against
+  isValidUsername (defense against hand-written KV rows), address list capped
+  at 100 with invalid filtered, body capped at 2KB; (6) rate limit is per-IP
+  (hashed, raw IP never logged) so nobody can burn another wallet's budget —
+  it increments before sig verification, but a legit user's own failures
+  would need 10 in a day to matter; (7) no CSRF surface (JSON POST, no cookies)
+  and no admin path anywhere. NOTED, NOT CHURN (1): the name-uniqueness
+  check-then-set can race (KV has no transactions) — two wallets claiming the
+  same name in the same sub-second could both pass the check; both addr
+  records would display the name while the index points at the last writer,
+  and the next write from the real owner heals it — display-level, rare, and
+  unfixable without a lock KV doesn't offer; no change earned. (2) malformed
+  JSON bodies return 500 instead of 400 — cosmetic only. Live health: / /scan
+  /burn 200 on the custom domain; /api/scan-stats still
+  {deep_scans:3, pass_burns:1, dumb_destroyed_min:100000} — flat funnel,
+  honest strip, not a security matter. Zero wallet/signing/data-source/mascot
+  touch, no new data sources. #9 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29);
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 11:53 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine audit unit:
+  (1) health check: / /scan /burn /plan /trade /roots all 200 on the custom
+  domain; /api/scan-stats still {deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000} — flat since 03:50, still honest, still a
+  traffic/distribution matter, not a copy defect (09:23 reasoning holds);
+  (2) raid mission copy audited (missions.ts) — no price promises anywhere
+  ("No spam, no price talk", "zero price predictions", "Community tool, not
+  advice"); (3) scan share-report copy audited (TokenScanner.tsx:350-375) —
+  honest, verdict-naming, shared links re-verify live at view time; (4) /ai
+  has aria-label + placeholder, /feedback is linked in PageShell, no
+  blank-input cold start found anywhere new; (5) served homepage verified
+  carries the 10:03 CTA refunnel ("Scan any token"), the ContractGuardrail
+  ("Which Dumb Money?"), and the honest tax copy — everything the last ships
+  claimed is live. Considered and REJECTED with reasons (in
+  BULLISH-RESEARCH.md): dynamic per-token og tags for shared /scan?token=
+  links (verdict-in-the-unfurl needs a live ~20-check scan inside head() —
+  heavy, slow for crawlers, RPC-failure-prone; the pre-filled share text
+  already carries the verdict), a deep-scan copy rewrite (still no
+  measurable baseline; flat stats = traffic, not copy), scheduling community
+  rituals/contests (Antonio's idea-only hold #5 — loop doesn't schedule
+  community events). No churn earned anywhere; nothing broken. #8 stays
+  open as recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 11:43 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the two
+  ships since the 11:03 #10 verified accurate, in src AND in served content
+  on the custom domain. (1) The 11:23 #13 "Owner trading-cooldown power"
+  probe (5j): ROADMAP "Token safety scanner" line (dump.ts:231) carries the
+  probe clause in the component's own words — "read-only calls impersonating
+  the owner against the common cooldown-setter shapes, with fail-safe probe
+  values that could only remove or disable a cooldown, plus the common
+  cooldown getters so the report honestly distinguishes an armed cooldown
+  from the owner's power to change it; a hit is the slow-rug tempo trick:
+  buys look free while sells are gated by the clock; skipped when ownership
+  is renounced" — matching token-scan.ts:1168-1278 claim-by-claim (4 setter
+  shapes, read-only eth_call impersonating the live owner, 0/false fail-safe
+  args, keccak256 selectors, common getters read plainly, warn/pass/unknown
+  branches, the permissive-fallback control gates first, the whole probe sits
+  inside `if (liveOwner)` at line 1183 so renounced/absent owners skip).
+  (2) The 11:33 #9 honesty fix (armed note on both unknown branches) makes
+  the roadmap's "honestly distinguishes an armed cooldown" claim MORE true —
+  verified in src (token-scan.ts:1250/1268) AND in the served bundle, so no
+  churn earned; a branch-level reporting fix is the same scale as the audit
+  fixes that have carried no churn all day. (3) Both Dumb AI scanner answers
+  (dump.ts:388, knowledge.ts:64) carry the 5j clause in each surface's own
+  words with no drift — the fix's "unknown branch names an armed cooldown"
+  nuance is a reporting detail inside the described probe, not a new claim.
+  (4) Done flags still honest: scanner "Now" group done:true (5j + the fix
+  are iterations of the done group, no flip earned), future-phase groups
+  (60d/90d/planned burn engine/planned vetted directory) correctly
+  done:false. Served-content verification (independent): /plan SSR HTML
+  carries the roadmap's cooldown clause verbatim; the live scan-logic chunk
+  (BurnBragCard-ClJxRVrA.js — same hash the 11:33 deploy verified, nothing
+  deployed since) carries the owner-cooldown-setter check id, the "Owner
+  trading-cooldown power" title, the "slow-rug tempo trick" warn copy, and
+  BOTH updated unknown branches with the armed-note interpolation
+  (`${c?` Note:${c}`:``}`). Live health: / /scan /burn /plan 200 on the
+  custom domain. Zero wallet/signing/data/mascot touch, no new data sources.
+  #10 stays open as recurring; #5 on Antonio's idea-only hold, #6 on mascot
+  approval (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 11:33 ET run: backlog #9 DONE (security pass, recurring) →
+  adversarial review of the 11:23 #13 "Owner trading-cooldown power" probe
+  (5j) in token-scan.ts, then SHIPPED one honesty fix found by the review.
+  Reviewed: fail-safe probe args (0/false could only loosen or disable in
+  the impossible execution case), keccak256-derived selectors, read-only
+  eth_call owner impersonation, revert-vs-noise triage, permissive-fallback
+  control gating false warns, null-safe getters, liveOwner-only gating —
+  all clean. THE FIX: both "unknown" branches dropped the armed-cooldown
+  note — a token whose getters cleanly report an ARMED cooldown while the
+  setter probes hit RPC noise (or the permissive-fallback control) would
+  say "whether the owner can throttle cadence is unknown" without ever
+  telling the user their sells are currently throttled. Both unknown copies
+  now append the same armed note the pass/warn branches carry
+  (armedNote is only nonempty when the getter reads answered cleanly, so
+  the note stays trustworthy). Considered and NOT changed: the mixed
+  absent+RPC-noise case lands on "pass" with a caveat that names custom
+  names and rejected probe values but not RPC-noise inconclusiveness —
+  the identical structure is shared by probes 5c/5d/5h/5i (all passed
+  prior #9 reviews); fixing one probe alone would create inconsistency,
+  so it goes to the next full probe-family review instead of a one-off.
+  No ROADMAP churn (the 5j line's claim is unchanged). tsc + eslint clean,
+  built, deployed to dump-money-hub-preview — / /scan /burn 200 on the
+  custom domain; served chunk BurnBragCard-ClJxRVrA.js carries both
+  updated unknown branches with the armed-note interpolation. Zero
+  wallet/signing/data/mascot touch, no new data sources. #9 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 11:23 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner trading-cooldown power" probe (5j) in the /scan quick
+  scan** — the deferred BULLISH-RESEARCH.md item (deferred at 10:33 for its
+  own design pass) now closed. The slow-rug tempo trick: an armed transfer
+  cooldown turns an exit into a trickle, and a live owner who can flip or
+  retune the dial controls the tempo. Probes 4 cooldown-setter shapes
+  (setTradingCooldown/setCooldown/setTransferDelay (uint256),
+  setCooldownEnabled (bool)) with read-only eth_calls impersonating the live
+  owner; probe args are fail-safe (0 for seconds-style could only REMOVE a
+  cooldown, false for the bool switch could only DISABLE one); selectors via
+  keccak256, never hand-typed. Clean return = warn ("the slow-rug tempo
+  trick: buys look free while sells are gated by the clock"); all-revert =
+  pass with the honest custom-names-plus-rejected-test-value caveat;
+  all-RPC-noise = unknown ("treat as risky"); the permissive-fallback
+  garbage-selector control gates first; renounced/absent owners skip —
+  DUMB/HEX correctly skip. The deferred design requirement is honored: the
+  common cooldown GETTERS (tradingCooldown/transferDelay/cooldownEnabled,
+  added to scanAbi) are read plainly so the copy honestly distinguishes "a
+  cooldown is armed today" from "the owner can change it" — the warn names
+  the armed state when present; the pass caveat names it too when the
+  setters don't answer (an armed-but-unsettable cooldown is less scary,
+  and the report says so). Pre-write diff confirmed no existing cooldown
+  coverage (per the 09:53 standing lesson). Pre-ship validated: SHIPPED
+  quickScan run end-to-end in node against live RPC — DUMB (renounced) →
+  check absent; INC (live owner) → check present, pass with caveat, no
+  spurious armed note; HEX (no live owner per owner()) → absent. Independent arg-encoding
+  check: 4 distinct selectors, 36-byte calldata each, all-zero fail-safe
+  args (the warn path reuses the code-verified 5h/5i impersonation
+  mechanics, per the 10:33 precedent). ROADMAP "Token safety scanner" line
+  (dump.ts:231) + both Dumb AI scanner answers (dump.ts AI_QA, knowledge.
+  ts:64) extended in each surface's own words. BULLISH-RESEARCH.md deferred
+  entry marked resolved → shipped. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /plan /burn 200 on the custom domain;
+  served bundle verification: the live scan-logic chunk (BurnBragCard-
+  B4LUq4Te.js) carries the owner-cooldown-setter check id, title, and warn
+  copy; /plan SSR carries the new roadmap clause; served dump + ai chunks
+  carry both new AI clauses. Zero wallet/signing/data/mascot touch, no new
+  data sources. #13 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#10
+  stay open as recurring.
+
+- 2026-09-29 11:13 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **an honesty fix on the /burn Feed-the-Burn "Pull the trigger"
+  card** — a research-found unit. The card promised "A watcher also drips
+  automatically about every 15 minutes." That's false: the
+  drip-vault-pulse-watcher cron was DISABLED 2026-09-28 (its caller key was
+  chat-exposed; re-enable blocked on Antonio rotating the caller wallet via
+  secure handoff + funding gas + end-to-end test). Chain evidence: the vault
+  (0x67c0553cC87b505006E5137FBE3AD7c4660C44ee) has fired exactly ONE Drip in
+  its ~19-hour life (block 27664149: 75,000 PLSX sold → ~147,232 DUMB burned,
+  ~17h before this run), and ~225,000 PLSX has been sitting in the vault with
+  the 15-minute cooldown clear for 17+ hours — a live 15-min watcher would
+  have produced dozens of Drip events. New copy (in the card's own voice):
+  "Nothing drips on a timer right now — if tokens are sitting in the vault,
+  you're the trigger." The true parts kept (anyone can call drip(), no
+  allowlist, no owner, 25%-of-balance, 15-min cooldown). DEMAND FINDING for
+  Antonio (on him, loop cannot act — keys/signing are hard boundaries): the
+  vault flywheel is stalled at manual — 225k PLSX waiting, nothing dripping.
+  True autopilot (his 2026-09-28 call) needs the caller-wallet rotation + gas
+  funding + test he was asked for; the loop must NOT sign or hold keys.
+  Considered and REJECTED: leaving the stale watcher line (it directly
+  contradicts the chain — the same false-claim class the loop keeps killing),
+  and naming the key-rotation internals in the page copy (operational detail,
+  doesn't belong on a user page). tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /burn 200 on the custom domain; served
+  /burn HTML carries the new sentence and 0 hits for the old (one transient
+  stale-edge read cleared on retry, the 05:10 pattern). Zero wallet/signing/
+  data-source/mascot touch, no new data sources. No ROADMAP/AI churn (the
+  watcher line existed only in the card — verified, no other src refs).
+  #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 on mascot
+  approval (ON HOLD per Antonio 2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 11:03 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the one ship
+  since the 10:23 #10 verified accurate, in src AND in served content on the
+  custom domain. (1) The 10:33 #13 "Owner sell-limit power" probe (5i):
+  ROADMAP "Token safety scanner" line (dump.ts:231) matches token-scan.ts:
+  1039-1143 claim-by-claim — live owner only (the whole probe sits inside
+  `if (liveOwner)`, so renounced/absent owners skip: "skipped when ownership
+  is renounced" is exact), read-only eth_call impersonating the owner (never
+  commits state), 5 common limit-setter shapes (setMaxTxPercent /
+  setMaxTxAmount / setMaxWallet / setMaxWalletAmount / updateMaxTxAmount),
+  fail-safe probe values (50 percent-style / half-supply amount-style could
+  only loosen limits), warn copy "The transfer tax can be honest while the
+  exit is gated: this is the classic soft-rug throttle" (roadmap: "the tax
+  stays honest while the exit gets gated" — same meaning, the component's own
+  words). Both Dumb AI scanner answers (dump.ts:388, knowledge.ts:64) carry
+  the probe clause in each surface's own words with no drift — knowledge.ts's
+  "skipped when ownership is renounced" is exact. (2) The 10:43 #8 "See a real
+  burn" demo chip correctly carries NO ROADMAP/AI churn — a funnel affordance,
+  not a feature (08:43 token-chip precedent): no ROADMAP line and no AI answer
+  names the chip anywhere (chip copy 0 hits in dump.ts/knowledge.ts), and the
+  tx-explainer AI answers describe the explainer, which the chip doesn't alter
+  (fill-then-tap, no auto-run). (3) The deferred trading-cooldown probe (10:33
+  #13's BULLISH-RESEARCH.md entry) correctly has NO roadmap/AI line yet —
+  it's a design pass, not a shipped capability. (4) Done flags still honest:
+  scanner "Now" group done:true (the probe is an iteration of the done group,
+  no flip earned), future-phase groups (247/258/269/279) correctly done:false.
+  Served-content verification (independent): / /scan /plan /burn 200 on the
+  custom domain; /plan SSR HTML carries the roadmap's "sell-limit probe"
+  clause; served BurnBragCard-BgpwRyrh.js (post-10:43-deploy hash) carries the
+  owner-limit-setter check id (3 hits), the "Owner sell-limit power" title,
+  and the "classic soft-rug throttle" warn copy. Zero wallet/signing/mascot/
+  data-source touch. #10 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay
+  open as recurring.
+
+- 2026-09-29 10:53 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the one ship since the
+  10:13 #9 (the 10:43 #8 "See a real burn" one-tap demo chip on the /scan
+  tx-explainer tab) reviewed clean under the adversarial four-lens check.
+  (1) Gating: renders only when `input.trim() === ""` — never mid-scan, never
+  beside a filled input; after tap the input is non-empty so the chip hides,
+  exactly like the 08:43 token-chip precedent. (2) The tap fills ONLY the
+  pinned `DEMO_TX` constant — no user input, no address-source choice, so a
+  newcomer's first explanation can never land on a fat-fingered or phishing
+  hash; `type="button"` plus no `<form>` anywhere in the scan tree keeps it
+  out of any form-submit path. (3) Explicit-click contract holds: the chip
+  calls `setInput` only — no `run`, no RPC fired on tap; the Explain button's
+  existing `isTxHash` gate is the only execution path, and the shareTx
+  auto-run effect (isTxHash-gated, search-param-driven) can't be piggybacked
+  by the chip. (4) DEMO_TX honesty INDEPENDENTLY re-verified: ran the SHIPPED
+  explainTx in node against live RPC — isTxHash true, block 27663514
+  (matches the pinned comment), headline "Burn — 104,477.42 DUMB destroyed"
+  (matches "~104,477"), PLS-swap burn shape with DUMB verified arriving at
+  dead, `burnBragTx` set so the /brag link works — the chip's "real burn"
+  claim is true, not trust-me. (5) Busy-state race clean: tapping the chip
+  during an in-flight scan only sets input text — no new RPC fires, the
+  Explain button stays busy-gated. (6) Zero dangerouslySetInnerHTML in the
+  component; token symbols render as React text nodes; share copy is the
+  tool's own words, never tx-controlled strings. Noted, not churn: clearing
+  the tx input after a completed explanation leaves the stale result under
+  the chip — pre-existing behavior (same note as the 08:53 token-chip audit),
+  not this ship's to fix. No ROADMAP/AI churn (funnel affordance, same scale
+  as the 08:43 precedent). Served-content check skipped: no deploy since
+  10:43 — the chip is already verified live there. Live health: / /scan /burn
+  200 on the custom domain. #9 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29);
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 10:43 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"See a real burn" one-tap demo chip on the /scan tx-explainer tab**
+  + completed the 04:50 accessibility pass's miss on the same input — the tx
+  explainer ("Explain a transaction") had the exact blank-input cold start the
+  08:43 run's "Try DUMB" chip killed on the token scanner: a newcomer opening
+  the tab with no tx hash in their pocket got nothing to do. Now a subtle chip
+  renders under the input when empty ("No hash handy? See a real burn"); one tap
+  fills the input with a pinned, real, verified-on-chain burn tx (PLS → DUMB via
+  the PulseX router → straight to the dead address, ~104,477 DUMB destroyed,
+  block 27663514 — pre-ship validated by running the SHIPPED explainTx
+  end-to-end in node against live RPC: "Burn — 104,477.42 DUMB destroyed", 4
+  clean movements, burn flag + honest subline), and the user still taps Explain
+  as normal — fill-then-tap, no auto-run (the 08:43 explicit-click contract;
+  the explainer re-runs live so the demo is never a canned result). Same pass
+  also added the missing `aria-label` on the tx input and `role="alert"` on its
+  error block — the 04:50 run labeled the token-address + burn-tx-hash inputs
+  but missed this one; the /scan page is now fully labeled. Four-lens: better
+  (kills the tab's cold start with the most on-brand demo the tool can show),
+  safer (pinned known hash — a newcomer can't fat-finger a phishing lookalike
+  on their first explanation), more secure (zero new surface — existing state
+  setter + existing isTxHash-gated path), fun (tiny plain copy). No ROADMAP/AI
+  churn — a funnel affordance, not a feature (same scale as the 08:43 chip, per
+  precedent). Considered and REJECTED: (1) demoing a swap tx instead — rejected:
+  the burn demo is cleaner (4 legs vs 6-8, dedicated burn headline) and directly
+  teaches the site's core mechanic; the swap-cost education already lives in the
+  tool's copy and deep scan. (2) Auto-running the explanation on chip tap —
+  rejected: same explicit-click contract as the 08:43 chip (no unprompted RPC
+  reads). (3) A demo chip for the deep-scan burn-hash field — already rejected
+  08:43 (misattributes someone else's burn to the pass unlock); unchanged.
+  tsc + eslint clean, built, deployed to dump-money-hub-preview — / /scan /burn
+  200 on the custom domain; served /scan?tx= SSR carries the chip + label
+  (plain /scan doesn't SSR the tx tab — tab-gated, client-rendered). Zero
+  wallet/signing/data-source/mascot touch, no new data sources. #8 stays open
+  as recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 10:33 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner sell-limit power" probe (5i) in the /scan quick scan** —
+  the soft-rug throttle vector: a live owner who can change max-transaction /
+  max-wallet limits can choke sells to a trickle while keeping their own exit
+  open — the tax can be honest while the exit is gated. Probes 5 setter shapes
+  (setMaxTxPercent, setMaxTxAmount, setMaxWallet, setMaxWalletAmount,
+  updateMaxTxAmount — all (uint256)) with read-only eth_calls impersonating the
+  live owner; probe args are fail-safe (50 percent-style / half the already-
+  read supply amount-style could only LOOSEN limits in the impossible case a
+  call executed); selectors via keccak256, never hand-typed. Clean return =
+  warn ("the classic soft-rug throttle"); all-revert = pass with the honest
+  custom-names-plus-rejected-test-value caveat; all-RPC-noise = unknown
+  ("treat as risky"); the permissive-fallback garbage-selector control gates
+  first; renounced/absent owners skip. Pre-write diff against the full probe
+  family confirmed no existing limit probe (per the 09:53 standing lesson).
+  Pre-ship validated against live chain data, then the SHIPPED code run
+  end-to-end in node (TS source via type stripping, read-only): DUMB
+  (renounced) → check correctly absent; INC (live owner) → pass with caveat
+  (all 5 shapes reverted under owner impersonation); TEDDY/PCOCK (renounced)
+  → correctly skipped; HEX (no owner()) → correctly skipped. No live true-
+  positive among curated tokens — the warn path reuses the code-verified 5h
+  mechanics, with the per-sig arg encoding verified independently (5 distinct
+  selectors, 36-byte calldata, arg round-trips). ROADMAP "Token safety
+  scanner" line (dump.ts:231) + both Dumb AI scanner answers (dump.ts AI_QA,
+  knowledge.ts:64) extended in each surface's own words. A trading-cooldown
+  probe was considered and DEFERRED to its own design pass (different arg
+  semantics — bool/seconds shapes need their own fail-safe design), logged in
+  BULLISH-RESEARCH.md. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /plan /burn 200 on the custom domain;
+  served bundle verification: the live scan-logic chunk (BurnBragCard-
+  DCPMgzuX.js) carries the owner-limit-setter check id, the served dump
+  (dump-DeE3QMu4.js) + ai (ai-CZMxK6T8.js) chunks carry the new AI clauses,
+  /plan SSR carries the new roadmap clause. Zero wallet/signing/data/mascot
+  touch, no new data sources. #13 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29);
+  #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 10:23 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the one ship
+  since the 09:43 #10 verified accurate, in src AND in served content on the
+  custom domain. (1) The 10:03 #8 hero CTA refunnel ("Scan any token" replacing
+  the external "Explorer · PulseChain") correctly carries NO ROADMAP/AI churn:
+  no ROADMAP line and no Dumb AI answer names the hero CTA labels anywhere
+  (verified by search across dump.ts/knowledge.ts/routes/components) — the CTA
+  set isn't documented in the roadmap, so a funnel affordance doesn't earn a
+  line, per the established one-line-funnel-fix precedent (07:50/08:10/08:43).
+  The proof-strip AI answer describes the strip, not the CTA buttons, so no
+  drift there either. Served verification: homepage SSR HTML carries "Scan any
+  token" and 0 hits for "Explorer · PulseChain". (2) The 09:53 #13 was
+  research-only (near-ship probe reverted with zero diff) and the 10:13 #9 was
+  audit-only — correctly no churn. (3) Done flags still honest: 16 "Now"
+  groups done:true, the four future-phase groups ("60 days / Community
+  engine", "90 days / Products and rails", "Planned / DUMB Burn Engine",
+  "Planned / Vetted Token Directory") correctly done:false — nothing shipped
+  flips them. (4) The 06:50 burn-contests parked copy confirmed live in the
+  served AI chunk (ai-DEHmdVja.js carries "parked as an idea only", 0 hits for
+  the stale "format pick" phrasing). Live health: / /scan /burn /plan /ai
+  200 on the custom domain. #10 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29);
+  #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 10:13 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the one ship since the
+  09:33 #9 (the 10:03 #8 hero CTA refunnel: "Scan any token") reviewed clean
+  under the adversarial four-lens check. (1) All four hero CTAs render via
+  react-router `<Link to={href}>` with hardcoded internal paths ("/trade",
+  "/scan", "/raid", "/roots") — no external navigation, no href injection,
+  no open-redirect; the new "Scan any token" CTA lands on /scan, the free
+  wallet-less quick scan, so the funnel's cold-start action is the zero-
+  signing surface (safer first touch than "Trade DUMB"). (2) The removed
+  external "Explorer · PulseChain" CTA left no dead code: the external-link
+  branch and the DUMB_TOKEN_URL import are gone from Hero.tsx (remaining
+  DUMB_TOKEN_URL uses in Proof/Genesis/ContractGuardrail are pre-existing
+  legit explorer links, not stragglers); served SSR HTML carries 0 hits for
+  "Explorer · PulseChain" and 1 for "Scan any token". (3) Trust coverage
+  claim accurate: ContractGuardrail (line 83, pinned addresses + explorer
+  links + copy buttons) renders in the hero directly below the CTA row, and
+  /roots keeps every explorer link — the removed button was redundant, not a
+  trust loss. (4) ScanSearch verified a real lucide-react export; all 4 CTA
+  buttons keep the icon + text label (no icon-alone action). (5) The 09:53
+  #13 probe build was reverted with zero diff before ship — nothing to
+  review there. Copy is neutral (no gain promises, no invented data). Zero
+  wallet/signing/data-source/mascot touch. Live health: / /scan /burn 200
+  on the custom domain. #9 stays open as recurring; #5 on Antonio's idea-
+  only hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29);
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 10:03 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **hero CTA refunnel: "Scan any token"** — the hero's first-fold CTAs
+  (Trade DUMB / Join the raid / See the receipts / Explorer·PulseChain) were all
+  DUMB-holder actions; a newcomer without DUMB had no zero-friction first action
+  in the hero, and the free scanner — the flagship utility that brings outsiders
+  in — only surfaced in the below-fold "room by room" cards and the nav. Now:
+  Trade DUMB, Scan any token (/scan, ScanSearch house icon), Join the raid, See
+  the receipts. The removed external Explorer CTA is not a trust loss:
+  ContractGuardrail (pinned addresses + explorer links + copy buttons) sits
+  directly under the CTAs, and /roots keeps every explorer link; dead code
+  (external-link branch, DUMB_TOKEN_URL import) removed. Four-lens: better
+  (first-fold funnel to the free utility), safer (the scanner is the site's
+  zero-signing first touch — safer than "trade" as a cold-start), more secure
+  (external link replaced by an internal one, zero new surface), fun (plain
+  brand copy, no gimmick). tsc + eslint clean, build + deploy to
+  dump-money-hub-preview, live-verified: / 200 with "Scan any token" in served
+  SSR and "Explorer · PulseChain" gone; /scan 200; /api/scan-stats unchanged
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}). Zero wallet/
+  signing/data-source/mascot touch, no new data sources. No ROADMAP/AI churn —
+  a funnel affordance, not a feature (same scale as the 07:50 fix). #8 stays
+  open as recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 09:53 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine unit.
+  (1) NEAR-SHIP CAUGHT + REVERTED: started building an "owner fee-change
+  power" probe (impersonated-owner read-only eth_call against
+  setTaxFeePercent/setLiquidityFeePercent/setFees) — killed mid-run when the
+  probe-family diff showed it's a strict duplicate of the shipped 5c
+  `fee-setter` probe (token-scan.ts:483: same 3 shapes among its 7, same
+  read-only impersonate-the-owner design, same renounced-skip, same
+  permissive-fallback control). Shipping it would have doubled RPC per
+  live-owner scan for zero new signal and put two redundant checks on every
+  report. Reverted with zero diff — tsc passes, nothing deployed. Standing
+  lesson logged in BULLISH-RESEARCH.md: the probe family is deep enough now
+  that any new probe must be diffed against the existing check ids
+  (fee-setter, fee-setter-anyone, owner-fee-exemption, owner-exclusion-
+  setter, owner-mint, owner-blacklist) before writing code. (2) Probe-family
+  smoke test: SHIPPED code run end-to-end in node (TS source via type
+  stripping, read-only) against live chain — INC (live owner)
+  `0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d` → fee-setter pass (7 shapes,
+  honest caveat), fee-exemption pass, exclusion-setter pass, owner-mint warn
+  (the verified true positive: mint(address,uint256) answered the owner's
+  call), blacklist pass, pause unknown (fail-safe); DUMB (renounced) → all
+  owner probes correctly absent, fee-setter-anyone pass (the permissionless
+  nightmare-case probe runs exactly when there's no live owner). All per
+  design. (3) BagScan RPC-boundedness audit: clean — discovery capped at 25
+  contracts (BAG_DISCOVER_CAP), only the first 12 scanned (BAG_SCAN_CAP),
+  honest cap notes ("the rest aren't reachable from this page"), fully
+  read-only, risk-first progressive ordering; no unbounded-RPC defect, no
+  change earned. Site health: / /scan 200 on the custom domain;
+  /api/scan-stats live ({deep_scans:3, pass_burns:1, dumb_destroyed_min:
+  100000}) — funnel quiet, not regressing. Zero wallet/signing/data/mascot
+  touch, no new data sources. #13 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29);
+  #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 09:43 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the one ship
+  since the 09:03 #10 verified accurate, in src AND in served content on the
+  custom domain. (1) The 09:13 #13 "Owner blacklist power" probe (5h):
+  ROADMAP "Token safety scanner" line (dump.ts:231) carries the probe clause
+  in the component's own words — "a blacklist probe (whether the live owner
+  can freeze wallets — read-only calls impersonating the owner against the
+  common blacklist shapes; a hit means the owner can block sells or trap
+  tokens; skipped when ownership is renounced)" — matching token-scan.ts:941-
+  1033 (check id "owner-blacklist", title "Owner blacklist power", warn/pass/
+  unknown copy verified line-by-line in src). (2) Both Dumb AI scanner answers
+  (dump.ts:388, knowledge.ts:64) carry the probe clause in each surface's own
+  words with no drift — knowledge.ts's "skipped when ownership is renounced"
+  exact, the renounced-skip design point the 09:13 run shipped. (3) Done flags
+  still honest: the scanner "Now" group (dump.ts:227-228) done:true (the probe
+  is an iteration of the done group, not a new group — no flip earned), future-
+  phase groups (247/258/269/279) correctly done:false. (4) The 09:23 #8 and
+  09:33 #9 runs were research- and audit-only respectively — correctly no
+  churn. Served-content verification (independent): / /scan /burn /plan 200 on
+  the custom domain; /plan SSR HTML carries the roadmap's "blacklist probe"
+  clause; the served scan-logic chunk BurnBragCard-Cgqq5rcS.js (same hash the
+  09:13 deploy verified — no deploy since, nothing to redeploy) carries the
+  owner-blacklist check id, title, and warn copy. No wallet/signing/mascot/
+  data-source touch. #10 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay
+  open as recurring.
+
+- 2026-09-29 09:33 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the one ship since the
+  08:53 #9 (the 09:13 #13 "Owner blacklist power" probe 5h) reviewed clean
+  under the adversarial four-lens check. (1) Probe arguments are
+  state-harmless by construction: `blacklist`/`addToBlacklist` take the dead
+  address; `setBlacklist(address,bool)` passes false (could only
+  "un-blacklist" the dead address); `isBlacklisted` is a getter; and the
+  eth_call never commits state in any case. (2) Owner impersonation is
+  `from`-only on a read-only eth_call — no signing, no wallet touch, no
+  custody. (3) All four selectors via keccak256, never hand-typed; the
+  revert-vs-transport-noise classification matches the standing probe
+  family (retried once, then "unknown"). (4) The permissive-fallback
+  control gates before any probe — a contract answering fake functions
+  degrades to unknown, never a false warn. (5) Runs only for live owners;
+  renounced/absent skip (DUMB/DAMP correctly skip — the 09:13 ship's
+  pre-ship node run confirmed). (6) Bounded: ≤4 shapes × 2 attempts + 1
+  fallback check, live-owner tokens only. Noted, not churn: the mixed
+  absent+RPC-unknown case renders pass with the custom-names caveat — that
+  is the standing family-wide classification (same in 5e/5f/5g); redesigning
+  it means touching the whole family, not a 5h fix. The getter/setter
+  ambiguity is the settled 09:13 design decision (clean return = machinery
+  exists), not relitigated. Served-bundle verification (independent):
+  / /scan /burn /plan 200 on the custom domain; the served
+  BurnBragCard-Cgqq5rcS.js chunk (hash identical to the 09:13 verification —
+  no deploy happened since, nothing to redeploy) carries the owner-blacklist
+  check id, title, and warn copy. Zero wallet/signing/data/mascot touch, no
+  new data sources. #9 stays open as recurring; #5 on Antonio's idea-only
+  hold, #6 on mascot approval (ON HOLD per Antonio 2026-09-29); #8/#10/#13
+  stay open as recurring.
+
+- 2026-09-29 09:23 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — the deferred 08:43 unit
+  closed: does the deep-scan card's copy answer "why pay 100k DUMB" clearly
+  enough? VERIFIED YES, claim-by-claim, so no copy change earned. The live
+  card (DeepScanPanel, TokenScanner.tsx) names the free-vs-paid distinction
+  explicitly ("the quick scan reads what the contract says, the deep scan
+  watches what it does"), the deliverable concretely (simulated buys/sell-
+  backs at multiple sizes against live PulseX liquidity — true round-trip
+  cost, what a 10 WPLS bag nets on exit, full depth curve), the price
+  explicitly (one 100,000 DUMB burn with a live USD figure → 30 days
+  unlimited deep scans), and renders inline directly below the quick-scan
+  report with the token carried over — the free-to-paid funnel is one
+  screen, no cross-link gap. /api/scan-stats still flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000}) — that's a
+  traffic/distribution matter, not a copy defect: with 3 deep scans in 30
+  days no copy variant could reach significance for months, so a rewrite
+  now would be unmeasurable churn. REJECTED with reasons in
+  BULLISH-RESEARCH.md: a deep-scan copy rewrite (no measurable baseline to
+  beat) and a "deep scan unavailable" note for no-pair tokens (the Liquidity
+  lock check row already states the no-pair fact; the deep scan functionally
+  requires a pair, so a second note duplicates an explained absence). Live
+  health: /scan 200 on the custom domain. #8 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 09:13 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner blacklist power" probe (5h) in the /scan quick scan** —
+  the freeze-and-dump vector: a live owner who can blacklist wallets can stop
+  buyers from selling, then dump first. Probes 4 blacklist shapes
+  (blacklist(address), isBlacklisted(address), addToBlacklist(address),
+  setBlacklist(address,bool)) with read-only eth_calls impersonating the
+  live owner; the dead address is the probe argument (even an executed call
+  could only "blacklist" the dead address). Clean return = warn ("the owner
+  can freeze wallets, blocking sells or trapping tokens"); all-revert = pass
+  with the honest custom-names caveat; all-RPC-noise = unknown ("treat as
+  risky"); the permissive-fallback garbage-selector control gates first
+  (a contract that answers fake functions degrades to unknown, never a false
+  warn); renounced/absent owners skip — DUMB/DAMP correctly skip. Design
+  note: blacklist(address) may be a setter OR a public mapping getter —
+  either way a clean return proves the machinery EXISTS, so the warn is
+  never a false positive from getter/setter ambiguity. Selectors via
+  keccak256 (same viem lib the code uses), never hand-typed. Pre-ship
+  validated against live chain data, then the SHIPPED code run end-to-end
+  in node (TS source via type stripping): INC (live owner) → **pass** with
+  the honest caveat (all 4 reverted under owner impersonation, garbage
+  selector also reverted — probe reliable there); DUMB (renounced) → check
+  correctly absent; HEX → check absent (its owner() isn't live per the
+  scan, so it skips like the other owner probes). No true-positive live
+  (none of the curated tokens have blacklist machinery — verified 10 tokens
+  × 4 shapes, all reverted); the warn path reuses the code-verified 5f/5g
+  mechanics (clean return on an impersonated-owner call). ROADMAP "Token
+  safety scanner" line (dump.ts:231) + both Dumb AI scanner answers (dump.ts
+  AI_QA, knowledge.ts:64) extended in each surface's own words. Rejected as
+  churn: a permissionless-blacklist variant for renounced-owner tokens
+  (pathological case — anyone could freeze anyone = broken token, not a rug;
+  doubles RPC for a shape nobody will use; note in research log). tsc +
+  eslint clean, built, deployed to dump-money-hub-preview — / /scan /plan
+  /burn 200 on the custom domain; served bundle verification: the live scan
+  logic chunk (BurnBragCard-Cgqq5rcS.js) carries the owner-blacklist check id
+  + label + warn/pass copy; /plan SSR carries the new roadmap clause.
+  BULLISH-RESEARCH.md updated (shipped + rejected). #13 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 09:03 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the one ship
+  since the 08:10 #10 verified accurate, in src AND in served content on the
+  custom domain. (1) The 08:43 #8 "Try DUMB" one-tap demo chip on the /scan
+  quick scan correctly carries NO ROADMAP/AI churn: the ROADMAP "Token safety
+  scanner" line (dump.ts:229-238) describes scanner CAPABILITIES (checks run,
+  burn-gated deep scan, shareable cards) — the chip is an input convenience
+  (fills the pinned, verified DUMB constant when the address input is empty),
+  not a capability change, so it earns no new line under the established
+  07:50 one-line-funnel-fix precedent. (2) Both Dumb AI scanner answers
+  (dump.ts:388 "paste any PulseChain token address" and knowledge.ts:64 "Paste
+  a contract address") are uncontradicted by the chip — it adds a tap-to-fill
+  path without changing what "paste" covers; no drift. (3) Done flags still
+  honest (line 228 scanner group done:true; future-phase groups at
+  247/258/269/279 correctly done:false). (4) The 08:33 #13 and 08:53 #9 runs
+  were research- and audit-only respectively — correctly no churn. Served-
+  content verification (independent): /plan 200 with the "Token safety
+  scanner" line in the served SSR HTML; /scan 200 with the "Try DUMB" chip
+  copy in the served SSR HTML. No wallet/signing/mascot/data-source touch. #10
+  stays open as recurring; #5 on Antonio's idea-only hold, #6 on mascot
+  approval (ON HOLD per Antonio 2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 08:53 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the one ship since the
+  08:00 #9 (the 08:43 #8 "Try DUMB" one-tap demo chip on the /scan quick
+  scan) reviewed clean under the adversarial four-lens check. (1) Gating:
+  renders only when `input.trim() === ""` — never mid-scan, never beside a
+  filled input; after tap the input is non-empty so the chip hides, exactly
+  like a manual paste. (2) The tap fills ONLY the pinned `DUMB` constant
+  (pulsechain.ts, the verified `0xe65112d2f…7fF8D`) — no user input, no
+  address-source choice, so a newcomer's first scan can never land on a
+  fat-fingered or phishing address; `type="button"` keeps it out of any
+  form-submit path. (3) Explicit-click contract holds: the chip calls
+  `setInput` only — no `runScan`, no RPC fired on tap; the Scan button's
+  existing `isAddress` gate is the only execution path, so the 03:10
+  no-unprompted-scans precedent is intact. (4) No interplay with the
+  shared-link auto-run (shareToken effect is `isAddress`-gated and
+  first-mount-once, and it sets a non-empty input — the chip can't piggyback
+  it). (5) Static copy, no injected strings, no dangerouslySetInnerHTML
+  anywhere nearby, zero wallet/signing/data-source/mascot touch. Noted, not
+  churn: clearing the input after a completed scan leaves the stale result
+  rendered under the chip — pre-existing behavior (manual clear did the same
+  before the chip), so not this ship's to fix. Served-content verification
+  (independent): / /scan /burn 200 on the custom domain; "Try DUMB" present
+  in served /scan SSR HTML. No ROADMAP/AI churn (same scale as the 07:50
+  one-line precedent — display aid, not a feature). #9 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 on mascot approval (ON HOLD
+  per Antonio 2026-09-29); #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 08:43 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Try DUMB" one-tap demo chip on the /scan quick scan** — the
+  flagship free utility (free quick scan, no wallet) still had a blank-address
+  cold start: a newcomer lands with no token address in their pocket and the
+  empty input gives them nothing to do. A subtle chip ("No address handy? Try
+  DUMB") renders under the address input only when it's empty; one tap fills
+  the input with the pinned DUMB constant (no paste, no phishing-address risk)
+  and the user hits Scan as normal — the explicit-click contract stands
+  (03:10 precedent, no unprompted RPC scans). DUMB is the honest demo: renounced
+  owner so the probe family correctly skips, 10/10 checks pass except the
+  standing fail-safe pause→unknown — a newcomer sees the full 22+ check report
+  run live on-chain on their first visit. Demand logic: turns the top-of-funnel
+  from "paste something" into "see it work in one tap"; the scan experience
+  sells itself and a good first scan brings them back with their own tokens.
+  Four-lens: better (kills the cold start), safer (pinned known address, no
+  fat-fingered scammer addresses on a first scan), more secure (zero new
+  surface — existing state setter + the existing isAddress-gated scan path),
+  fun (tiny plain copy, no gimmick). Rejected with reasons in
+  BULLISH-RESEARCH.md: auto-run on chip tap (explicit-click contract), a demo
+  chip on the bag-scan (spotlights someone else's wallet — privacy precedent),
+  pre-filling the deep-scan burn-hash field (misattributes a stranger's burn).
+  No ROADMAP/AI churn (same scale as the 07:50 one-line funnel fix). tsc +
+  eslint clean, built, deployed to dump-money-hub-preview — / /scan /burn /plan
+  200 on the custom domain; served scan chunk (scan-Kpox9EDz.js) + /scan SSR
+  HTML carry the chip copy. Demand-signal note: /api/scan-stats still
+  {deep_scans:3, pass_burns:1, dumb_destroyed_min:100000} — funnel quiet but
+  not regressing; the strip stays honest. Zero wallet/signing/data/mascot
+  touch, no new data sources. #8 stays open as recurring; #5 on Antonio's
+  idea-only hold, #6 on mascot approval; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 08:33 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner mint power" probe in the /scan quick scan** — the
+  adjacent inflation vector to the fee probe family (5e/5f): a live owner who
+  can print new tokens is the classic mint-then-dump rug. Probes
+  `mint(address,uint256)` / `mint(uint256)` with a read-only eth_call
+  impersonating the live owner (never commits state; the simulated mint
+  targets the dead address). Clean return = warn ("the owner can print new
+  tokens… mint, then sell the new supply into buyers"); revert on both =
+  pass with the honest custom-names caveat; all-RPC-noise = unknown ("treat
+  as risky"); the permissive-fallback garbage-selector control gates first
+  (a contract that answers fake functions degrades to unknown, never a false
+  warn); renounced/absent owners skip it — DUMB/DAMP correctly skip.
+  Pre-ship validated against live chain data, then the SHIPPED code run
+  end-to-end in node (TS source via type stripping): INC (live owner) →
+  **warn, a TRUE positive** — its mint(address,uint256) answered the owner's
+  own call while a stranger's call to the same shape reverted (owner-gated,
+  verified) — so the warn path is proven reachable and honest; DUMB
+  (renounced) → check correctly absent. Utility bar holds: real repeated
+  pain (mint-then-dump), brings outsiders in (free quick scan, no wallet),
+  zero wallet/signing/data-source/mascot touch, no new contract. ROADMAP
+  "Token safety scanner" line (dump.ts:231) + both Dumb AI scanner answers
+  (dump.ts AI_QA, knowledge.ts token-scanner chunk) extended in the
+  component's own words. Rejected as churn: extra mint shapes (mintTo,
+  mintBatch, minter-role getters) — same RPC-volume reasoning as the 05:40
+  #13 exclusion-setter run; the pass-with-caveat names the gap honestly.
+  tsc + eslint clean, built, deployed to dump-money-hub-preview — / /scan
+  /burn /plan /ai 200 on the custom domain; served chunk verification:
+  BurnBragCard-Cby3m4k5.js carries the check id + warn/pass copy, /plan SSR
+  carries the roadmap clause, served dump + ai chunks carry both new AI
+  answers. BULLISH-RESEARCH.md updated (shipped + rejected). #13 stays open
+  as recurring; #5 on Antonio's idea-only hold, #6 on mascot approval
+  (ON HOLD per Antonio 2026-09-29); #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 08:10 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — the one ship since the
+  07:40 #10 (the 07:50 #8 burn-page newcomer buy-path links) verified
+  accurate in src AND in served content, and correctly carries NO
+  ROADMAP/AI churn. (1) The ROADMAP "Voluntary burns" line (dump.ts:198-217)
+  needs no touch: the two links ("No DUMB yet? Buy it on the trade page" for
+  not-connected, "Buy DUMB|DAMP on the trade page" on insufficient balance —
+  BurnBox.tsx:509,560, internal react-router Links to /trade) change no
+  claim the line makes; per the established convention (00:40 skip-to-
+  content precedent) a two-line funnel fix is not a feature and earns no
+  line. (2) The Dumb AI "How do I burn DUMB?" answer (dump.ts:336) and the
+  knowledge "burn-page" chunk (knowledge.ts:55-58) say nothing the new
+  links contradict — the links add a newcomer path, they don't alter any
+  described behavior; no drift. (3) Done flags still honest (all "Now" done
+  groups = shipped; future-phase groups done:false). Served-content
+  verification (independent): / /burn /plan 200 on the custom domain; /plan
+  SSR HTML carries the roadmap's "Burn DUMB/DAMP to the dead address" line;
+  the served /burn HTML references burn-ClZg5UIA.js — byte-IDENTICAL to the
+  local build — carrying both new strings (the "Buy it on the trade page"
+  literal + the "No {tokenKey} yet?" interpolation). No
+  wallet/signing/mascot/data-source touch. #10 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 on mascot approval (ON HOLD per Antonio
+  2026-09-29); #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 08:00 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the one ship since the
+  07:30 #9 (the 07:50 burn-page newcomer buy-path links) reviewed clean
+  under the four-lens adversarial check. (1) Both additions are internal
+  react-router `<Link to="/trade">` — no external navigation, no href
+  injection, no open-redirect; the destination (/trade) carries the
+  ContractGuardrail with both token addresses pinned, so the funnel fix is
+  a net safety gain for newcomers (keeps them off search-engine landmines
+  for the known name-collision scam token) rather than new surface.
+  (2) The insufficient-balance link gates on `bal !== undefined`
+  (BurnBox.tsx:252) — it cannot render a false "insufficient" during wallet
+  balance loading. (3) Copy is neutral and honest — routes to where tokens
+  are gotten, never promises gains, no invented data. (4) Zero wallet /
+  signing / mascot / data-source touch, no new API dependencies. Noted, not
+  churn: the DAMP toggle user gets "No DAMP yet? Buy it on the trade page"
+  — correct, since /trade supports DAMP via the curated DAMP/WPLS route.
+  Served-bundle verification (independent): the live burn chunk on the
+  custom domain carries both new strings ("Buy it on the trade page" as a
+  literal, the "No {tokenKey} yet?" interpolation), / and /burn 200. No
+  wallet/signing/mascot/data-source touch. #9 stays open as recurring; #5
+  on Antonio's idea-only hold, #6 on mascot approval; #8/#10/#13 stay open
+  as recurring.
+
+- 2026-09-29 07:50 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  SHIPPED **burn-page newcomer buy path in BurnBox** — a genuine funnel gap found
+  this run: the not-connected state of the burn box showed only the connect
+  button, and the connected-with-insufficient-balance state showed only
+  "Insufficient DUMB balance." — neither told a newcomer with zero tokens where
+  to GET them. Both states now link to /trade ("No DUMB yet? Buy it on the trade
+  page" / "Buy DUMB|DAMP on the trade page"). Better (completes the funnel from
+  a shared burn/brag link: buy → hold/burn), safer (points newcomers at the
+  hub's own curated trade page with the ContractGuardrail pinned, instead of
+  leaving them to search and hit the known name-collision scam risk), zero
+  wallet/signing/data/mascot touch, no new data sources, no ROADMAP/AI churn
+  (one-line funnel fix, not a feature). tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /burn /plan /ai 200 on the custom domain;
+  served burn chunk carries both new strings. BULLISH-RESEARCH.md updated
+  (shipped). #8 stays open as recurring; #5 on Antonio's idea-only hold, #6 on
+  mascot approval; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 07:40 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from the one ship
+  since the 06:50 #10 verified accurate, in src AND in served content. (1) The
+  07:30 #9 edge-cache read-through on GET /api/brag-image correctly carries NO
+  ROADMAP/AI churn: it's pure performance (uncached full-PNG renders → edge
+  cache read-through), invisible to users, no copy or behavior change. The
+  ROADMAP "Burn brag cards" line (dump.ts:204) and both share answers
+  (dump.ts:388, knowledge.ts:82) still match the shipped reality claim-by-claim —
+  the card is still "rendered server-side straight from the verified on-chain
+  burn (amount decoded from the transfer, never uploaded)". Checked the one
+  subtlety: the "rotating tagline" claim (knowledge.ts:82) is NOT drifted by the
+  cache — brag-card.server.ts:343 seeds the tagline deterministically from the
+  tx hash (it rotates across burns, not across renders of the same burn), so the
+  immutable-cached image is byte-identical to a fresh render, which the 07:30
+  run verified live. The 60s negative cache on 404s is claim-safe too: a tx
+  hash names immutable receipt contents, so "not a burn" can never become one
+  (pending-then-mined covered by the 60s window). (2) The 07:00 #8 and 07:20
+  #13 runs were research-only, no code — correctly no churn. (3) Done flags
+  still honest (brag-cards groups done:true, following future-phase group
+  done:false); /plan SSR still carries the brag-cards roadmap line verbatim.
+  Live health: / /scan /burn /plan 200 on the custom domain; /api/brag-image
+  live-verified: bad-tx → 400, random hash → 404, real voluntary burn
+  (0xc0a9abf2…1bfeac0a6) → 200 image/png with cache-control immutable. No
+  wallet/signing/mascot/data-source touch. #10 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 on mascot approval; #8/#9/#13 stay open as
+  recurring.
+
+- 2026-09-29 07:30 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **edge-cache read-through on GET /api/brag-image** — the adversarial
+  review of the newest not-yet-audited surface (the burn brag-image endpoint)
+  found the verification itself airtight but every request uncached: each hit
+  paid 2 RPC reads + a full 1080x1080 software PNG render (~3.5M-pixel
+  framebuffer + deflate), and the 404 path had no negative caching — so every
+  X/Telegram unfurl of a shared brag link re-paid the full cost, and random-
+  hash spam was a cheap CPU/RPC amplifier. Now: `caches.default` read-through
+  keyed on the full URL (tx hash is the only input), 200s stored immutable,
+  404s stored with a 60s negative cache (safe: a tx hash names immutable
+  contents, a "not a burn" can never become one; pending-then-mined covered
+  by the 60s window), 400s stay uncached (cheap), and a `typeof caches`
+  guard keeps the handler from 500ing in plain node. Reviewed clean, no
+  change needed: TX_RE gates the hash (no injection into RPC params), both
+  burn shapes receipt-grounded (direct: tx.to = DUMB/DAMP + transfer(dead)
+  input + matching Transfer(from,dead) log; PLS-fallback: router input
+  decoded via ABI with to=dead and path ending in DUMB, amount = summed
+  DUMB→dead logs — inflation impossible without real destruction), the card
+  renderer is bitmap text (no HTML/SVG injection; inputs are enum + formatted
+  number + validated hex), the shared ?burn= viewer path is format-gated and
+  re-verifies on-chain with no pass issued (TokenScanner.tsx:673). tsc +
+  eslint clean, built, deployed to dump-money-hub-preview — / /scan /burn
+  200 on the custom domain; /api/brag-image verified live: bad-tx → 400,
+  random hash → 404, a documented real voluntary burn
+  (0xc0a9abf2…1bfeac0a6) → 200 image/png 1080x1080, byte-identical across
+  requests. Zero wallet/signing/data/mascot touch, no new data sources.
+  #9 stays open as recurring; #5 on Antonio's idea-only hold, #6 on mascot
+  approval (ON HOLD per Antonio 2026-09-29); #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 07:20 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine utility-health
+  unit on the flagship scanner plus four surface probes, everything closed with
+  verification. (1) LIVE QUICK-SCAN SMOKE against the current public RPC
+  (shipped code run end-to-end in node, TS source via type stripping): DUMB
+  10/10 checks pass except pause→unknown (fail-safe, honest); DAMP same;
+  INC 13 checks — the full live-owner suite including the 04:40 5e exemption
+  probe and 05:40 5f exclusion-setter probe both present and passing per
+  design, owner+liquidity warns honest, tax unknown (no standard getter);
+  HELGO degrades fail-safe on RPC noise (owner/tax/pause unknown, liquidity
+  warn); a mistyped no-contract address correctly fails the `code` check and
+  aborts (designed behavior — the scanner refuses, never fakes). (2) Burn-pledge
+  fulfillment loop audited clean: PledgeCard's `pledgeRedeemed` flips only on
+  verified on-chain voluntary burns covering the pledged amount — pledges are
+  promises, never counted as burns. (3) Scan-report staleness: NOT a gap —
+  shared ?token= links re-run and re-verify the scan at view time by design;
+  in-session scans are live. (4) DAI-removal completeness after the 2026-09-28
+  change: zero DAI/DAI2 references left in src (swap box, wallet verified
+  list, pricing, scanner identity, site copy all clean). (5) Deep-scan pair
+  resolution for the four new curated tokens (TEDDY/SOLIDX/PCOCK/HELGO): the
+  deep scan resolves the WPLS pair dynamically via factory.getPair — no
+  hardcoded list, so the new tokens deep-scan automatically. REJECTED with
+  reasons in BULLISH-RESEARCH.md: 30-day deep-scan pass gifting (burn 100k to
+  unlock scans for another wallet — speculative churn, no demand evidence;
+  validate-before-build); a source-verification badge on scan reports via an
+  explorer API (new external data source — hard boundary). Live health: / /scan
+  200 on the custom domain, /api/scan-stats live with the same honest
+  aggregates (3 deep scans, 1 pass, >=100k floor). #13 stays open as recurring;
+  #5 on Antonio's idea-only hold, #6 on mascot approval; #8/#9/#10 stay open
+  as recurring.
+
+- 2026-09-29 07:00 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine unit of demand
+  research, not a ship. (1) Demand funnel health all green: /scan 200 with
+  complete OG in served SSR HTML (title/description/1200x630/twitter card),
+  /api/scan-stats live (3 deep scans, 1 pass burn, >=100,000 DUMB destroyed
+  floor feeding the honest activity strip), /burn 200 with the "Burn contests
+  next" card exactly per Antonio's "leave it" (#5 idea-only hold stands).
+  (2) Both "Designed" burn-visualizer items verified shipped + rendering in
+  served /burn HTML (tax-flow visualizer "Follow the money"; total-burned
+  all-time card with live totalSupply() %). (3) NEW FINDING for Antonio: the
+  Dumb AI live-model path is OFF on the live worker — `dump-money-hub-preview`
+  carries only ANALYTICS_PASS as a secret (names-only check, no values
+  touched), so no OPENAI_API_KEY; /ai honestly shows "Local RAG mode" and
+  serves current curated answers (verified 06:50). Live path code is healthy
+  (grounded chunks, price questions routed local, honest fallback) — enabling
+  it needs his key + OpenAI spend, so it's his call, not a loop fix. (4)
+  REJECTED with reasons in BULLISH-RESEARCH.md: share row on Dumb AI answers
+  (speculative churn under validate-before-build; freeform generative
+  snapshots carry a different honesty risk than counts-only share patterns).
+  No wallet/signing/mascot/data-source touch. #8 stays open as recurring; #5
+  on Antonio's idea-only hold, #6 on mascot approval; #9/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 06:50 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED a stale-copy fix from the AI-honesty audit: the Dumb AI "Are there
+  burn contests?" answer (src/data/dump.ts) and the "burn-contests" knowledge
+  chunk (src/data/knowledge.ts) both still said the format "is still being
+  picked" / "implementation waits on Antonio's format pick" — drift against
+  Antonio's 2026-09-29 call recorded in backlog #5 (keep contests as an IDEA
+  only, no format pick needed). Both now read "parked as an idea only: no
+  format is being picked and nothing is being built"; the accurate parts kept
+  (design exists, entry = verified on-chain voluntary burn, recognition only,
+  funded prizes off the table, burns-never-promise-price framing). The /burn
+  "Burn contests next" card left untouched per his explicit "leave it" in #5.
+  Rest of the audit clean: ROADMAP "Now" groups all done flags honest (16 done
+  groups = shipped; future-phase groups done:false), nothing shipped since the
+  06:10 #10 except the 06:40 #9 one-line pledges.ts display-name validation
+  (internal hardening, no roadmap/AI churn). tsc + eslint clean, built,
+  deployed to dump-money-hub-preview, live-verified on the custom domain —
+  served dump chunk carries the new AI_QA answer (stale phrasing 0 hits),
+  served ai chunk carries the new knowledge clause ("format pick" 0 hits).
+  No wallet/signing/mascot/data-source touch. #10 stays open as recurring; #5
+  still on Antonio's idea-only hold, #6 on mascot approval; #8/#9/#13 stay open
+  as recurring.
+
+- 2026-09-29 06:40 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED one-line hardening from an adversarial review of the opt-in wallet
+  username registry + burn pledges (nothing else earned a change). Reviewed
+  clean: (1) username.ts POST — body capped 2048B, JSON.parse inside the
+  try/catch (never throws raw), timestamp must be a finite number and within
+  the 10-min freshness window (replay-resistant beyond the window; in-window
+  replay can only touch the signer's own name), viem verifyMessage against
+  the bound message (name+address+timestamp — a captured signature can't move
+  to another wallet or action), case-insensitive uniqueness via uname:name
+  index with rename freeing the old name (check-then-set KV race documented
+  and cosmetic — worst case two addr records share one name display),
+  10 POSTs/day/IP on cf-connecting-ip ("unknown" bucket unreachable in prod
+  since Cloudflare always sets the header); (2) pledges.ts — amount strictly
+  /^[0-9]+$/ + safe-integer + 1k–10B whole-token bounds (leading zeros pass
+  the regex but Number() resolves sanely; cosmetic only), signed message
+  binds token+amount+address+timestamp, GET prunes expired/invalid rows and
+  rewrites the index, pledges never presented as burns anywhere; (3) rendering
+  — zero dangerouslySetInnerHTML in server/ or lib/, pledge + leaderboard
+  names render as React text nodes (auto-escaped), username charset
+  [a-zA-Z0-9_-] makes HTML injection impossible anyway. THE SHIP: pledges.ts
+  resolved the opt-in display name with a bare `length > 0` check, skipping
+  the isValidUsername validation that handleUsernameGet applies — now
+  validated identically (import + one-line check); a malformed legacy KV
+  record falls back to the shortened address instead of rendering. tsc +
+  eslint clean, built, deployed to dump-money-hub-preview, live-verified
+  200 on both domains (/api/pledges → {"pledges":[]}, /api/username → {},
+  / 200). No wallet/signing/mascot/data-source touch. #9 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 06:30 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine unit of
+  utility research, not a ship. Probed three candidate surfaces and closed
+  each with verification rather than churn: (1) first-swap walkthrough
+  (designed 2026-09-27, "Designed" section of BULLISH-RESEARCH.md) —
+  VERIFIED SHIPPED + LIVE: the 5-step "Your first swap" section renders on
+  /trade below the swap box (src/routes/trade.tsx) and is in the served SSR
+  HTML on the custom domain (/trade 200, "Your first swap, in 5 steps"
+  present) — stale "Designed" entry moved to "Shipped" in the research doc;
+  (2) "what's being vetted on PulseChain right now" per-token trending board
+  — REJECTED with reasons in BULLISH-RESEARCH.md: the beacon payload is
+  {path, ts, event} only and /api/scan-stats aggregates counts, so a board
+  needs a payload extension + new KV counters (a real build, not a freebie);
+  the naive quick-scan-count version is gameable (free, wallet-less scans →
+  promotion vector, violates community honesty); the Sybil-resistant variant
+  (deep-scan addresses only — each costs a 100k DUMB burn/pass) is honest
+  but deep-scan volume is near zero today, so the board would render empty;
+  the 03:50 #13 activity strip already communicates momentum honestly —
+  revisit only behind a real volume gate (~5 deep scans/day for a week);
+  (3) read-only token-approval/allowance checker — REJECTED with reasons:
+  real pain and fits the safety profile, but duplicates incumbent chain-wide
+  revoke tooling; the hub's contribution is already shipped (exact-amount
+  approvals by default + walkthrough education), and arbitrary-token input
+  would reopen the deliberately-rejected paste-any-address vector while
+  curated-only guts the utility. Live health: /trade 200 on the custom
+  domain. #13 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#10 stay
+  open as recurring.
+
+- 2026-09-29 06:20 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — a genuine unit of
+  demand research, not a ship. Probed four candidate surfaces and closed each
+  with verification rather than churn: (1) scanner verdict accessibility —
+  the BagScan verdict chip renders "N red flags" / "N cautions" as TEXT plus
+  icon plus color, and TokenScanner CheckRows carry icon + text label, so the
+  red-vs-amber severity split is never color-alone (no color-blind gap);
+  (2) quick-scan share funnel — ShareReport already renders on every
+  completed quick scan, no top-of-funnel gap; (3) shared /scan link unfurls —
+  served /scan carries complete OG (title, description, 1200×630 image,
+  twitter card) — the per-verdict OG idea stays rejected per the standing
+  entry (share copy already carries the verdict; crawler-rendered OG adds
+  stale-verdict risk); (4) PledgeCard redemption — verified it shares the
+  leaderboard's exact react-query key ("burn-leaderboard-epoch"), so no
+  double epoch scan on /burn. Three ideas evaluated and REJECTED with reasons
+  in BULLISH-RESEARCH.md: a "Last 7 days" leaderboard tab (premature — epoch
+  is 8 days old so the window ≈ all-time, and it re-opens Antonio's locked
+  design; revisit when the epoch ages), an embeddable scanner widget for
+  other communities (unvalidated channel — measure ?token= share-link traffic
+  in existing analytics first, per validate-before-build), and a watchlist
+  "rescan all" button (22+ checks × N tokens of RPC for a convenience nobody
+  asked for). Live health: / 200 on the custom domain. #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 06:10 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from both ships
+  since the 05:30 #10 verified accurate, in src AND in served content on the
+  custom domain. (1) The 05:40 #13 owner fee-exclusion-setter probe (5f):
+  ROADMAP "Token safety scanner" line (dump.ts:231) matches token-scan.ts:715-791
+  claim-by-claim — live owner only (renounced skips), read-only impersonating
+  eth_call (never commits), warn copy ("could exempt their wallet from the
+  transfer tax before selling… what IS vs what COULD BE"), pass-with-caveat
+  ("none answered… Custom setters could hide under other names"), RPC noise →
+  unknown ("treat as risky"); both Dumb AI scanner answers (dump.ts:388,
+  knowledge.ts:64) carry the probe clause in the component's own words with no
+  drift — knowledge.ts's "skipped when ownership is renounced" is exact (the
+  probe only runs with a live owner). Served: /plan SSR HTML carries the
+  roadmap line verbatim, the served ai chunk (ai-H78YLBLP.js) carries the
+  knowledge clause, the served dump chunk (dump-L7Y84BfX.js) carries the dump.ts
+  clause. (2) The 05:50 #8 donor-board readState machine correctly carries NO
+  roadmap/AI churn — the ROADMAP "Feed the Burn" line (dump.ts:223: "every
+  donation since the vault launched read straight from chain logs, ranked by
+  cumulative donated value at current prices (estimate only, for bragging
+  rights)") is unchanged and still accurate: the board still reads logs
+  directly, still ranks by current-price value, and the new error/stale/partial
+  states are failure handling, not a claim change. Served burn-D4PmQBKa.js
+  carries all three failure-state strings (prices note, "may be a partial
+  view", stale) — the 05:50 ship is live. (3) No status flips earned — done
+  flags honest (16 done groups = shipped; future-phase groups done:false).
+  tsc clean. Live health: / /scan /burn /plan /ai all 200 on the custom domain.
+  #10 stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 06:00 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — both surfaces shipped since
+  the 05:20 #9 (the 05:40 #13 "owner fee-exclusion setter" probe 5f + the
+  05:50 #8 donor-board readState machine) reviewed clean. (1) The readState
+  machine (FeedTheBurn.tsx): all-failed + never loaded → "failed" + donors=[]
+  → role="alert" error note (never the false "No donations yet"); all-failed +
+  cached → "stale" keeps the last good read under a caveat (no flicker); partial
+  → rebuilt from successful reads with a "may be a partial view" caveat. Failure
+  degrades toward error/unknown, never toward false claims; 60s tick retry
+  heals; cancelled guards on both effect exits; error paths render static copy
+  (no error-message leakage); addresses from viem-decoded typed log args,
+  React-escaped; role="alert" mounts only on failure (correct live-region use);
+  the "donors non-empty + zero rows ⟺ prices failed" invariant still holds under
+  partial rounds; the share row hides rather than naming a wrong rank on partial
+  data. (2) The 5f probe (token-scan.ts:715-791): eth_call impersonating the
+  owner is read-only (never commits state — the exclusion is simulated, never
+  executed); both selectors via keccak256, never hand-typed; owner arg
+  ABI-encoded correctly; liveOwner gates on the read owner() (string, not zero,
+  not dead — DUMB/DAMP renounced correctly skip); revert → absent classification
+  consistent with the standing probe family (05:00 #9 reviewed the same pattern
+  clean); hit → warn (fail-safe), all-noise → unknown ("treat as risky"); ≤4
+  bounded RPC calls on live-owner tokens only; check id unique, renders
+  generically. ROADMAP scanner line (dump.ts:231), both Dumb AI scanner answers
+  (dump.ts:388, knowledge.ts:64) verified claim-by-claim in the component's own
+  words. Noted, not churn: a setter that exists but reverts on the simulated
+  self-exclusion (e.g. require(!alreadyExcluded)) would land "pass" rather than
+  "unknown" — the standing family-wide classification (redesigning it means
+  touching 3e/5e too); and partial rounds drop failed-token donors (the caveat
+  covers it; merge-caching would be churn). Served-bundle verification: the
+  three readState strings live in served burn-D4PmQBKa.js, the 5f check id +
+  copy live in served BurnBragCard-DxRa0FLz.js. Live health: / /scan /burn all
+  200 on the custom domain. #9 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback;
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 05:50 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **honest chain-read failure states on the Feed-the-Burn donor
+  board** — the 05:20 #9 audit's deferred unit ("an honest error state is a
+  future #9 or #8 unit"). The audit understated the defect: the board
+  swallowed every per-token getLogs failure as an empty array, so a total RPC
+  outage resolved donors to [] and rendered "No donations yet — be the first
+  to feed the burn." — a verified-truth community board asserting a false
+  negative about real donations. Failures now resolve per-token to null with
+  a readState machine: all-failed + never loaded → announced error note
+  (role="alert", 60s retry heals it); all-failed + cached board → keeps the
+  last good read under a "stale" caveat (no flicker on transient RPC blips);
+  partial → renders the real logs with a "may be a partial view" caveat.
+  Legit empty reads still show "No donations yet." State logic unit-tested in
+  node (13/13). Rejected: honest-error states for the vault stats cards
+  ("…" asserts nothing — churn) and a manual retry button (auto-retry
+  exists). Zero wallet/signing/data/mascot touch, no new data sources, no
+  ROADMAP/AI churn (no claim change). tsc + eslint + prettier clean, built,
+  deployed to dump-money-hub-preview — / /burn /scan 200 on the custom
+  domain; the served burn-D4PmQBKa.js chunk carries all three new strings.
+  BULLISH-RESEARCH.md updated (shipped + rejected). #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 05:40 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED the deferred 04:40 follow-up: **"Owner fee-exclusion setter" probe
+  (5f) in the /scan quick scan** — the adjacent slow-rug vector to 5e's
+  fee-exemption getter check: 5e answers what IS (does the live owner's wallet
+  skip the tax today), 5f probes whether the owner could grant themselves the
+  skip LATER. Probes `excludeFromFee(address)`/`excludeFromFees(address)` with
+  a read-only eth_call impersonating the live owner, arg = the owner address
+  itself (the exact self-exemption the check guards against); eth_call never
+  commits state, so the exclusion is simulated, never executed. Clean return =
+  warn ("answered the owner's own call — the owner could exempt their wallet
+  before selling, even if their wallet pays the tax today"); revert on both
+  shapes = pass with the honest caveat ("can't exempt wallets through the
+  usual functions. Custom setters could hide under other names"); all-RPC-
+  noise = unknown ("treat as risky"). Runs only with a live owner (no owner =
+  nobody to call the setter); selectors via keccak256, never hand-typed.
+  Pre-ship validated against live chain data: quickScan(INC) (live owner) →
+  new check present, honest pass ("none answered"); quickScan(DUMB)
+  (renounced) → check correctly absent; an impersonated eth_call to a
+  real function resolves cleanly, proving the warn path is reachable and the
+  probe isn't biased toward "absent". ROADMAP "Token safety scanner" line
+  (dump.ts:231) + both Dumb AI scanner answers (dump.ts:388, knowledge.ts:64)
+  extended in the component's own words. Zero wallet/signing/data/mascot
+  touch, no new data sources, no custody, no new contract. tsc + eslint +
+  prettier clean, built, deployed to dump-money-hub-preview — / /scan /burn
+  200 on the custom domain; the served BurnBragCard chunk (where the scan
+  checks ship) carries the new id, title, warn + pass copy; /plan SSR
+  carries the roadmap line; the served ai chunk carries the knowledge
+  clause. (Initial scare: the scan-* chunk had 0 hits for the new id — the
+  quick-scan checks ship in the shared BurnBragCard chunk, which the local
+  build already carried; served chunk confirmed carrying it.) Rejected as
+  churn: also probing (address,bool)/(address[]) setter variants — the
+  pass-with-caveat already names the gap honestly, and doubling the shapes
+  doubles the RPC volume on a flaky public RPC for a weak signal. BULLISH-
+  RESEARCH.md updated (deferred item resolved → shipped). #13 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 05:30 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from all ships
+  since the 04:30 #10 verified accurate in src AND in served content on the
+  custom domain. (1) The 04:40 #13 owner-fee-exemption probe: ROADMAP scanner
+  line (dump.ts:231) matches token-scan.ts:625-713 claim-by-claim — runs only
+  for a live owner (skipped when renounced), read-only eth_call, warn copy
+  ("their sells skip the X% tax you'd pay"), answered-false → pass,
+  none-answered → pass with the custom-getter caveat, RPC noise → unknown
+  ("treat as risky"), pathological empty returns → unknown (never a pass),
+  exempt wins over not-exempt (warn, fail-safe); the Dumb AI "How do I check
+  if a token is safe?" answers in dump.ts:388 AND knowledge.ts:64 both carry
+  the probe clause in the component's own words with no drift. Served:
+  /plan SSR HTML carries the roadmap line verbatim, the served ai chunk
+  carries the knowledge-body clause, the dump chunk carries the AI answer.
+  (2) The 04:50 accessibility pass and 05:10/05:20 donor-board ships correctly
+  carry no ROADMAP/AI churn — verified the donor ROADMAP line (dump.ts:223:
+  "ranked by cumulative donated value at current prices (estimate only, for
+  bragging rights)") is still accurate against the 05:10 header ("Ranked by
+  current USD value — so prices can move ranks even with no new donations")
+  and the footer, and that the 05:20 gate removal is live (zero `pricesLive`
+  in src or the served burn chunk; the new prices note is in the served burn
+  chunk). (3) Done flags still honest (8 done groups = shipped, 4 planned/
+  future groups done:false). tsc clean. Live health: / /scan /burn /plan /ai
+  all 200 on the custom domain. No new roadmap lines earned a place this
+  run. #10 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#13 stay
+  open as recurring.
+
+- 2026-09-29 05:20 ET run: backlog #9 DONE (security pass on the newest
+  shipped surface since the 05:00 #9: the 05:10 run's Feed-the-Burn donor
+  board honesty pass) → SHIPPED **a tighter empty-state gate for the donor
+  board** — the audit found one real defect in the 05:10 ship: its gate
+  (`donors.length > 0 && !pricesLive`) only showed "Donations are on-chain,
+  but current prices couldn't be read" when NO price was live at all — but
+  useTokenPrices() resolves null per token, so a donor whose donated tokens'
+  price reads failed (while some other token's price stayed live) still lands
+  at usd = 0, is filtered out, and — covering every donor — the board renders
+  the exact false "No donations yet — be the first to feed the burn." the
+  05:10 run killed. Gate is now unconditional on prices: in the rows-empty
+  branch, donors non-empty implies every donor's prices failed (ingest skips
+  0n amounts, so non-empty donors + zero rows ⟺ all usd = 0 on null prices) —
+  the prices note is the truthful state in every case. The now-unused
+  pricesLive const was removed; the code comment rewritten to state the
+  invariant. Reviewed clean, no change needed: share copy (header + footer
+  frame the USD-value ranking per the 05:10 churn decision — not
+  relitigated); donor addresses from viem-decoded typed log args (no href
+  injection); opt-in names charset-restricted + React-escaped. Observed, not
+  churn: on total getLogs RPC failure the board shows "Reading the chain…"
+  until the 60s retry lands — a persistent outage would spin; an honest error
+  state is a future #9 or #8 unit. Zero wallet/signing/data/mascot touch, no
+  new data sources, no ROADMAP/AI churn (no claim change). tsc + eslint +
+  prettier clean, built, deployed to dump-money-hub-preview — / /burn /scan
+  200 on the custom domain, the served burn chunk carries the note with the
+  old pricesLive gate gone. BULLISH-RESEARCH.md updated (shipped + observed).
+  #9 stays open as recurring; #5 still blocked on Antonio's format pick, #6
+  on mascot approval, #11 on his trading feedback; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 05:10 ET run: backlog #8 DONE (bullish-demand research,
+  recurring) → SHIPPED **Feed-the-Burn donor board honesty pass** — a
+  research-found unit: the donor leaderboard's header promised "You climb
+  only when your total passes someone else's" — factually false for a board
+  ranked by the current USD value of five independently-moving tokens
+  (WPLS/HEX/INC/PRVX/PLSX): ranks can shift on price moves alone, with no new
+  donations. It now reads honestly ("Ranked by current USD value — so prices
+  can move ranks even with no new donations. No resets, no shortcuts, nothing
+  invented."), consistent with the board's own footer footnote and the
+  ROADMAP line ("ranked by cumulative donated value at current prices
+  (estimate only, for bragging rights)"). Second genuine defect on the same
+  surface: when every price read fails while the donation logs read fine,
+  every row's usd lands at 0, the filter empties the board, and it rendered
+  "No donations yet — be the first to feed the burn." — a false empty state.
+  Now shows "Donations are on-chain, but current prices couldn't be read —
+  the board will appear once prices load." (gated on donors non-empty AND no
+  live price for any of the five tokens). Rejected as churn: rewriting
+  per-row / me-rank / share-text "donated" amounts to "at current prices" —
+  the fixed header + existing footnote frame the board consistently, and the
+  share text's "Every donation verified on-chain" is true as written. No
+  ROADMAP/AI churn (dump.ts:223 already accurate, dump.ts:348 makes no
+  rank-stability claim). Zero wallet/signing/data/mascot touch, no new data
+  sources. tsc + eslint + prettier clean, built, deployed to
+  dump-money-hub-preview — / /burn /scan 200 on the custom domain, the served
+  burn-C99rzL2N.js chunk carries both new strings (one transient stale-edge
+  read of the old bundle cleared on retry — deploys healthy). BULLISH-RESEARCH.md
+  updated (shipped + rejected). #8 stays open as recurring; #5 still blocked
+  on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 05:00 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 04:20 #9: the 04:40 run's "Owner fee exemption"
+  probe + the 04:50 run's /scan accessibility pass) → audit-only, NO code
+  changes, no build/deploy — nothing found that earned a change. Reviewed
+  clean: (1) the exemption probe (token-scan.ts:620-713) — liveOwner gates on
+  the already-read owner() value (renounced/absent owners skip, no misleading
+  output for DUMB/DAMP); both getter selectors derived via keccak256 from the
+  full signature strings, never hand-typed; owner's 20-byte address ABI-encoded
+  into calldata correctly (case-independent padding); read-only eth_call from
+  any account (anyone-callable view — no impersonation, no signing); return
+  decoding is fail-safe in the right direction — empty/wordless returns go
+  "unknown" (never a pass), clean returns parsed as bool, reverts classified
+  as "absent" by explicit revert-string match (a transport error retries once
+  then lands "unknown", never "absent"); exempt wins over not-exempt when the
+  two spellings disagree (warn, fail-safe); all-unknown degrades to "treat as
+  risky"; the probe adds at most 4 bounded RPC calls on live-owner tokens only.
+  (2) The 04:50 accessibility pass — both role="alert" error blocks mount only
+  when {error} is truthy (conditionally rendered, so no mount-time announce),
+  correct live-region use for error text; aria-labels on the two
+  placeholder-only inputs match their contexts with no visible-label conflict.
+  Noted, not churn: a getter that lies — hardcodes `false` while the real
+  exemption logic lives elsewhere, or a 4-byte selector collision returning a
+  non-bool word — would read as a pass ("pays the same tax as everyone else");
+  this is the scanner's standing "common shapes + caveats" design (the answered-
+  false-as-pass branch was an explicit 04:40 decision, not relitigated here),
+  and warn/unknown degrade the right way; also `passScanned` remains a write-only
+  ref from the original pass build (dead code, cosmetic — flagged 04:20, left
+  for a future cleanup run, still not its own build). No new data sources, no
+  wallet/signing/mascot touch. Live health: / /scan /burn all 200 on the custom
+  domain. #9 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 04:50 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **scanner accessibility pass** — the /scan page is the hub's
+  newcomer magnet (free quick scan, no wallet), but its two text inputs had
+  placeholder-only labeling (invisible to screen readers) and error messages
+  were silent to assistive tech. Now: `aria-label` on the token-address and
+  burn-tx-hash inputs + `role="alert"` on both error blocks, so every scan
+  error is announced. Minimal, zero wallet/signing/data/mascot touch, no new
+  data sources. Utility bar: accessibility is squarely in #8's scope — more
+  people can actually use the scan, and "the safest, simplest hub on
+  PulseChain" includes assistive-tech users. Considered + REJECTED as churn:
+  a Dumb AI answer for the ScanActivity strip (display-only element; the
+  scanner answer already describes the burn gate — deferred from the 04:30
+  #10 run, decided no: duplicate surface). tsc + eslint clean, built,
+  deployed to dump-money-hub-preview — / /scan /burn /ai 200 on the custom
+  domain, the served /scan SSR carries the address aria-label, the served
+  scan-D3HRYZQZ.js chunk carries both aria-labels + both role="alert"
+  instances. BULLISH-RESEARCH.md updated (shipped + rejected). #8 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 04:40 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner fee exemption" probe in the /scan quick scan** — the
+  adjacent slow-rug vector to the fee setters, deferred this morning to keep
+  the 03:30 fee-setter ship tight (the deferred BULLISH-RESEARCH.md note is
+  now marked resolved). With a LIVE owner only, the scan reads the common
+  fee-exemption getters (`isExcludedFromFee(address)` /
+  `isExcludedFromFees(address)`, selectors via keccak256, never hand-typed)
+  against the owner's address — plain read-only eth_call, anyone-can-call,
+  no impersonation needed: exempt = warn ("their sells skip the X% tax you'd
+  pay — their way out is cheaper than yours"), answered-false = pass, no
+  getter answering = pass with the honest 5c/5d-pattern caveat, RPC noise on
+  every getter = unknown ("treat as risky"), pathological empty returns =
+  unknown (never a pass). Skipped for renounced/absent owners (no owner's
+  wallet to check — DUMB/DAMP correctly skip). Validated pre-ship against
+  live chain data, shipped code run end-to-end in node (TS source via type
+  stripping): INC + WBTC (live owners, no exemption getters) → present, pass
+  with the "none answered" copy; DUMB + HEX (renounced/no owner) → check
+  correctly absent. The warn branch is proven reachable by construction
+  (DUMB's safemoon-fork getter answered and parsed correctly on the false
+  path; the true branch is the same parse). Utility bar holds: real repeated
+  pain (a dev who sells tax-free while holders pay is a classic slow-rug
+  shape), brings outsiders in (free quick scan, no wallet), burn-gated
+  deep-scan funnel intact. Considered + REJECTED: probing the exclusion
+  SETTER (whether the owner can exempt themselves later — deferred as a
+  natural follow-up, one check per run); treating answered-false as unknown
+  (a clean bool answer isn't "unverified"); random-address impersonation
+  (view is anyone-callable — adds nothing). Dumb AI "How do I check if a
+  token is safe?" answers (dump.ts + knowledge.ts scanner body) + ROADMAP
+  "Token safety scanner" line updated in the component's own words. Zero
+  wallet/signing/data/mascot touch, no new data sources. tsc + eslint clean
+  (prettier --fix on the new block), built, deployed to
+  dump-money-hub-preview — / /scan /burn /plan 200 on the custom domain, the
+  served scan chunk (BurnBragCard-vpCa_Joo.js) carries the new check id + all
+  three copy branches, /plan SSR carries the roadmap line, the served dump
+  chunk carries both new strings, the ai chunk carries the knowledge-body
+  clause. BULLISH-RESEARCH.md updated (shipped + rejected). #13 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 04:30 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from both ships
+  since the 03:40 #10 verified accurate, in src AND in served content on the
+  custom domain. (1) 03:50 #13 activity strip + /api/scan-stats — the ROADMAP
+  line (dump.ts:242) matches shipped behavior claim-by-claim: the endpoint
+  returns only three coarse 30-day aggregates (deep scans, scan passes, DUMB-
+  destroyed floor — verified: live endpoint returns {"window_days":30,
+  "deep_scans":3,"pass_burns":1,"dumb_destroyed_min":100000}); ScanActivity
+  renders nothing until deep_scans > 0 (never a fabricated zero) and carries
+  the "Privacy tools undercount" caveat; every pass burn is verified on-chain
+  at ≥100k DUMB to dead before the pass exists, so the floor is a true
+  minimum. The 04:00 #9 rewrite (direct-key reads) correctly carries no
+  roadmap churn — no user-visible change. (2) 04:10 #8 pass-backed deep-scan
+  share links — the ROADMAP line (dump.ts:233) and the Dumb AI scanner answer
+  (dump.ts:388) both match src: the pass path keys viaPass through
+  onDeepComplete (TokenScanner.tsx:294-306), share copy reads "run on a 30-day
+  pass unlocked by a verified 100,000 DUMB burn" (never implying a fresh
+  burn), no pass is ever issued from a shared link (TokenScanner.tsx:666),
+  and the brag card stays keyed on this-session burns only. Served-content
+  verification: /plan SSR HTML carries both new roadmap lines verbatim; the
+  served scan-CTMdohzc.js chunk carries both new strings verbatim
+  ("run on a 30-day pass…", "Privacy tools undercount"); done flags still
+  honest (the four future-phase groups correctly done:false). Observed, not
+  acted on: the activity strip has no Dumb AI answer — display-only element,
+  and the scanner answer already describes the burn gate; logged as a
+  candidate for a future #8 run, not churn. Live health: / /scan /burn /ai
+  /trade /wallet all 200 on the custom domain. #10 stays open as recurring;
+  #5 still blocked on Antonio's format pick, #6 on mascot approval, #11 on
+  his trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 04:20 ET run: backlog #9 DONE (security pass on the newest
+  shipped surface since the 04:00 #9: the 04:10 run's burn-backed deep-scan
+  share links for 30-day pass holders) → audit-only, NO code changes, no
+  build/deploy — nothing found that earned a change. Reviewed clean: (1) the
+  brag card stays strictly keyed on this session's verified burn — verifiedBurn
+  is set ONLY inside runWithHash after verify() returns ok; the pass path
+  (runDeep) never sets it, so an old pass burn can never mint a fresh "I just
+  burned" card (and verifiedBurn resets per token); (2) pass-share links carry
+  the pass's burn hash (always lowercase at save; format-hex gated at the
+  viewer's autoBurn effect) and re-verify on-chain at view time through the
+  existing path — verifyDeepScanBurn enforces the 100k minimum for BOTH burn
+  shapes (direct transfer + PLS-fallback swap), and no 30-day pass is ever
+  issued to a viewer; (3) copy stays honest in both branches — pass runs name
+  the pass ("run on a 30-day pass unlocked by a verified 100,000 DUMB burn"),
+  never "burned to run it"; (4) the manual-paste one-time guard (USED_BURNS)
+  still blocks pass-hash replays for new passes; (5) token switches reset
+  deep/deepBurn/deepChecks/deepViaPass (runScan) and deep/verifiedBurn
+  (DeepScanPanel), so no stale pass-hash share leaks across tokens; (6) the
+  pass-hash URL exposes nothing new — every burn tx is already public
+  on-chain, and pre-existing design already linked burn hashes; (7) double-click
+  on "Run deep scan" is idempotent (busy guard + identical state sets, at
+  worst a duplicate trackEvent). Noted, not churn: pass expiry is checked at
+  load only — a pass expiring mid-session can still run deep scans in that
+  session, but the gate is client-side for a read-only client-side simulation
+  (anyone can call deepScan from the console), so an expiry check adds no real
+  hardening; and `passScanned` is a write-only ref from the original pass
+  build (dead code, cosmetic — leave for a future cleanup run, not its own
+  build). No new data sources, no wallet/signing/mascot touch. Live health:
+  / /scan /burn /api/scan-stats all 200 on the custom domain. #9 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 04:10 ET run: backlog #8 DONE (bullish-demand research,
+  recurring) → SHIPPED **burn-backed deep-scan share links for 30-day pass
+  holders** — closes the deferred gap this research thread flagged 2026-09-28
+  (the deferred note is now marked resolved in BULLISH-RESEARCH.md). A pass
+  holder who ran a deep scan on their 30-day pass (no fresh burn this
+  session) got only the quick-scan share copy — "Safety scan for 0x…" — never
+  naming the deep scan that ran, backed by a real 100,000 DUMB burn. The
+  pass-based path (`runDeep` in DeepScanPanel) now calls `onDeepComplete`
+  with the pass's burn hash + a `viaPass` flag; the ShareReport links
+  `?token=<addr>&burn=<passTxHash>`, re-verified on-chain at view time by the
+  existing shared-link path (the pass's hash was verified before the pass
+  was issued; no pass is ever issued to the viewer), and the copy is the
+  honest variant the deferred note demanded — "…run on a 30-day pass
+  unlocked by a verified 100,000 DUMB burn, live on PulseChain…" — never
+  "burned to run it," never implying a fresh burn. The brag card stays keyed
+  on this-session burns only (an old pass burn must never mint a fresh "I
+  just burned" card). ROADMAP "Token safety scanner" line, the Dumb AI
+  scanner answer, and the token-scanner knowledge chunk updated. Rejected +
+  logged: fresh-burn copy for pass runs (loose timing), new brag cards on
+  pass scans (timing misattribution), a viewer-facing pass note (already
+  covered by the existing re-verification copy). Zero wallet/signing/data/
+  mascot touch, no new data sources. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /burn /plan /ai 200 on the custom domain,
+  the new pass copy verified in the served scan chunk on BOTH domains and
+  the roadmap line live in served /plan HTML. #8 stays open as recurring;
+  #5 still blocked on Antonio's format pick, #6 on mascot approval, #11 on
+  his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 04:00 ET run: backlog #9 DONE (security pass on the newest
+  shipped surface since the 03:20 #9: the 03:50 run's public
+  GET /api/scan-stats + ScanActivity strip) → SHIPPED **direct-key reads in
+  /api/scan-stats, replacing the kv.list scan** — the audit found two real
+  defects on the brand-new public endpoint, both fixed. (1) Silent
+  truncation undercount: the handler did `kv.list({prefix:"ev:", limit:1000})`
+  and summed only what the list returned; the ev: namespace grows ~12
+  events/day over the 90-day TTL (approaching 1000 keys), and once past the
+  cap the lexicographically-first-1000 cutoff would silently drop the newest
+  days — a public honesty surface undercounting its own numbers. (2) KV read
+  amplification: that same list + one get per returned key meant up to ~1000
+  KV GETs per uncached request on an unauthenticated GET — a cheap
+  cache-busting DoS multiplier. The rewrite does 90 direct
+  `kv.get("ev:<YYYY-MM-DD>:<event>")` reads (3 events × 30 days, key shape
+  verified against the handlePing writer — same `dayKey`), three parallel
+  event streams with sequential day reads; read count is bounded and the
+  newest day can never fall out of a list cap. Response shape and numbers
+  unchanged (verified: both domains return the same 3 deep scans / 1 pass /
+  ≥100,000 DUMB floor the 03:50 run recorded — behavior-preserving).
+  Reviewed clean, no change needed: no auth on the endpoint is by design
+  (three coarse counts only — no paths/countries/feedback leak; same
+  aggregate the passphrase-gated endpoint exposes); 600s public cache +
+  60s error cache bounded thundering-herd; fail-closed 503; parseInt fallbacks
+  to 0; ScanActivity type-validates the JSON, renders only on
+  deep_scans > 0, carries numbers via toLocaleString (no XSS surface), copy
+  keeps the "at least … destroyed" honesty + privacy-tools caveat. Zero
+  wallet/signing/data/mascot touch, no new data sources, no ROADMAP/AI
+  churn (no user-visible behavior change). tsc + eslint clean, built,
+  deployed to dump-money-hub-preview — / /scan /burn /plan /ai 200 on both
+  domains, /api/scan-stats 200 on both with identical honest numbers.
+  #9 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback; #8/#10/#13 stay open
+  as recurring.
+
+- 2026-09-29 03:50 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **honest deep-scan activity strip on /scan** — the flagship
+  utility had no social proof at the burn-gated decision point. New public
+  `GET /api/scan-stats` (server.ts + analytics.ts, no passphrase — returns
+  only coarse 30-day aggregates: deep scans completed, scan passes bought,
+  DUMB-destroyed floor; no paths/countries/feedback exposed) fed by the
+  site's existing anonymous KV counters. `ScanActivity` component mounts in
+  the /scan deep-scan card, renders only when deep_scans > 0 (never a
+  fabricated zero), with the "privacy tools undercount" caveat. The destroyed
+  floor is a true minimum (every pass burn verified on-chain at >=100k DUMB
+  to dead before the pass exists). Live data: 3 deep scans, 1 pass burn,
+  >=100,000 DUMB in 30 days — real, verified on both the workers.dev and
+  custom-domain endpoints. Verified the one wrinkle: the custom domain 404'd
+  the new endpoint for ~1-2 min post-deploy (edge propagation), then served
+  200 — the deployment itself was correct. Utility bar: social proof at the
+  price point converts more deep scans = more DUMB destroyed; zero new data
+  sources, zero wallet touch, zero invented numbers. Rejected + logged in
+  BULLISH-RESEARCH.md: a "safe token directory" (point-in-time scans read as
+  endorsements the loop can't keep current), per-token "scanned N times"
+  badges (new keyed counters, endorsement optics), a scan-pass leaderboard
+  (privacy regression), tax-change push alerts (backend the loop shouldn't
+  own). tsc + eslint clean, built, deployed to dump-money-hub-preview —
+  /scan 200, /api/scan-stats 200 on both domains. #13 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 03:40 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED **the bag-scan share-row + risk-first-ranking roadmap gap** —
+  audited every ship since the 02:30 #10 against src + served content. The
+  03:00 fee-setter probe, 03:10 paste-any-wallet path, and 03:30
+  permissionless fee-change probe were all already documented (ROADMAP line
+  231 + the "How do I check if a token is safe?" answer describe them in the
+  component's own words — verified claim-by-claim against
+  token-scan.ts:477-640: 7 safemoon-fork shapes, owner-impersonating probes
+  for live owners only, 0x…0001-impersonating probes only when no live
+  owner, warn/unknown/pass copy all match). The 02:40 bag-scan ship was NOT:
+  its share row (X/Telegram/native, counts-only, own-wallet vs pasted-wallet
+  copy distinction) had no ROADMAP or AI-answer line, and the risk-first
+  re-ranking / red fail chips were undocumented too. ROADMAP "Scan my bags"
+  line now names the re-ranking (fails first, red), the finish-gated share
+  row, and the honest copy split ("I checked a PulseChain wallet…", never
+  "my bags" for pasted runs); the "How do I share DUMB?" answer names the
+  bag-scan share row (counts only, never an address). Verified in src
+  (BagScan.tsx:85-111 bagShareText: counts/fails/warns, honest zero-data
+  fallback, ownWallet branch) before writing. Correctly carried no line:
+  the 03:20 cap-note honesty fix (copy-only, no claim change), the
+  red-fail chip coloring (no prior claim of equal coloring), and the 02:50
+  audit-only #9. done flags still honest (all planned/thinking groups
+  done:false). Zero wallet/signing/data/mascot touch, no new data sources.
+  tsc + eslint clean (prettier --fix on the roadmap line), built, deployed
+  to dump-money-hub-preview — / /plan /ai /scan 200 on the custom domain;
+  the /plan SSR HTML carries the new "I checked a PulseChain wallet" clause
+  and the served assets/dump-JorJ6rat.js chunk carries both new strings
+  verbatim. #10 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#13
+  stay open as recurring.
+
+- 2026-09-29 03:30 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Permissionless fee change" probe in the /scan quick scan** —
+  a research-found genuine hole in the 03:00 fee-change probe: it impersonates
+  the live owner, so renounced/absent-owner tokens skipped the check entirely
+  — exactly the case where "ownership renounced = tax is locked" is the
+  selling point, and a fee setter left open to any caller (missing access
+  control, non-standard role) would slip through. The same 7 shapes are now
+  probed impersonating an arbitrary address that can never be an owner
+  (0x…0001), running ONLY when there is no live owner (no RPC doubling on the
+  owner case; legacy probe provably absent on renounced tokens — verified in
+  the live test). A clean return = hard FAIL ("anyone could rewrite the
+  transfer tax… ownership being renounced doesn't stop this"); all-revert =
+  honest pass ("the tax can't be rewritten through the usual functions by
+  just anyone", custom setters still caveated); all-RPC-noise = unknown.
+  Checks render generically (status-counted), so no UI change was needed;
+  Dumb AI "How do I check if a token is safe?" answers (knowledge.ts +
+  dump.ts) + ROADMAP "Token safety scanner" line updated. Validated pre-ship
+  against live chain data: quickScan(DUMB) (renounced) → fee-setter-anyone
+  PASS, legacy fee-setter correctly absent; arbitrary-caller plumbing proven
+  (owner() as 0x…0001 → "found", so the fail branch is reachable — not dead
+  code; garbage selector → "absent"; onlyOwner setFees → "absent"). Zero
+  wallet/signing/data/mascot touch, no new data sources. tsc + eslint clean,
+  built, deployed to dump-money-hub-preview — / /scan /burn /plan /ai 200 on
+  the custom domain; served BurnBragCard chunk (minifier grouped token-scan
+  there again, per the 02:10 pattern) carries the new check id + copy; the
+  dump chunk carries the roadmap line + AI answers. Utility bar holds: real
+  repeated pain (tax-hike honeypots after the "renounced, you're safe" pitch
+  is a classic rug shape), brings outsiders in (free quick scan, no wallet),
+  burn-gated deep-scan funnel intact. Considered + REJECTED: also running the
+  probe for live owners (a setter answering a stranger but rejecting the owner
+  is pathological — doubles RPC for nothing); probing from the zero address
+  (some contracts explicitly reject address(0) — false negatives; 0x…0001
+  avoids that). BULLISH-RESEARCH.md updated. #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 03:20 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **an honesty fix on the "Check any wallet" cap note** — the 03:10 #8
+  ship's adversarial review found one real bug: when the bag scan capped at 12
+  of 17 (or 25+), the note read "paste any address above for the rest" — but
+  re-pasting rediscovers the same capped set (discovery hard-caps at 25
+  contracts, no pagination), so the rest was never reachable; the note promised
+  a path that doesn't exist. Now reads honestly ("only the first 12 were
+  scanned; the rest aren't reachable from this page", naming the 25-contract
+  discovery cap when truncated). Reviewed clean, no change needed: isAddress
+  gating + early return on invalid input, React-escaped display of the pasted
+  address (no XSS), share text carries counts only (never the address), no
+  address in any beacon payload (`bag_scan` already in both analytics
+  allowlists), busy-guarded runs (no double-submit), Enter-key path shares the
+  same guard, input disabled while busy, zero-address/dead-address pastes
+  degrade gracefully (discovery just finds their real inbound transfers).
+  Rejected: "Scan next 12" pagination (doubles per-session RPC load and would
+  fake completeness since discovery still caps at 25), per-run rate limiting
+  (client-side self-DoS only — a user could script it anyway), softening the
+  ROADMAP "every token" line (the on-screen cap note now tells the truth, so no
+  claim drift). tsc + eslint clean, built, deployed to dump-money-hub-preview
+  — / /scan /burn 200 on the custom domain, the served scan chunk carries the
+  new copy and zero of the old. #9 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback;
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 03:10 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Check any wallet" — paste-any-address bag scanning on /scan,
+  no wallet connection needed**. A research-found friction gap: "Scan my bags"
+  (the free dust-trap quick-scan of every token that moved into a wallet
+  recently) required a connected wallet — on a site whose own scam-safety
+  lessons say "be careful what you connect to," that gates the flagship
+  utility behind the very action newcomers are warned about; the discovery is
+  read-only public-RPC getLogs anyway, so the connection added nothing but
+  friction. Now a "Check any wallet" input runs the identical discovery +
+  risk-first quick scans on any pasted 0x address (`isAddress`-gated, same
+  house pattern as the token scanner), Enter-key friendly; the connected
+  one-click path is unchanged. Share copy stays honest by scope: pasted runs
+  share as "I checked a PulseChain wallet…" instead of "my bags" — counts
+  only, finished-runs only, never an address. The wrong-network note no longer
+  pretends the pasted path needs PulseChain switching (it reads the chain
+  directly). ROADMAP "Scan my bags" line + the Dumb AI "how do I check if a
+  token is safe?" answer updated to name the paste-any-wallet path; pure copy,
+  zero wallet/signing/data/mascot touch, no new data sources. tsc + eslint
+  clean (prettier --fix on two wraps), built, deployed to
+  dump-money-hub-preview — / /scan /burn 200 on the custom domain, /scan SSR
+  HTML carries "Check any wallet", /plan carries the roadmap line. Utility
+  bar holds: real repeated pain (airdropped dust honeypots), brings outsiders
+  in (zero connection friction, watch-only wallets work), deep-scan funnel
+  intact (rows open the full report where the burn-gated deep scan lives);
+  safer by construction — fewer connects, fewer prompts. Rejected this run:
+  auto-run on /scan load (unprompted RPC load), deep-linkable ?wallet= URLs
+  (would spread someone else's address), raising the 12-token cap (RPC
+  flakiness), a second analytics event (noise). BULLISH-RESEARCH.md updated.
+  #8 stays open as recurring; #5 still blocked on Antonio's format pick, #6
+  on mascot approval, #11 on his trading feedback; #9/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 03:00 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Fee-change powers" probe in the /scan quick scan** — a
+  research-found genuine gap: the owner check warned "it can still change
+  fees… if those functions exist" but never tested whether they do. A token
+  showing 6% today whose owner can set 99% tomorrow is the classic slow-rug,
+  and the tax getter only reports today's value. The new check runs only for
+  a LIVE owner (renounced/absent skip it — fee changes need someone to call
+  them): 7 read-only eth_call probes impersonating the owner against the
+  common safemoon-fork fee-setter shapes (setTaxFeePercent,
+  setLiquidityFeePercent, setFees, setBuyFee, setSellFee, setMarketingFee,
+  setTaxes) with the arg repeating the current tax (eth_call never commits
+  state — same read-only discipline as the sell sim; selectors derived via
+  keccak256, never hand-typed). A clean return → warn ("the X% tax you see
+  today isn't locked"); none answered → pass with the honest caveat
+  ("custom setters could hide under other names"); RPC noise → unknown.
+  Validated pre-ship against live chain data: WBTC (live owner,
+  0xCA06411b…EBEB7) → pass, INC (live owner 0xB2Ca4A66…02d4) → pass, DUMB
+  (renounced) → correctly skipped; plumbing proven with a known-existing
+  function (owner() → found) and a garbage selector (→ revert/absent); the
+  shipped bundle's quickScan run end-to-end in node reproduces all three
+  branches. Checks render generically (status-counted), so no UI change was
+  needed; Dumb AI "How do I check if a token is safe?" answers (knowledge.ts
+  + dump.ts) + ROADMAP "Token safety scanner" line updated. Zero
+  wallet/signing/data/mascot touch, no new data sources. tsc + eslint
+  clean, built, deployed to dump-money-hub-preview — / /scan /burn 200 on
+  the custom domain, the served chunk carries the new "Fee-change powers"
+  copy. Utility bar holds: real repeated pain (tax-hike slow rugs are how
+  buyers get rekt after the LP/tax checks pass), brings outsiders in (free
+  quick scan, no wallet), burn-gated deep-scan funnel intact. #13 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 02:50 ET run: backlog #9 DONE (security pass, recurring) →
+  SHIPPED **two honesty fixes on the bag-scan share surface from the 02:40
+  #8 ship** — the audit's own surface came back with two real finds. (1) The
+  "Share this:" row rendered mid-scan: counts understated what ran and "I
+  scanned my PulseChain bags" implies a completed run, so a user could share
+  "3 tokens checked, 1 with red flags" while 9 were still scanning. The row
+  now renders only after the run finishes (`!busy`) — the progressive
+  results list still renders live as designed; only the share row waits.
+  (2) If every scan errored, `bagShareText` printed "0 tokens checked, no red
+  flags found" — a clean bill of health on zero data. Now falls back to an
+  honest line ("I tried scanning my PulseChain bags … but the scans didn't
+  land — trying again"). Reviewed clean, no change needed: risk-first
+  re-ranking on every progressive update (ES2019+ stable sort — earlier
+  finishers keep ties; React keyed by address so rows move without
+  detaching the "Full report →" buttons), red-fail vs amber-caution chip
+  coloring, share copy carrying ONLY counts (no address/wallet), intent URLs
+  encodeURIComponent'd with target="_blank" rel="noreferrer noopener",
+  NativeShareButton reuses the vetted one-tap pattern (no auto-post,
+  share_tap already in both analytics allowlists — no new event needed),
+  `window.location.origin + /scan` only (own origin, no attacker input),
+  address format-gated at discovery. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — the served scan chunk (scan-MFHeG7M8.js) on the
+  custom domain carries the new honest-fallback copy; / /burn /plan /ai 200.
+  No ROADMAP/AI churn (no copy-claim change). #9 stays open as recurring;
+  #5 still blocked on Antonio's format pick, #6 on mascot approval, #11 on
+  his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 02:40 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Scan my bags" risk-first results + honest severity color +
+  share row** — a research-found gap in the shipped bag scanner: rows rendered
+  in scan order (the riskiest token could sit buried at the bottom) and the
+  verdict chip painted actual FAILS the same amber as mere cautions. Results
+  now re-rank risk-first on every progressive update (fails → cautions →
+  clean → couldn't-scan, stable sort so earlier finishers hold ties), and
+  fail rows render red while cautions-only stays amber — a safety tool
+  shouldn't paint them the same color. Added a one-tap "Share this:" row
+  (native share sheet + Post to X + Share to Telegram, nothing posts
+  automatically) using the vetted intent pattern (encodeURIComponent'd,
+  target="_blank" rel="noreferrer noopener"); copy carries counts ONLY
+  ("I scanned my PulseChain bags on the Dumb Money hub — N tokens checked,
+  F with red flags. Scan yours free before you touch anything") — never an
+  address or wallet — and links /scan, so every shared bag-scan is an invite
+  into the scanner funnel where the burn-gated deep scan lives. No new
+  analytics event (reused share_tap), no new data sources, no
+  wallet/signing/mascot touch. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — /scan 200 on the custom domain with the
+  "Scan my bags" shell in SSR HTML and the served scan chunk
+  (scan-CfH8utch.js) carrying the new row + share copy; /burn /ai /plan
+  200. BULLISH-RESEARCH.md updated (shipped). No ROADMAP/AI-answer churn
+  (no copy claims change — the AI answers describe bag scan without ordering).
+  #8 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback; #9/#10/#13 stay open
+  as recurring.
+
+- 2026-09-29 02:30 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED **a one-line AI-answer drift fix** — the 02:10 #13 run claimed it
+  updated BOTH the ROADMAP "Token safety scanner" line AND the Dumb AI "How
+  do I check if a token is safe?" answer with the new owner-concentration
+  check, but verified in src the answer was never touched: it still listed
+  the old check set (tax, renounced, paused, proxy, LP-burn, identity, sell
+  sim) with no concentration mention, while the roadmap line had it. Inserted
+  the missing clause in the component's own words — "how much of the supply
+  the live owner address holds (the owner-concentration check — flagged at
+  50%+, warned at 15%+: holding isn't dumping, but the power sits in one
+  place; skipped when ownership is renounced)" — after "whether transfers
+  are paused". Everything else from the ships since the 01:20 #10 verified
+  accurate: (1) ROADMAP scanner line (owner concentration + deep-scan brag
+  cards + tx-explainer brag-card link) matches token-scan.ts:441-480,
+  TokenScanner.tsx deep-scan panel, and tx-explain.ts:519-534; (2) the
+  tx-explainer AI answer's "direct DUMB/DAMP transfer, or the PLS path that
+  buys DUMB and sends it straight to dead" wording stays accurate for the
+  01:30 swap-shape ship; (3) done flags still honest (all planned/thinking
+  groups done:false); (4) the 02:00 dust-formatter fix correctly carries no
+  roadmap churn. tsc clean; eslint: changed file clean, the only error is a
+  pre-existing parsing error in dist-test/username.mjs (Sep-28 test
+  scaffolding, untouched — noted, not churn). Built, deployed to
+  dump-money-hub-preview — / /plan /scan /burn /ai 200 on the custom domain,
+  the /plan SSR HTML carries the roadmap's owner-concentration line, and the
+  served dump chunk (dump-Dgu8SbhE.js) carries the new AI-answer clause
+  verbatim. #10 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#13
+  stay open as recurring.
+
+- 2026-09-29 02:20 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 01:50 #9: the 02:00 run's dust-burn "<0.0001"
+  formatter fixes + the 02:10 run's owner-concentration check) → audit-only,
+  NO code changes, no build/deploy — nothing found that earned a change.
+  Reviewed clean: (1) the concentration check (token-scan.ts:441-480) — one
+  extra tryRead-wrapped balanceOf (never throws) reusing the already-read
+  totalSupply; renounced/absent owners skip it entirely (no misleading output
+  for DUMB/DAMP); integer bps math in bigint is exact for ownerBal ≤ supply
+  with a safe Number() conversion (≤ 10,000); "~" prefix on the truncated pct
+  keeps it honest; thresholds 5000/1500 match the unit-tested claims; copy
+  stays honest ("holding isn't dumping"); reads-fail → unknown "treat as
+  risky" (fail-safe direction); the contract-controlled symbol in the detail
+  string renders via React `{c.detail}` (escaped, no XSS); owner passed to
+  balanceOf is a viem-decoded checksummed address (the cast is safe); (2) the
+  three dust formatters verified CONSISTENT at the boundary — server fmtTok,
+  client fmtBurnTok, and fmtBragAmt all agree (dust → "<0.0001", 0.0001 →
+  "0.0001", 0 stays "0"), with BurnBox's card + share text both flowing
+  through fmtBragAmt (no fourth surface missed — BurnBragCard and the canvas
+  PNG renderer take pre-formatted strings); (3) the tx-explainer's burn
+  headline confirmed out of scope for the dust bug — its fmtAmount uses
+  significant digits, which can never render "0" for a positive value
+  (verified: n === 0 only when value is 0n, and the burn gates require
+  arrival > 0n). Noted, not churn: three dust-rule implementations in three
+  places (works, tested, consistent — refactoring would be churn); a
+  pathological ownerBal > supply would print "~150%" (cosmetic, fail branch
+  still fires correctly). No new data sources, no wallet/signing/mascot
+  touch. Live health: / /scan /burn 200 on the custom domain. #9 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 02:10 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Owner concentration" check in the /scan quick scan** — a
+  research-found genuine gap: the quick scan caught rule-change risk
+  (owner powers, pause, upgradeability) and exit risk (LP burn %, sell sim,
+  round-trip) but NOT the classic slow-rug shape — a live owner sitting on
+  a huge share of supply while the LP looks clean. The check runs only when
+  owner() points at a live address (renounced/absent = skipped, no check):
+  one extra readContract (balanceOf(owner); totalSupply was already read in
+  the metadata section) → owner share in bps → fail ≥50% / warn ≥15% /
+  pass below, reads-fail → unknown ("treat as risky", never "fine"). Copy
+  stays honest: "holding isn't dumping, but the power sits in one place."
+  Validated pre-ship against live chain data (WBTC: live owner
+  0xCA06411b…EBEB7 holding ~0.00% → pass; DUMB/DAMP/TEDDY/PCOCK/PTGC/PLSX
+  renounced, HEX/PRVX/SOLIDX/HELGO no owner() → correctly skipped) and the
+  threshold math unit-tested in node (7/7: 60%→fail, 50→fail, 49.99→warn,
+  15→warn, 14.99→pass, 0→pass, dust→pass). Checks render generically
+  (status-counted), so no UI change was needed; Dumb AI "How do I check if
+  a token is safe?" answer + ROADMAP "Token safety scanner" line updated.
+  Zero wallet/signing/data/mascot touch, no new data sources. tsc + eslint
+  clean, built, deployed to dump-money-hub-preview — / /scan /burn /plan
+  /ai 200 on the custom domain, the served lazy chunk carries the new
+  check with all three copy branches + the unknown branch in the right
+  position (minifier grouped token-scan into the BurnBragCard chunk —
+  content-verified, not a problem). Utility bar holds: real repeated pain
+  (dev dumps are how newcomers get rekt after the LP check passes), brings
+  outsiders in (free quick scan, no wallet), the burn-gated deep-scan
+  funnel stays intact. #13 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 02:00 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **dust-burn amount honesty fix on all three brag surfaces** — a
+  research-found unit: the brag verification gates accept ANY positive burn
+  (direct gate: amount > 0n; swap gate: arrival > 0n), but all three
+  brag-amount formatters trim to 4 decimals — so a real dust burn (e.g. 1 wei
+  of DUMB) rendered "0 DUMB" on the server brag card, the client BurnBragCard,
+  and the pre-filled share text ("I just burned 0 DUMB …") — a verified-truth
+  surface asserting a zero amount for a real burn, exactly the honesty defect
+  the brag system exists to prevent. Now a positive-but-sub-0.0001 amount
+  renders "<0.0001" everywhere: (1) server fmtTok in
+  src/server/brag-card.server.ts (the /api/brag-image card — the only caller,
+  so no other surface changes); (2) fmtBurnTok in TokenScanner.tsx (the
+  deep-scan panel's card + share copy — the only caller); (3) a new
+  fmtBragAmt wrapper in BurnBox.tsx used only by sharePost (the shared fmtTok
+  still drives balances/parsed/shortfall copy — untouched, no churn). The
+  tx-explainer's swap-burn headline was checked and already uses significant
+  digits (no "0" bug there). Formatter logic unit-tested in node (7/7: dust →
+  "<0.0001", 0.0001 boundary, 0.5, 104,477.42, 100,000, 0 → "0" unchanged).
+  Zero wallet/signing/data/mascot touch, no new data sources, no AI/roadmap
+  churn (no new feature, no copy change beyond the amount string). tsc +
+  eslint clean, built, deployed to dump-money-hub-preview — / /burn /scan
+  /plan /ai 200 on the custom domain, served scan + burn chunks carry the
+  fix (one transient stale-edge read of the old bundle cleared on retry —
+  deploys healthy). BULLISH-RESEARCH.md updated (shipped + considered/
+  rejected). #8 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #9/#10/#13 stay
+  open as recurring.
+
+- 2026-09-29 01:50 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 01:10 #9: the 01:30 run's tx-explainer PLS-swap
+  burn detection + the 01:40 run's burn brag cards on the deep-scan success
+  panel) → audit-only, NO code changes, no build/deploy — nothing found that
+  earned a change. Reviewed clean: (1) the explainer's swap-burn gate
+  (tx-explain.ts:429-438) mirrors the endpoint's getSwapBurnArrival
+  condition-for-condition: tx.to pinned to ROUTER_LC, function decoded via
+  the router ABI (never a hand-typed selector) with exact-name equality,
+  `to` = dead, path ends in DUMB, reverted txs returned before
+  classification, DUMB arrival > 0n required from the receipt's own Transfer
+  logs; (2) the brag-link gate (tx-explain.ts:519-534) is the same gate plus
+  dead-arrival: the direct shape requires fn === "transfer" to the DUMB/DAMP
+  contract, decoded recipient = dead, input amount > 0n, and a Transfer log
+  from the token contract with from = tx.from = dead (matching the
+  endpoint's fromTopic check) — the link copy promises only "get your
+  shareable brag card", naming no amount, so the explainer's dead-arrival
+  headline and the card's input-amount print can never contradict the link;
+  (3) deep-scan panel keying (TokenScanner.tsx:460-468/543) — verifiedBurn is
+  set only inside runWithHash after verify() returns ok, never from the
+  shared ?burn= auto-run path or a stale pass, and resets on every token
+  change; the amount is the verifier's bigint in both paths (input amount on
+  direct, summed dead-arrival on PLS), and the client fmtBurnTok + server
+  fmtTok produce identical strings — panel copy matches the unfurl card on
+  both shapes; (4) share surface reuses the vetted pattern: intent URLs
+  encodeURIComponent'd, target="_blank" rel="noreferrer noopener", nothing
+  posts automatically, panel renders only in the verified success state;
+  (5) /brag degrades gracefully — a well-formed non-burn hash renders
+  "Couldn't verify that burn" with an explorer escape hatch, never an
+  asserted claim, which covers the one theoretical divergence found (the
+  endpoint's strict-hex fail-closed on malformed log data vs the explainer's
+  skip-malformed — pathological input, graceful outcome either way).
+  Observed, not churn (pre-existing 2026-09-28 design, not this audit's
+  window): the manual paste box accepts a burn from ANY wallet by explicit
+  design ("from any wallet"), so a viewer could paste someone else's burn
+  hash and get an "I just burned" card — mitigated by the card naming the
+  tx hash so every brag stays checkable. Live health: / /scan /burn /ai all
+  200 on the custom domain. #9 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback;
+  #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 01:40 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **burn brag cards on the deep-scan success panel** — the
+  research-flagged follow-up from the 01:00 run: a deep-scan burner just paid
+  a verified 100,000 DUMB burn (one-click transfer, manual paste, or
+  PLS-fallback swap) and got "Deep scan complete — burn verified" with no
+  brag/share surface for the burn itself, while BurnBox's success panel has
+  had the "Brag about it" card + share row for both paths since 01:00. The
+  panel now renders the same vetted surface on this session's verified burn:
+  BurnBragCard (verified dead-arrival amount + tx hash, share/download) plus
+  a text-only share row (native + Post to X + Share to Telegram) linking
+  /brag?tx=, whose preview unfurls the server-verified card (both shapes
+  verified). The amount is the verifier's dead-arrival bigint everywhere —
+  the same number the unfurl card prints (the established BurnBox
+  convention, no copy/card mismatch). Keyed strictly on this session's
+  verification: never from a stale pass or a shared ?burn= link the viewer
+  didn't do, resets per token. Share copy stays honest ("that unlocked 30
+  days of deep scans", "supply shrank a little, no promises"). Dumb AI "How
+  do I check if a token is safe?" answer + ROADMAP "Token safety scanner"
+  line updated. Zero wallet/signing/data/mascot touch, no new data sources.
+  tsc + eslint clean, built, deployed to dump-money-hub-preview — /scan
+  + /burn 200 on the custom domain, the served scan chunk carries the new
+  block, the served dump chunk carries the roadmap line + AI answer.
+  BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 01:30 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **tx-explainer detects the PLS-swap burn shape** — the
+  research-flagged follow-up from the 01:00 run: the /scan transaction
+  explainer deliberately refused to classify PLS-fallback burns (its comment
+  said "swap-burns never set this") because /api/brag-image only verified
+  direct burns; the 01:00 run taught the endpoint the swap shape and the
+  explainer was one ship behind its own API. Now it detects
+  swapExactETHForTokensSupportingFeeOnTransferTokens on the PulseX router
+  with `to` = dead and the path ending in DUMB (mirroring the endpoint's
+  gate condition-for-condition, mined-only): the tx gets a proper "Burn — X
+  DUMB destroyed" headline (previously the generic "complex transaction"
+  misclassification, since nothing comes back to the sender) and `burnBragTx`
+  is set, so the "get your shareable brag card" link renders. Verified live
+  against real chain data: Antonio's real 40,868-PLS swap-burn (0x4757ca97…)
+  explains as "Burn — 104,477.42 DUMB destroyed" with the brag link set, and
+  an ordinary 1M-PLS DUMB buy (0x73a44f04…) still explains as a swap with no
+  link — the honesty property held. Dumb AI's "What did my transaction
+  actually do?" answer updated (it said only direct burns link the card; the
+  ROADMAP line already said "voluntary burn" without the direct restriction,
+  still accurate). Zero wallet/signing/data/mascot touch, no new data
+  sources. tsc + eslint clean, built, deployed to dump-money-hub-preview —
+  /scan + /burn 200 on the custom domain. BULLISH-RESEARCH.md updated
+  (shipped). #8 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #9/#10/#13 stay
+  open as recurring.
+
+- 2026-09-29 01:20 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from all four
+  ships since the 00:20 #10 verified accurate, in src AND in the served HTML
+  on the custom domain. (1) 00:30 #13 "Scan my bags" — the ROADMAP line
+  (dump.ts:240) verified claim-by-claim against BagScan.tsx: wallet-gated on
+  /scan ("Connect a wallet…"), scans inbound-transfer tokens in the recent
+  window ("Tokens that sent a transfer to …" — discoverWalletTokens uses
+  topic-filtered Transfer logs), each row's "Full report →" dispatches
+  dumb:rescan and TokenScanner re-runs runScan(addr) (address re-gated with
+  isAddress on the consumer side), the burn-gated deep scan lives in the
+  re-opened report as usual; the Dumb AI "How do I check if a token is safe?"
+  answer (dump.ts:386) carries the same three claims verbatim-accurate;
+  (2) 00:40 #8 skip-to-content link — infra/accessibility unit, correctly
+  carries no ROADMAP line (consistent with past practice); (3) 01:00 #8 brag
+  cards for PLS-fallback burns — the generic "Burn brag cards" roadmap line
+  (dump.ts:204) stays accurate (it claims no shape restriction); the Dumb AI
+  tx-explainer answer's "direct DUMB/DAMP burn" wording (dump.ts:390) remains
+  true since the explainer still only detects the direct shape (swap-shape
+  detection stays a deferred follow-up); the BurnBox AI answer's "After a
+  confirmed burn, 'Brag about it' shares the real amount" (dump.ts:334) now
+  covers both paths. (4) done flags honest — the four future-phase groups
+  remain correctly done:false; nothing shipped qualifies as flipping them.
+  No new planned/thinking items earned a line — no churn. Live health:
+  / /scan /burn /plan all 200 on the custom domain. #10 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 01:10 ET run: backlog #9 DONE (security pass on the new surface
+  since the 00:50 #9: the 01:00 run's brag cards for PLS-fallback burns) →
+  audit-only, NO code changes, no build/deploy — nothing found that earned a
+  change. Reviewed clean: (1) `getSwapBurnArrival` in
+  src/routes/api/brag-image.ts — tx.to pinned to the verified router, selector
+  computed from the ABI via toFunctionSelector (never hand-typed), input
+  decoded with viem (decode failure → null), `to` must be dead and path's last
+  element DUMB, receipt status success required, dead-arrival summed ONLY from
+  DUMB Transfer logs with topic[2] = dead, strict hex regex on log data with
+  fail-closed null on malformed, null when arrival ≤ 0n — the one-call router
+  can only execute the swap, so every accepted tx is a genuine DUMB burn;
+  (2) honest cross-check: BurnBox's PLS-path share copy uses v.amount from
+  client `verifyPlsBurn` (same receipt-log sum, minArrival-gated), so the
+  shared "I just burned X DUMB" number and the card's printed arrival are the
+  same verified bigint — no mismatch between copy and card; (3) the BurnBox
+  success panel + "Brag about it" card + share row render only on
+  doneSucceeded (receipt-confirmed success — never confirming, reverted, or
+  rejected states), intent URLs encodeURIComponent'd with
+  target="_blank" rel="noreferrer noopener", nothing posts automatically,
+  BurnBragCard mounts only on the confirmed panel with the real amount + tx
+  hash; (4) no new data sources (same public RPC), no wallet/signing
+  changes, no mascot touch; comment copy in BurnBox matches the endpoint's
+  two shapes. Minor noted-but-not-churn: sub-token dust burns render a "0"
+  amount card (cosmetic — still a real burn); /api/brag-image has no per-IP
+  rate limit (pre-existing shape, fail-closed on RPC errors). Live health:
+  / /scan /burn 200, /api/brag-image 400 on malformed hash / 404 on
+  well-formed non-burn — fail-closed behavior confirmed on the custom domain.
+  #9 stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-29 01:00 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **brag cards for PLS-fallback burns** — a research-found parity
+  gap: PLS-fallback burners (often newcomers with small bags, the most likely
+  sharers) got an explorer link while direct burners got the unfurling brag
+  card. `/api/brag-image` now verifies a second shape — the PulseX V2
+  router's `swapExactETHForTokensSupportingFeeOnTransferTokens` with `to` =
+  dead and a path ending in DUMB (selector computed from the ABI, never
+  hand-typed; receipt must show DUMB actually arriving at dead). The card
+  prints the verified dead-arrival — the honest destroyed number, since the
+  swap output is taxed on arrival. The direct-transfer shape is unchanged.
+  BurnBox's success panel now shows the same "Brag about it" card + share row
+  for both paths (the dead `viaPls` share special-case removed), so every
+  confirmed burn unfurls a card on X/Telegram/Discord. Verified end to end
+  against real chain data: a 20k-block scan found two router-swap txs with
+  DUMB→dead — one genuine swap-to-dead burn (card rendered, 200, real
+  1080×1080 PNG) and one ordinary DUMB buy whose receipt only carried the 1%
+  protocol tax-burn legs (correctly 404 — the decoded `to` != dead check
+  refused to issue a "voluntary burn" card for someone's buy; the honesty
+  property held under adversarial conditions). Safety: verification is
+  fail-closed (unverified → 404), amounts come only from on-chain logs,
+  nothing uploaded/stored, the card names the tx hash so every brag stays
+  checkable, /brag's "voluntarily burned" copy still holds for both shapes.
+  Zero wallet/signing/data/mascot touch, no new data sources. tsc + eslint
+  clean, swap-input decode unit-tested in node, built, deployed to
+  dump-money-hub-preview — /burn 200 on both domains, /api/brag-image 400 on
+  malformed hash / 404 on well-formed non-burn. BULLISH-RESEARCH.md updated
+  (shipped). Considered follow-ups for later runs (not this one): tx-explainer
+  detecting the swap-burn shape and linking its /brag card; a brag/share row
+  on the deep-scan pass panel's PLS-burn success state. #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 00:50 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — nothing found that earned a
+  change. Reviewed the two ships since the 00:10 #9: (1) skip-to-content link
+  (00:40 #8) — unique #page-content id in PageShell only, first in tab order,
+  tabIndex=-1 target (focus moves, not just scroll), outline-none, routes
+  keep their own <main> so no landmark nesting; (2) "Scan my bags" (00:30
+  #13) — explicit click only (never auto-runs), correct-chain gate + disabled
+  states, progressive row rendering, honest scope/cap/empty/error copy,
+  addresses format-gated (^0x[0-9a-f]{40}$) before dispatch, rescan event
+  handler already isAddress-gated (per the 00:10 #9 audit), symbols rendered
+  as React text (auto-escaped), read-only throughout — no signing, no
+  approvals; (3) discoverWalletTokens — typed parseAbiItem Transfer filter,
+  chunked 5k-block getLogs over the 100k-block window, seen-cap 25 + BAG_DISC
+  truncation honest, tryRead never throws, honest empty state; (4)
+  `bag_scan` event present in both client + server analytics allowlists.
+  Minor theoretical nits (scan progress not aria-live) didn't earn churn.
+  Live health: / /scan /burn /wallet all 200 on the custom domain. #9 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 00:40 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **skip-to-content link** — an accessibility audit unit: keyboard and
+  screen-reader users were forced to tab through the entire sticky header (nav,
+  More dropdown, wallet connect, Trade CTA) on every page before reaching
+  content. PageShell now renders a visually-hidden "Skip to content" link first
+  in the tree (revealed on focus) targeting a new focusable `#page-content`
+  wrapper around page content (tabIndex=-1 so focus moves, not just scroll).
+  Routes keep their own <main> landmarks; the wrapper is a plain div so no
+  landmark nesting. Two lines of JSX + a comment, zero wallet/signing/data/
+  mascot touch, no new data sources. North-star fit: a newcomer — including one
+  using a keyboard or screen reader — reaches the page's actual content first
+  visit, which is exactly "welcoming." tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — / /scan /burn /wallet 200 on the custom domain, the
+  link + focus target verified in the served SSR HTML. BULLISH-RESEARCH.md
+  updated (shipped + considered/rejected). #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-29 00:30 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"Scan my bags" on /scan** — one-click quick scan of every token
+  the connected wallet received in the recent window. The repeated pain: the
+  airdropped-dust trap — free mystery tokens you try to sell and can't
+  (honeypot), or approve and lose. New `discoverWalletTokens` in token-scan.ts
+  (chunked topic-filtered getLogs over the last 100k blocks via a typed
+  parseAbiItem Transfer event — the gentle retry-per-chunk pattern from the
+  burn ticker; window labeled honestly from block timestamps; capped at 25
+  discovered / 12 scanned per run; never throws — RPC failure = honest empty
+  state), new `BagScan` component mounted under the scanner on /scan: explicit
+  button (never auto-runs), progress, verdict-chip rows that open the full
+  report through the existing rescan event (where the burn-gated deep scan
+  lives as usual — the funnel into real burns stays intact). Read-only
+  throughout: no signing, no approvals, nothing moves; explicit click only,
+  no surprise RPC load. Utility bar holds: real repeated pain, brings
+  outsiders in ("check your bags" needs no DUMB), every deep scan still
+  burns. New `bag_scan` analytics event added to both client + server
+  allowlists. Dumb AI "How do I check if a token is safe?" answer + ROADMAP
+  "Token safety scanner" line updated. Discovery query shape verified live
+  against rpc.pulsechain.com pre-ship (dead-address inbound transfers
+  resolve distinct tokens). tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — /scan 200 on both domains with the card copy in
+  the served SSR HTML, the scan chunk carries the button copy and the
+  token-scan chunk carries the discovery (100000n window verified in the
+  served bundle), / /burn /plan 200. BULLISH-RESEARCH.md updated (shipped +
+  rejected: auto-run on connect, outbound-transfer scanning). #13 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-29 00:20 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED **the long-tail roadmap gap from the 00:00 #8 run** — the
+  "That's you" leaderboard banner's new "Pledge your next burn on the
+  promise board below — a pledge is a promise, not a burn" nudge (anchored
+  to the PledgeCard's id="pledge-board") had no ROADMAP line. Verified the
+  three ships since the 23:20 #10 run against src first: (1) pledge nudge +
+  anchor present (BurnLeaderboard.tsx:172-174, PledgeCard.tsx:153) and the
+  nudge copy renders only when the wallet actually ranks (inside the
+  youRow banner branch); (2) "Share your pledge" row present
+  (PledgeCard.tsx:236) — already covered by the "Burn pledges" ROADMAP
+  line; (3) scan watchlist present (ScanWatchlist.tsx, scan-watchlist.ts,
+  wired in TokenScanner.tsx) — already covered by the "Scan watchlist"
+  ROADMAP line. The "Burn leaderboard" item now names the nudge with the
+  component's own words. No other drift found: done flags still honest
+  (all planned/thinking groups done:false), no wallet/signing/data/mascot
+  touch, no new data sources. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — /plan 200 on BOTH domains with the new line in
+  the served SSR HTML; /burn /scan 200. #10 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-29 00:10 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 23:40 #9: the 23:50 run's scan watchlist on
+  /scan + the 00:00 run's "Pledge your next burn" nudge in the leaderboard
+  banner) → audit-only, NO code changes, no build/deploy — nothing found
+  that earned a change. Reviewed clean: (1) src/lib/scan-watchlist.ts —
+  localStorage-only (nothing leaves the device), entries format-gated
+  (^0x[0-9a-fA-F]{40}$) + type/shape-validated on load (malformed or
+  poisoned rows are dropped, cap 50, newest-first), all localStorage touches
+  in try/catch (SSR-safe, storage-full-safe); (2) ScanWatchlist.tsx — symbol
+  rendered as React text (auto-escaped, incl. aria-label), explorer href
+  built from a format-gated address (no javascript: injection possible),
+  "scanned Xm ago" staleness label on every row, copy never presents a
+  snapshot as current ("A verdict is a snapshot: re-scan before you act");
+  (3) RESCAN_EVENT handler in TokenScanner.tsx — detail is viem-isAddress
+  gated before any scan runs, watch toggle re-syncs from localStorage on
+  each new result, rescan of a watched token refreshes verdict + timestamp;
+  (4) watchlist_toggle event present in both client + server analytics
+  allowlists; (5) the 00:00 pledge-nudge copy + #pledge-board anchor verified
+  in src (BurnLeaderboard.tsx:172, PledgeCard.tsx:153); (6) ROADMAP + Dumb
+  AI watchlist copy verified accurate against shipped behavior (browser-local
+  list, re-scan refreshes, never claims current). Live health: / /scan
+  /burn /api/pledges all 200 on the custom domain. #9 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 00:00 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Pledge your next burn" nudge in the leaderboard's "That's you"
+  banner** — a research-found unit: the burn-pledge board shipped 2026-09-28
+  and is honestly empty, but nothing connected the recognition moment (a
+  verified burner seeing their rank lit up) to the promise board directly below
+  it — a real burner at peak commitment had no pointer to the rally surface
+  built for their next move. The banner now carries one line under the share
+  row: "Pledge your next burn on the promise board below — a pledge is a
+  promise, not a burn" (in-page anchor to the pledge card's new
+  `id="pledge-board"`). Copy stays honest (promises labeled promises);
+  renders only when the wallet actually ranks; pure copy + anchor — zero
+  wallet/signing/data/mascot touch, no new data sources, nothing posts
+  automatically. Considered + REJECTED as churn: a pledge-state-aware variant
+  (would need a second /api/pledges fetch in the leaderboard; the copy "pledge
+  your NEXT burn" is already honest for existing pledgers). tsc + eslint clean,
+  built, deployed to dump-money-hub-preview — /burn 200 both domains, the
+  served burn chunk on the custom domain carries the new copy, anchor in the
+  SSR HTML. BULLISH-RESEARCH.md updated (shipped + rejected). #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot approval,
+  #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 23:50 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **scan watchlist on /scan**. The repeated pain it solves: every
+  PulseChain user who vets contracts loses the verdict on reload. Every
+  quick-scan report now has a Watch toggle; watched verdicts (red flags,
+  tax, pair state, scanned time) persist in a browser-local list under the
+  scanner — localStorage only (nothing leaves the device), capped at 50,
+  never presented as current ("scanned Xm ago" on every row). Re-scan
+  re-runs the scan live on-chain via a custom event in the mounted scanner
+  (shared ?token= links only auto-run on first mount, so they can't carry
+  this) and refreshes the entry; rows with a PulseX pair show "Deep scan
+  available", routing repeat vetters back through the 100k-DUMB-burn deep
+  scan. Utility bar holds: real repeated pain, outsiders' reason to return,
+  every deep scan burns. Safety: SSR-safe (localStorage in try/catch),
+  address format-gated, symbol from the contract rendered React-escaped,
+  verdict summary only (no stale check copy on a safety tool), one new
+  analytics event (watchlist_toggle) added to both client + server
+  allowlists. Dumb AI "How do I check if a token is safe?" answer + ROADMAP
+  "Token safety scanner" line updated. tsc + eslint clean, built, deployed
+  to dump-money-hub-preview — /scan 200 both domains with the watchlist
+  panel in the SSR HTML, the served scan chunk carries the watchlist store +
+  rescan event, / /burn /plan + /api/pledges 200. (One transient stale-edge
+  read of the old bundle during verification cleared on retry — deploys
+  healthy.) #13 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#10
+  stay open as recurring.
+
+- 2026-09-28 23:40 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 23:00 #9: the 23:10 run's burn pledges +
+  the 23:30 run's "Share your pledge" row) → audit-only, NO code changes,
+  no build/deploy — nothing found that earned a change. Reviewed clean:
+  (1) server/pledges.ts — body capped 2048B, JSON.parse inside the outer
+  try, address format-gated (^0x[0-9a-fA-F]{40}$), token + amount +
+  timestamp strictly validated before any crypto, signature freshness
+  10 min + viem verifyMessage in try/catch, message binds token+amount+
+  address+timestamp so a replay can only re-publish the identical pledge,
+  one-per-wallet replacement, 10 POSTs/day/IP (bucket is per-requester so
+  invalid requests only self-DoS — acceptable), GET prunes expired/invalid
+  rows + rewrites the index, display names resolved from the uname registry
+  with the EXACT matching key (uname:addr:<lowercase>, verified against
+  username.ts), charset-restricted names React-escaped, all failures
+  return generic errors with no stack leaks; (2) PledgeCard.tsx share row —
+  copy carries ONLY numbers (amount + token), never address or opt-in
+  username, X/Telegram intent URLs fully encodeURIComponent'd with
+  target="_blank" rel="noreferrer noopener", link is window.location.origin
+  + /burn (own origin, no attacker input), native-share path dismisses
+  silently on AbortError with noopener popup fallback, nothing posts
+  automatically, row renders only when the wallet actually has an active
+  pledge; (3) routing in src/server.ts is method+path pinned, honesty
+  holds (promises never presented as burns, empty board honest, arrival-leg
+  math 95%/98% matches verified dead-balance accounting). Live health:
+  / /burn /plan 200 on the custom domain, /api/pledges 200 with []. #9
+  stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-28 23:30 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Share your pledge" row on the PledgeCard** — a research-found
+  unit, not the backlog: burn pledges shipped 23:10 but the board is honestly
+  empty, and a pledger had no one-tap way to broadcast their commitment while
+  every other rally point does (burn-leaderboard "That's you" banner,
+  Feed-the-Burn donor board share row, milestone strip, brag cards). Now the
+  pledge card shows a "Share your pledge:" row for the connected wallet's own
+  active pledge, reusing the exact vetted share pattern (native share + Post
+  to X + Share to Telegram, encodeURIComponent'd, own-origin /burn link,
+  nothing posts automatically, renders only when that wallet actually has a
+  pledge). Copy stays honest: active = "I pledged to burn X DUMB in the next
+  30 days — holding me to it"; redeemed = "…and my burns are verified
+  on-chain" — proof of follow-through is the best recruitment. Safety: pure
+  copy + share surface, zero wallet/signing/data/mascot touch, no new data
+  sources; share text carries numbers only, never address or opt-in username
+  (same rule as the leaderboard copy). Considered + REJECTED: auto-posting
+  pledges (crosses the no-auto-post hard boundary). Also updated the Dumb AI
+  "How do I share DUMB?" answer and the ROADMAP "Burn pledges" line. tsc +
+  eslint clean, built, deployed to dump-money-hub-preview — /burn 200 both
+  domains, the served burn chunk (burn-CZIGlNUQ.js) on the custom domain
+  carries the new copy, the served dump chunk carries the AI + roadmap
+  updates. BULLISH-RESEARCH.md updated (shipped + rejected). #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot approval,
+  #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 23:20 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED **the long-flagged curated-token-list roadmap line**. Since the
+  Sept-28 DAI removal + TEDDY/SOLIDX/PCOCK/HELGO addition, the change was
+  documented only in the Dumb AI answer, not as a ROADMAP line (flagged
+  19:11, re-flagged 20:41, "on the main agent's plate" — taken by this run
+  as straight #10 hygiene). New "Live on PulseChain" item: "Curated swap
+  inputs only — PLS, HEX, TEDDY, SOLIDX, PCOCK, HELGO, INC, PLSX, PRVX, pTGC,
+  WBTC; every token and pair verified on-chain before listing,
+  paste-any-address rejected, each with a live sell path back (the two DAIs
+  were removed Sept 2026, TEDDY/SOLIDX/PCOCK/HELGO added)" — verified against
+  SwapBox.tsx:72-100 (PayKey/SellOutKey match exactly) and the on-chain
+  verification comments in pulsechain.ts:31-38 before writing. Also verified
+  the 23:10 pledges ship stayed accurate: roadmap "Burn pledges" line
+  (dump.ts:212) and the Dumb AI "What are burn pledges?" answer both match
+  PledgeCard.tsx (sign-one-message, 1k–10B whole tokens, arrival-leg
+  accounting, promises-not-burns, 30-day expiry, one-per-wallet); served
+  /burn HTML carries the PledgeCard copy; /api/pledges 200 with []. No
+  wallet/signing/data/mascot touch, no new data sources. tsc + eslint clean,
+  built, deployed to dump-money-hub-preview — /plan 200 on BOTH domains with
+  the new roadmap line in the served SSR HTML; / /burn /ai 200 on the custom
+  domain. #10 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#13 stay
+  open as recurring.
+
+- 2026-09-28 23:10 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **Burn pledges — the public promise board on /burn**. The rally
+  mechanic the loop's utility hunt kept circling: pledges were "Considered
+  (not yet built)" in BULLISH-RESEARCH.md, and the utility bar demands
+  something that drives real burns — a pledge row that flips to burned ✓ only
+  on verified on-chain data closes that loop. New PledgeCard under the
+  leaderboard: a connected wallet signs ONE message (no gas, nothing moves)
+  publishing "I pledge to burn X DUMB/DAMP within 30 days" (1k–10B whole
+  tokens, DUMB or DAMP). Active pledges list with opt-in display names;
+  each row shows "burned ✓ — N verified on-chain" when the wallet's
+  verified voluntary-burn sums (arrival-leg accounting: 95% DUMB / 98% DAMP
+  of sent, per the verified tax math) cover the pledge, else "promise —
+  awaiting on-chain burn". Pledges are labeled promises everywhere, never
+  burns; the empty board says it's empty on purpose (never seeded); one
+  pledge per wallet (re-pledge replaces), 30-day expiry, pruned on read.
+  Server: GET /api/pledges + POST /api/pledge in src/server/pledges.ts, wired
+  in src/server.ts — signed message binds token+amount+address+timestamp
+  (10-min freshness, viem verifyMessage), 10 POSTs/day/IP, KV in the
+  existing dump-money-analytics namespace under `pledge:` (no new binding,
+  no new data source, no contract). The redemption join reuses the
+  leaderboard's cached epoch scan (same react-query key — zero extra RPC).
+  Safety review: zero user-controlled HTML (names charset-restricted +
+  React-escaped), amounts validated as safe integers in range, pledge text
+  signed verbatim so a captured signature can't be replayed for another
+  amount/wallet; nothing posts automatically; no custody, no new contract.
+  Dumb AI gains a "What are burn pledges?" answer + a ROADMAP "Voluntary
+  burns" line. tsc + eslint clean, built, deployed to
+  dump-money-hub-preview — /burn 200 both domains with the PledgeCard copy
+  in the served HTML, /api/pledges live (200, {"pledges":[]}), /api/pledge
+  POST validates (400 on bad body). Production push needs Antonio's word.
+  #13 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback; #8/#9/#10 stay open
+  as recurring.
+
+- 2026-09-28 23:00 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 22:11 #9: the 22:41 run's Dumb AI + roadmap deep-scan
+  staleness fix + the 22:50 run's whitepaper FAQ tax-framing fix) → audit-only,
+  NO code changes, no build/deploy — nothing found that earned a change.
+  Reviewed clean: (1) whitepaper FAQ "Does anything burn when I trade?" now
+  reads "5% of every taxed transfer is permanently destroyed: 1% burned to the
+  dead address, 4% entombed in the contract's fee buckets (the auto-processing
+  engine is dead and ownership is renounced, so nothing ever spends them) — and
+  1% is reflected to holders" — matches the locked canonical framing exactly
+  (verified against fees()/feesDistribution() values + the BUILD_LOOP header);
+  the DAMP FAQ below it is net-first and consistent ("3% tax: 2% instantly
+  burned, 1% reflected"); (2) Dumb AI's deep-scan answer and the ROADMAP
+  "Token safety scanner" line describe the three checks in the component's own
+  words — verified against token-scan.ts:677-880 (roundtrip: 1 WPLS buy +
+  immediate sell-back, claimed tax applied per leg when a getter exists, raw
+  pre-tax quote when it doesn't; exit: 10-WPLS buy's tokens quoted back to
+  WPLS; depth: per-WPLS pricing at 1/10/100). Both stay inside the honesty
+  frame ("simulated", "every deep scan burns DUMB") — no promises, nothing
+  user-controlled, no external links, no wallet/signing/data/mascot touch.
+  Served-content verification on the custom domain: the whitepaper chunk
+  (whitepaper-fRmdGwcX.js) carries the NEW FAQ copy verbatim and the old
+  "1% of every taxed transfer is burned to the dead address, and another 1%
+  is reflected" line is gone (the one remaining "1% of every taxed transfer"
+  occurrence is the separate reflections FAQ — accurate, untouched); the /ai
+  dump chunk carries the new "three simulated checks" answer. Live health: /
+  /plan /ai /whitepaper /burn /wallet /scan all 200. #9 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot approval,
+  #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-28 22:50 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **Whitepaper FAQ tax-framing staleness fix** — a research-found
+  unit: the 2026-09-27 framing-consistency audit concluded "the whitepaper
+  leads with the net" but missed one line — the FAQ's "Does anything burn
+  when I trade?" answer still read legs-first: "1% of every taxed transfer
+  is burned to the dead address, and another 1% is reflected to holders" —
+  omitting the entombed 4% and leaving the reader with a "1% burns" takeaway
+  exactly the locked canonical framing was created to fix. Now: "5% of every
+  taxed transfer is permanently destroyed: 1% burned to the dead address, 4%
+  entombed in the contract's fee buckets (the auto-processing engine is dead
+  and ownership is renounced, so nothing ever spends them) — and 1% is
+  reflected to holders." Verified verbatim against the locked framing
+  (AGENTS.md: DUMB 6% = 2% buy-back + 2% liquidity + 1% burn + 1% reflection)
+  before writing; the whitepaper lead, intro, and DAMP FAQ were re-checked
+  and already net-first — only this line was stale. Safety: pure static copy,
+  zero wallet/signing/data/mascot touch, no new data sources, no promises.
+  Considered + VERIFIED INTENTIONAL (no change): the "No utility, no
+  promises" risk line is about the TOKEN (nobody owes you a product/buyback/
+  price outcome) — correct under Antonio's application-layer utility model,
+  not stale. tsc + eslint clean, built, deployed to dump-money-hub-preview —
+  /whitepaper 200 both domains, the served whitepaper-fRmdGwcX.js chunk on
+  the custom domain carries the new copy (old copy gone), homepage 200.
+  BULLISH-RESEARCH.md updated (shipped + considered). #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 22:41 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **Dumb AI + roadmap deep-scan staleness fix (the tripled deep
+  scan)** — a research-found unit, not the backlog: this morning's "deep scan
+  tripled" upgrade (2 checks → 3: true round-trip cost, exit liquidity,
+  1/10/100 WPLS depth curve) shipped without updating the words that
+  describe it — Dumb AI's "How do I check if a token is safe?" answer still
+  said "a simulated 1 WPLS buy plus an immediate sell-back" and the ROADMAP
+  "Token safety scanner" line said "simulated 1-WPLS buy + sell-back and
+  liquidity-depth probe." A newcomer asking the AI about the deep scan got a
+  description of yesterday's tool. Both now describe the three shipped checks
+  in the component's own words (verified against TokenScanner.tsx:677 and
+  token-scan.ts:674 before writing). Safety: pure static copy, zero
+  wallet/signing/data/mascot touch, no new data sources; answers stay inside
+  the honesty frame (nothing promised, everything verifiable). tsc + eslint
+  clean, built, deployed to dump-money-hub-preview — the served dump chunk
+  on the custom domain carries both new strings, /ai /plan /scan /burn 200
+  on both domains. BULLISH-RESEARCH.md updated (shipped). #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 22:30 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from all three
+  ships since the 20:41 #10 verified accurate, in src AND in the served HTML
+  on the custom domain. (1) 21:11 #16 ProofStrip — component reads
+  fees()/feesDistribution() live from both contracts (ProofStrip.tsx:47) and
+  reproduces the locked 5%/1% and 2%/1% framing from chain state; header
+  renders block number + read age, every figure is an explorer link with an
+  honest failure/retry state; served / HTML carries "Live from the chain"
+  SSR'd; /plan 200 with the "Proof-first homepage" roadmap line verbatim
+  (dump.ts:158). (2) 21:41 #8 AI knowledge — "How do I trade DUMB?" names the
+  "Before you sign" card with the exact shipped strings (SwapBox.tsx:1320/
+  1338/1355 match the answer word-for-word: card above the button on a live
+  quote, "You pay X → Y% tax (A burned forever · B shared with holders) →
+  you receive ≈Z", price-can-move disclosure + tax-on-every-transfer line)
+  and the named buy-input list (PLS/HEX/TEDDY/SOLIDX/PCOCK/HELGO/INC/PLSX/
+  PRVX/pTGC/WBTC) matches the curated set — no DAIs anywhere in SwapBox;
+  "What are the numbers at the top of the homepage?" matches ProofStrip
+  behavior (block number, read age, explorer link, 60s refresh). (3) 22:20 #8
+  AI knowledge — "What's on the /wallet page?" verified against shipped code:
+  holdings (PLS/DUMB/DAMP + all curated verified tokens, read-only),
+  ApprovalChecker scans exactly 13 curated tokens (ApprovalChecker.tsx:31 —
+  no DAIs, TEDDY/SOLIDX/PCOCK/HELGO present, HEX/WBTC 8-decimals), UsernameCard
+  claim (sign one message, no gas, 3–20 chars, unique, rename/clear) matches
+  src/lib/username.ts rules; /plan 200 with the /wallet holdings roadmap line
+  (dump.ts:149). Served dump chunk on the custom domain (dump-c4IraM40.js)
+  carries all three new AI questions/answers. done flags still honest (the
+  four future-phase groups correctly done:false). OBSERVED DRIFT (not acted on
+  — still on the main agent's plate per the 19:11 flag): the Sept-28 DAI
+  removal + TEDDY/SOLIDX/PCOCK/HELGO addition is documented only in the Dumb
+  AI answer, not as a ROADMAP line. Live health: / /plan /ai 200 on the
+  custom domain. #10 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#13
+  stay open as recurring.
+
+## 2026-09-28 — Swap "Before you sign" quote card (Mosheh, user-approved, DONE — preview, visual QA pending)
+- Adapted from the FLOOR bonding-curve trust research (Antonio: "do anything
+  that will benefit Dumb and Damp"): the human-verbs quote card, translated
+  for a taxed token — "You pay X → Y% tax (A burned forever · B shared with
+  holders) → you receive ≈Z", plus a one-line risk disclosure ("Price can move
+  either way — this is the math, not a promise. The transfer tax applies to
+  every transfer, not just swaps."). Renders directly above the swap button
+  only when a live quote exists. Tax legs derived from the real quote math
+  (input leg on sells, output leg on buys, both on DUMB↔DAMP); canonical
+  split DUMB 6% = 5% burn + 1% reflections, DAMP 3% = 2% + 1% (reflections
+  always 1%). tsc + eslint clean, built, deployed to dump-money-hub-preview,
+  /trade 200 on both domains. Live-browser visual QA dispatched to confirm
+  the card renders with sane numbers.
+- QA outcome (2026-09-28): the sandbox browser could not load any on-chain
+  quote (PulseChain RPC blocked in that environment — "You receive" stayed
+  "—", so the quote-gated card correctly did not render). Verified instead:
+  (a) the deployed preview chunk trade-DejwRpTg.js contains the card strings
+  ("Before you sign", "burned forever", "this is the math, not a promise") —
+  the feature IS in the live build; (b) a real getAmountsOut call from the
+  sandbox RPC for 100 PLS → DUMB returned 269 DUMB pre-tax, so the card math
+  is sane (13 burned forever · 3 shared with holders → ≈253 received).
+  Antonio to eyeball /trade in a real browser as final visual confirmation.
+## 2026-09-28 — Feed the Burn: all-time donor leaderboard (Mosheh, user-requested, DONE — preview)
+## 2026-09-28 — Wallet page: verified tokens held by the connected wallet (user request, DONE — preview)
+- /wallet now lists every curated (verified) token the connected wallet holds:
+  WPLS, HEX, DAI, DAI2, INC, PLSX, PRVX, pTGC, WBTC — only non-zero balances
+  shown, decimals-aware (HEX/WBTC = 8), USD estimates from the on-chain price
+  hook (WPLS priced 1:1 with PLS; DAI2 has no price), each row links the token
+  contract on the explorer. Balances via single readContract calls (multicall3
+  isn't deployed on PulseChain); per-token failures resolve to 0n, never throw.
+  Verified live: all 9 reads succeed; dead-address DUMB read formats correctly
+  (15.83B). Lint clean, wallet.tsx tsc-clean (22 pre-existing FeedTheBurn
+  errors untouched), built, deployed, /wallet 200.
+## 2026-09-28 — UPGRADE: deep scan tripled (user: "feels like a rip off", DONE — preview)
+- Deep scan was 2 checks (one often "unknown") — now 3, all with real numbers:
+  1. Round-trip cost ALWAYS simulated (claimed tax applied when a getter
+     exists; raw AMM-level quote labeled pre-tax when it doesn't — no more
+     "unknown").
+  2. NEW exit liquidity: what a 10 WPLS bag nets heading for the door, vs the
+     small-trade price.
+  3. Depth curve extended to 1/10/100 WPLS with per-size pricing.
+- deepScan() now takes { symbol, decimals } for human-readable amounts;
+  header copy updated to match. Verified live on DUMB (tax path) and INC
+  (no-getter path). Lint clean, built, deployed.
+## 2026-09-28 — BUGFIX #2: manual paste box rejected PLS-route burns (Mosheh, user-reported, DONE — preview)
+- The "paste your burn tx hash" box called verifyScanBurn (direct DUMB
+  transfer() only), so PLS-fallback router swaps were rejected at the door
+  with "That transaction wasn't sent to the DUMB token contract." Switched it
+  to verifyDeepScanBurn (tries direct, falls back to the PLS swap verifier —
+  the same either-path checker the ?burn= share links already used).
+  Verified with Antonio's real tx: ok:true, 104477.4 DUMB. Lint clean, built,
+  deployed to preview.
+## 2026-09-28 — BUGFIX: truncated Transfer topic broke ALL burn verifications (Mosheh, user-reported, DONE — preview)
+- TRANSFER_TOPIC in src/lib/token-scan.ts was hand-typed missing its final hex
+  char (...523b3e vs ...523b3ef) — no receipt log ever matched, so both the
+  direct-DUMB verifier and the PLS-fallback verifier always reported failure.
+  Antonio's 40,868 PLS burn DID land 104,477 DUMB at dead (>= 100k) but was
+  told "~0 arrived". Fixed by computing keccak256("Transfer(address,...)")
+  via viem — never hand-typed again. Verified against the real tx:
+  verifyPlsScanBurn now returns ok:true, 104477.4 DUMB. Also fixed a TDZ
+  landmine my earlier edit introduced (PRVX used in DRIP_VAULT_TOKENS before
+  its declaration) by moving PRVX/PTGC/WBTC consts above it; restored the two
+  pair constants a bad edit briefly dropped. Lint clean, built, deployed.
+- Antonio can paste the same tx hash (0x4757ca97...) into "verify & run deep
+  scan" and the 30-day pass will now activate — no need to burn again.
+## 2026-09-28 — Feed the Burn: all-time donor leaderboard (Mosheh, user-requested, DONE — preview)
+- "Top volunteer donors" section on /burn: every Transfer into the vault for the
+  five curated tokens since launch, read from chain logs — ranked by cumulative
+  donated value (current USD prices). Donors only move up when their total
+  passes someone else's; no resets. Connected wallet highlighted as "you";
+  shows your rank if outside the top 10. Verified the log query against the
+  RPC (0 donations so far). Lint clean, built, deployed, /burn 200 live.
+## 2026-09-28 — Feed the Burn: 5-token buy-and-burn list (Mosheh, user-requested, DONE — preview)
+- Antonio: vault allows WPLS / HEX / INC / PRVX / PLSX; DUMB and DAMP removed —
+  pure buy-and-burn drip into DUMB. Contract is immutable and permissionless, so
+  the curated list lives in the site (DRIP_VAULT_TOKENS, now with per-token
+  decimals) and drip-watch.sh only.
+- Caught while implementing: the watcher script listed PLSX as
+  0xcE1f94cB6697cDeB402AAFe2aD69e7930967b90B6 — wrong address; corrected to the
+  verified 0x95B303987A60C71504D99Aa1b13B4DA07b0790ab. HEX (pHEX) is 8 decimals,
+  not 18 — donate math now uses per-token decimals, and the watcher skips
+  dust-level balances (bal/4 <= DUST no-ops on-chain) so it never wastes gas.
+- Safety: disabled the drip-vault-pulse-watcher cron (it was still live on the
+  chat-exposed key). Script's false "key can ONLY call drip()" claim corrected
+  to plain-wallet-key wording. Re-enable only after Antonio rotates the caller
+  wallet via secure handoff + funds gas + end-to-end test.
+- Lint clean, built, deployed to dump-money-hub-preview, /burn 200 live.
+## 2026-09-28 — Feed the Burn: in-page deposits (Mosheh, user-requested, DONE — preview)
+- Antonio: "user should be able to deposit like this" (Robinhood 02/BUY&BURN
+  two-card layout). /burn vault section restructured into Donate + Pull the
+  trigger cards. Donate: token selector (WPLS/DAMP/PLSX/DUMB with live
+  balances), amount input + Max, tax-aware "vault receives ≈" line (DUMB 6%,
+  DAMP 3%), USD estimate, one-tap transfer() the user signs themselves,
+  receipt-status verified. Pull the trigger: the 4 per-token drip rows moved
+  here. Lint clean, built, deployed to dump-money-hub-preview, /burn 200 live.
+## 2026-09-28 — Desktop nav rebuilt (Mosheh, user-requested, DONE — preview)
+- 14-link desktop nav was cramped ("DUMB AI" wrapped mid-label). Now: 4 primary
+  links (Trade, Burn, Scan, Wallet) + "More" dropdown (Story, Proof, Genesis,
+  Roots, Chains, Raid, Dumb AI, Culture, Plan, Whitepaper) with active-state
+  highlight on the trigger. whitespace-nowrap guards everywhere. MobileNav
+  untouched. Deployed to dump-money-hub-preview.
+## 2026-09-28 — Feed the Burn vault section (Mosheh, DONE — shipped to preview)
+- /burn now has a "Feed the Burn" section for the DripVault v1 contract
+  (0x67c0553cC87b505006E5137FBE3AD7c4660C44ee, deployed block 27663330):
+  vault address + copy + explorer link, one-way-street warning, lifetime
+  DUMB-burned + drip-count from Drip event logs, per-token vault balances with
+  15-min cooldown countdowns, and permissionless "Drip it now" buttons
+  (wallet-gated, receipt-status verified). Constants + minimal ABI added to
+  src/lib/pulsechain.ts. Deployed to dump-money-hub-preview, verified 200 on
+  /burn with the vault address in the HTML. Production push needs Antonio's word.
+## 2026-09-27 — Neon pop restored (user-directed)
+- Antonio preferred the neon: reverted --primary/--ring to oklch(0.86 0.24 135)
+  (#85F128), --primary-foreground back to dark, brag-card LIME back to
+  [57,255,20], og-card.png rebuilt as new-mascot + original neon headline.
+  Standing decision: neon UI accent + deep-green mascot is the brand split.
+## 2026-09-27 — UI green deepened to match mascot (user-directed)
+- Antonio chose "deepen the green to match the mascot." --primary:
+  oklch(0.86 0.24 135) (#85F128 neon) -> oklch(0.66 0.2 140) (#3FAD1E, deep
+  mascot-family green); --primary-foreground flipped to near-white for button
+  contrast; --ring follows. Brag-card server LIME [57,255,20] -> [63,173,30].
+  og-card.png neon headline/lines deepened in place (mascot circle masked off).
+  --accent (bright yellow-green) kept as the small highlight pop. Deployed,
+  verified live (built CSS carries oklch(66% .2 140)).
+## 2026-09-27 — Brand audit + fixes (user-directed)
+- Audited whole site for brand correctness. Fixed: og-card.png (root share image)
+  had the OLD eyebrow mascot — composited the new no-eyebrow face in; Ticker
+  "Burns on trades: 1% live" -> "5% instant" (matches locked net framing);
+  /chains compare table fee cell now leads the net "5% instant burn"; favicons
+  + apple-touch-icon regenerated from the new face; deleted 9 dead files
+  (og-smiley.jpg, 8 unused UUID PNGs ~10MB). Verified live on custom domain.
+- Already correct: 7 gallery scenes (deep green, no eyebrows), portal hero,
+  socials, "Smiley" naming everywhere, pink #FF21B6 / gold #FFCF00.
+- OPEN QUESTION for Antonio: UI accent green is bright neon #85F128 while the
+  mascot is the deeper hero green — deliberate neon-UI/deep-mascot split, or
+  deepen the UI green to match? Not changed; awaiting his call.
+## 2026-09-27 — Mascot updated to Antonio's approved look (user-directed)
+- Antonio approved the new Dom renders (no eyebrows, no sleeve patch) and asked
+  to update Brand Rules + header logo. `src/assets/smiley-mascot.png` replaced
+  with his street render (old master archived in dumb-visuals-review/); new
+  `src/assets/smiley-face.png` face crop drives the PageShell header logo and
+  the Dumb AI chat avatar. MASCOT-SPEC.md settled: no eyebrows, no patch.
+  Deployed to dump-money-hub-preview, verified live on the custom domain.
+  Backlog #6 (mascot approval) now unblocked — placement is done.
+## 2026-09-27 — Brag-card unfurl rebuilt server-side + roadmap cleanup
+- `/api/brag-image` is now GET-only: verifies the tx on-chain (direct DUMB/DAMP
+  transfer() to dead, mined, tokens arrived), decodes the amount from the input,
+  and renders the 1080x1080 brag card PNG in the worker — zero npm deps
+  (pre-rasterized DejaVu bitmaps + Noto flame sprite, hand-rolled PNG encoder).
+  Nothing uploaded, nothing stored; deterministic per tx, cached immutably.
+  Killed two birds: the Cache API would not persist uploads across requests,
+  and uploads let anyone spoof an image against someone else's burn hash.
+- `/brag?tx=` og:image/twitter:image point at the endpoint; verified live on
+  the custom domain (real burn returns PNG, bad tx 400s, non-burn 404s).
+- BurnBox no longer POSTs uploads; client canvas card kept for native
+  share-sheet/download.
+- Roadmap cleaned: "Voluntary burns" card collapsed from a 25-item changelog to
+  8 milestones; canonical tax framing (5%/2% instant burn) leads "Live on
+  PulseChain"; ratings wall moved to shipped; fixed duplicate React key.
+- Root og/twitter descriptions corrected to the locked framing (was "live 1%
+  burn and 1% reflection").
+
+
+Standing improvement loop (created 2026-09-26, every 30 min). One backlog item
+per run, in order. Statuses: pending / done / blocked / rejected.
+
+Repo: `~/workspace/dump-money-hub` (NOT `dumb-money-hub` — that's the separate
+Robinhood project; never mix them). Site: https://dumbmoneypulse.melanatedintech.com
+(preview Worker `dump-money-hub-preview`). Chain 369.
+DUMB `0xe65112d2f120c8cb23ADC80D8E8122c0c8b7fF8D`
+DAMP `0x8357aA9070dc7d8d154Da74561CEc58cA30c41C3`
+
+Canonical tax framing (locked 2026-09-27, Antonio's words — use this everywhere,
+never the old leg-first wording):
+- DUMB: 6% on buy, sell, transfer — 5% instant burn, 1% reflections.
+- DAMP: 3% on buy, sell, transfer — 2% instant burn, 1% reflections.
+- "Instant": every leg executes atomically inside the transfer tx. The burn side =
+  1% protocol burn to the dead address + bucket legs entombed forever (engine dead,
+  owner renounced). Re-verified on-chain 2026-09-27 (fees 600/300, distributions
+  (3333,3333,1667,1667)/(3333,0,3333,3334)).
+
+Fee mechanics (verified 2026-09-26 — do not relitigate):
+- DUMB 6% total tax: 2% contract buy-back bucket, 2% liquidity bucket, 1% burn,
+  1% reflection. DAMP 3%: 1% contract, 1% burn, 1% reflection.
+- The auto-processing engine is dead; the transfer tax, 1% burn, and ~1%
+  reflection remain live. Never claim nothing burns on trades.
+
+Standing rules: no spending; NO new PulseChain contract deployments (Antonio's
+explicit design + approval required); no new external data sources without
+approval; never post as Antonio; never invent community members, names,
+ratings, burns, transactions, or enthusiasm; mascot art ships ONLY after
+Antonio visually approves it (review assets: ~/workspace/dumb-visuals-review/,
+spec: MASCOT-SPEC.md); minimal code; Antonio handles all signing/private keys;
+Mosheh has veto authority over anything risky — if it's too risky, it doesn't
+ship, period. Never promise price appreciation or new highs.
+
+## Backlog
+
+1. **Verify direct-to-dead-address tax accounting** (done 2026-09-26) —
+   VERIFIED on-chain (read-only, no signing): `isExcludedFromFee(dead)` = FALSE
+   on both tokens (while the token contracts and router are TRUE), so a plain
+   wallet→dead transfer of A IS taxed at the full rate. DUMB (6%): dead balance
+   +0.95A (94% transfer leg + 1% burn leg), token contract +0.04A (2% buy-back +
+   2% liquidity buckets, entombed — engine dead), 1%A reflected to holders.
+   DAMP (3%): dead +0.98A, contract +0.01A, 1%A reflected. Evidence: leg
+   structure decoded from a taxed tx (2×2% contract legs + 1% burn leg to dead);
+   reflection confirmed live via the DUMB/DAMP pool's balance growing ~10,011
+   DUMB ≈ its share of the 1% reflection on a 25.6M taxed transfer; zero
+   standalone voluntary burns found in the recent scan window (all direct-to-dead
+   logs are protocol burn legs of ordinary transfers). "Total burned" math for
+   direct-to-dead transfers: dead-balance increase = 95% of DUMB sent /
+   98% of DAMP sent. Scripts: goal hidden_files/verify_dead_burn*.py.
+2. **Voluntary "Burn it" button** (done 2026-09-26) — /burn page + BurnBox
+   component: ordinary transfer to the dead address, no new contract, no
+   approval needed. DUMB/DAMP token toggle, amount + MAX, live balance,
+   verified math panel ("X sent → ~0.95X / ~0.98X arrives at the dead
+   address", 1% tax burn stacks on top), acknowledgment checkbox +
+   AlertDialog final-check before wallet signature, on-chain states with
+   explorer links. Safety: PulseChain-only gate, insufficient-balance
+   guard, honest "burns shrink supply, never promise price" framing
+   everywhere, scam-safety note (never enter a seed phrase). Linked from
+   desktop nav, mobile "More", and a homepage "Burn it" card. No mascot
+   art (standing approval rule). Next: #3 live burns ticker, #4
+   leaderboard (only after real burns exist).
+3. **Live burns ticker** (done 2026-09-26) — BurnTicker component on /burn
+   (below BurnBox): scans the last 20,000 blocks of Transfer(to=dead) logs on
+   DUMB + DAMP via the public RPC, groups legs per tx per sender from full
+   receipts, and classifies each burn — "voluntary burn" (sender sent straight
+   to dead, no other recipient leg) vs "1% protocol burn of a ~X transfer"
+   (the verified tax-burn leg of an ordinary taxed transfer; X = leg × 100).
+   Header totals real burn arrivals per token; each row links its receipt on
+   scan.pulsechain.com with relative time. Honest loading/error/empty states,
+   60s refetch, no new data sources, no invented numbers.
+4. **Burn leaderboard** (done 2026-09-27; REBUILT 2026-09-28, Antonio's rule) —
+   BurnLeaderboard component on /burn: ranks top voluntary burners by raw
+   tokens burned (no USD anywhere — price moves can never re-rank), separate
+   DUMB/DAMP tabs, epoch block 27599124 (Sept 21, 2026), ties go to whoever
+   burned first. Protocol (tax) legs excluded; Burn-with-PLS legs re-attributed
+   from the pair to the signing wallet. Rows show opt-in display names (claim
+   on /wallet), connected wallet gets a "That's you" banner with a share row
+   a share row (native share + Post to X + Share to Telegram) for its verified
+   rank. Only real on-chain burners, never invented. /burn "Leaderboard coming"
+   card flipped to "Burn contests next" (#5).
+5. **Burn contests** (design done 2026-09-27) — full design in
+   `BURN-CONTESTS-DESIGN.md`. Entry = verified voluntary burn (reuses
+   `src/lib/burns.ts`). Key finding: wash-burning is self-defeating (tokens
+   destroyed + tax paid — no profit path), so gaming vectors are procedural
+   (sybil counts, retroactive windows, protocol-leg double counting) and are
+   mitigated by design. Ranked formats: (1) community milestone drive —
+   RECOMMENDED pilot (shared target + progress bar, no winner, zero gaming
+   surface); (2) recognition honor roll; (3) biggest single burn quarterly
+   (honest but plutocratic); (4) most-burn-txs DEFERRED (needs minimums);
+   burn-to-holdings tiers REJECTED (snapshot complexity). Prizes:
+   recognition only — no funded prizes (spending + legal = Antonio's call,
+   not the loop's). Pilot: announced ~2-day window (fits the 20k-block scan);
+   longer contests later via a loop-accumulated ledger JSON in the repo.
+   Antonio's call 2026-09-29: keep as an IDEA only — no implementation for now, no
+   format pick needed. /burn card currently reads "Burn contests next" — leave it.
+6. **Visual gallery for approved Dom art** (prep done 2026-09-27,
+   approval-gated for anything live) — spec pre-check + placement plan written
+   to `~/workspace/dumb-visuals-review/GALLERY-PLACEMENT-PLAN.md`. All 6 final
+   candidate renders (burn-furnace-v2, hype-rally-v2, meme-drop-v2,
+   moon-rocket-v2, raid-sprint-v3, smiley-reaction-v3) scored against
+   MASCOT-SPEC.md: smiley-reaction-v3 is the closest spec match (deep green,
+   rectangular $DUMB plate, spec-exact sneakers, no stray text); recurring
+   flags across the others — bright-chartreuse head green vs Antonio's deep-green
+   correction, Nike-like swoosh on all sneakers (outside-logo question),
+   "$DUMB RALLY" background text in hype-rally-v2, Wall-Street neon signage
+   text in meme-drop-v2. Per-image placement proposed (/raid gallery, /burn
+   masthead, /culture, homepage rotation). Wiring plan is mechanical once
+   Antonio approves. NOTHING copied into the site — zero mascot pixels live.
+   ON HOLD per Antonio 2026-09-29 — revisit only when he asks. NOTHING copied into
+   the site — zero mascot pixels live.
+7. **Community ratings infrastructure** (done 2026-09-27) — submission +
+   display plumbing on /culture ("Real voices, real stars" section):
+   `src/data/ratings.ts` holds real opt-in reviews only (empty by default —
+   the wall shows an honest "The wall is empty — on purpose" empty state;
+   never seeded, never invented). Submission form (handle, 1–5 star picker,
+   20–400 char review) generates a pre-filled review + "Post in Telegram"
+   (t.me/dumbmoneydotwin) / copy button — reviews are added to the data file
+   manually after verification; nothing is ever auto-posted. Aggregate average
+   renders only when ≥1 real review exists. No backend, no new data sources,
+   no wallet touch, no invented data.
+8. **Bullish-demand research** (pending, recurring) — keep researching
+   legitimate ways to grow demand and rally the community (accessibility,
+   share material, burn mechanics, community features). Log ideas considered
+   AND rejected with reasons in `BULLISH-RESEARCH.md`. Honest framing only:
+   burns shrink supply, price needs real demand — never promise gains.
+9. **Security/safety hardening passes** (pending, recurring) — adversarial
+   review of SwapBox, approvals, slippage gates, and any new feature. Fewer
+   ways a user can lose money or get confused. Standing step (added
+   2026-09-30): run
+   `~/workspace/goals/pulsechain-dumb-damp-build-loop/hidden_files/token-integrity-check.py`
+   — read-only on-chain verification that the locked claims (DUMB fees 600 /
+   DAMP fees 300, the feesDistribution splits, owner renounced) still match
+   live chain state. Exit 0 = all match; exit 1 = deviation = alert (pause
+   the loop, tell Antonio — the hub would be publishing a claim the chain
+   no longer supports). SHIPPED 2026-09-30: /api/market now has a KV-backed
+   stale-cache fallback (`market:cache`, 15-min TTL in ANALYTICS_KV) so
+   DexScreener flakes serve a labeled stale snapshot before the honest 502.
+10. **Roadmap hygiene** (pending, recurring) — keep `src/data/dump.ts`
+    ROADMAP current: add planned/thinking items, flip statuses when shipped.
+11. **Antonio's "for the most part" trading feedback** (resolved 2026-09-29) —
+    Antonio confirmed live test trading works. No changes needed. Closed.
+12. **Token safety scanner** (done 2026-09-27 — ALL THREE PHASES SHIPPED) —
+    first REAL-UTILITY build: a PulseChain token safety scanner on the site.
+    Paste any PulseChain token address → plain-English safety report: real vs
+    claimed transfer tax (simulate via eth_call), owner mint/blacklist/pause
+    powers, liquidity lock state, simulated buy+sell round-trip. Free quick
+    scan (basic checks); deep scan costs a small DUMB burn to the dead address,
+    verified on-chain (Transfer log match, like /api/brag-image) before the
+    report renders. No custody, no new contract, read-only RPC. This is the
+    utility that brings outsiders in: other communities come to check tokens,
+    every deep scan burns DUMB. Build across runs: route + basic checks first,
+    then burn-gated deep scan, then shareable report cards. ALL SHIPPED:
+    (1) quick scan 22:11 run, (2) burn-gated deep scan 22:41 run,
+    (3) shareable report cards 23:11 run. Further iteration under #8/#13.
+13. **Real-utility research** (pending, recurring — Antonio 2026-09-27) — keep
+    hunting for genuine (non-memefied) utility that brings people to the DApp,
+    burns supply, or gives DUMB/DAMP use cases. Bar: real repeated pain,
+    outsiders in, every use burns or deepens holding. Never force the token
+    into payments/tipping/commerce (the 6% tax punishes it). Vetoed: custodial
+    features, lotteries/funded prizes, staking contracts, promised returns.
+    Log all considered/rejected in BULLISH-RESEARCH.md.
+14. **Deep scan burn UX: one-click wallet burn + 30-day pass + PLS fallback**
+    (APPROVED by Antonio 2026-09-27 — DONE 2026-09-28, all three shipped) —
+    (a) ONE-CLICK WALLET BURN (shipped 23:41 run 2026-09-27); (c) 30-DAY PASS
+    (shipped 23:41 run 2026-09-27); (b) PLS FALLBACK (shipped 00:11 run
+    2026-09-28): when the connected wallet holds < 100k DUMB, a "Pay with PLS"
+    card quotes live (~110k DUMB target, ~41.3k PLS ≈ $0.38 validated on-chain
+    pre-ship) and fires ONE wallet confirmation:
+    swapExactETHForTokensSupportingFeeOnTransferTokens on the PulseX router
+    with `to` = dead, path [WPLS, DUMB] — bought DUMB goes straight to dead,
+    ~95% lands destroyed (verified dead-arrival math, 6% arrival tax IS the
+    burn); swap-box guards reused (8% slippage, 20-min deadline); verified via
+    receipt Transfer logs to dead (≥ 100k → pass); "pls" pass path already in
+    the ledger type; shared ?burn= links re-verify either path. Explicit copy:
+    "X PLS → buys ~110k DUMB → burned." No custody, no new contract.
+15. **PLS fallback on the voluntary /burn page** (APPROVED by Antonio
+    2026-09-27 — DONE 2026-09-28) — same one-confirmation mechanism as #14b,
+    applied to BurnBox on /burn. When the connected wallet holds less DUMB
+    than the entered burn amount, a "Burn with PLS" card appears: live quote
+    for entered × 1.1 pre-tax DUMB (ceil, 60s refresh — shared generalized
+    `quotePlsBurnFor` in token-scan.ts), one wallet confirmation calling
+    swapExactETHForTokensSupportingFeeOnTransferTokens on the PulseX router
+    with `to` = dead and path [WPLS, DUMB] (decode via shared router ABI —
+    no hand-rolled selector; `verifyPlsBurn` generalized with a per-use
+    arrival threshold), 8% slippage + 20-min deadline reused from the swap
+    box. The swap is verified via its receipt Transfer logs to dead — must
+    land ≥ the entered amount — and the success panel celebrates the VERIFIED
+    arrival with an explorer-linked text share (no brag-card image for swap
+    burns: /api/brag-image verifies direct burns only, and honesty means
+    never promising a card we can't generate). Safety: PLS-balance guard,
+    gas note, acknowledgment checkbox gates the PLS path too, chain pinned to
+    PulseChain, input + main burn button locked while a swap is pending, the
+    2-min stuck-receipt escape hatch covers both paths, DUMB-only (DAMP keeps
+    its plain-burn flow). Pre-ship validation against live chain data: entered
+    1000 → ~413.4 PLS quoted ~1,100 DUMB pre-tax → ~1,045 dead arrival ≥ 1000
+    ✓. Dumb AI "How do I burn DUMB?" answer + roadmap "Voluntary burns" line
+    updated. tsc + eslint clean, build + deploy + live verify done (/burn 200
+    both domains; the served burn chunk on the custom domain carries the card
+    + router call; roadmap line live on /plan).
+16. **Live proof strip on the hero** (DONE 2026-09-28, Antonio's request, adapted
+    from the FLOOR bonding-curve trust research) — trust comes from verifiable
+    facts placed BEFORE the action. Hero-first strip: total burned, supply,
+    per-transfer tax legs — each figure with block number, age, and explorer
+    link. We have most of the pieces (burn leaderboard, BurnTicker, /roots
+    dead-balance reads); this makes them the first thing a newcomer sees.
+    No invented numbers, no new data sources — on-chain reads only.
+17. **Dumb AI Pro tier — $20 pass, split 80/20** (SHIPPED 2026-09-29, Antonio's explicit
+    go-ahead: "let's build it and see what it does"; SPLIT redesigned 2026-09-29 per Antonio:
+    $20 split 80/20 — $16 of DUMB burns to dead, ~$4 goes to the model wallet
+    `0x05a69f4148097a4eb5d085ad2d1517abe9942758` (AI_MODEL_WALLET secret on the worker) to fund
+    OpenRouter; MULTI-TOKEN 2026-09-29 per Antonio: "users can pay with any of the tokens that we
+    have verified to be trusted" — the 12-token curated list (DUMB, PLS, HEX, INC, WBTC, PLSX,
+    TEDDY, SOLIDX, PCOCK, HELGO, PRVX, pTGC). Burn leg ALWAYS ends as DUMB at dead: direct
+    transfer for DUMB, PulseX V2 swap with `to` = dead for anything else (scan pass's PLS-fallback
+    shape; allowlisted paths only, 8% slippage, 20-min deadline, exact-amount approvals). Model
+    leg = plain transfer of the payment token (or native PLS) to the model wallet. Client burn-leg
+    send target $19.50 for swaps (survives slippage + DUMB arrival tax, still clears $16), $17.60
+    for DUMB. Server verifies both shapes on-chain (arrival from receipt logs, USD via WPLS pairs
+    × PLS/USD), thresholds $16 / $3.50, signature binds address + both hashes, KV replay guard.)
+    Free tier stays: free OpenRouter models, 10 Qs/day/visitor + 40/day site-wide, falls back to
+    local RAG. Pro = paid-model chain (Gemini 2.5 Flash → DeepSeek → GPT-4o-mini,
+    800-token budget), 100 Qs/day/wallet, 1,000/mo, 1,000/day global circuit
+    breaker. 30-day grant in ANALYTICS_KV, keyed to wallet. Copy says 30-day pass, not a
+    subscription. Flagship Pro feature: scan explainer — /scan "Explain with AI"
+    stores the report, /ai walks through it in plain English (Pro-only server-side;
+    never claims new on-chain checks). No secret reaches the browser; free-tier rates unchanged.
+    RESIDUALS UPDATE (2026-09-30, 05:33 run): (a) the browser-supplied-address
+    hole is CLOSED — paid chat + scan explainer now authorize on a SIGNED
+    SHORT-LIVED PRO SESSION per request (the planned design), so the
+    real-money-test precondition on THIS half is met; (b) KV replay guard
+    remains non-atomic (get-then-put) but was ANALYZED benign: tx.from pins
+    the grantee address (signature + from-match enforce it), so two
+    concurrent writers with the same tx hashes must claim the same address
+    and both writes land on the same `aipro:<addr>` / `aiprotx:<hash>` keys
+    with ~identical values — no double-spend to a different wallet is
+    possible. A Durable-Object transaction would be needed for a true
+    atomic check; not worth the machinery for a same-key overwrite, so no
+    code change on this half. The wallet signs
+    `proSessionMessage(address, expiresAt)` (30-min TTL, expiry inside the
+    signed bytes) once per half hour; the server verifies the signature
+    (viem, local, no RPC) before any paid-model call or scan explainer, and
+    quota accounting keys off the verified address. A claimed address alone
+    now gets the free tier; the scan-explainer denial carries
+    `sessionRequired: true` so the client re-signs and retries. Verified:
+    crypto unit test (valid signs OK; tampered expiry / wrong address /
+    expired / far-future / garbage all rejected), live POST on the custom
+    domain (unproven address → proRequired + sessionRequired; free-tier
+    question → live free answer, unaffected), served pro chunk carries the
+    session message. Files: src/lib/ai/pro.ts (message + PRO_SESSION_MS),
+    src/server/ai-pro.ts (verifyProSession), src/server/ai-chat.ts
+    (enforcement), src/components/dumb/AiPreview.tsx (client sign + retry).
+    No new data sources, no secrets in code, no wallet/signing beyond the
+    user's own signMessage, zero mascot touch.
+
+## Rejected ideas (with reasons)
+
+(none yet)
+
+## Run log
+
+- 2026-09-28 22:20 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **Dumb AI knowledge staleness fix: the /wallet page** — a
+  research-found unit, not the backlog: the /wallet page had grown into a
+  three-feature dashboard (read-only holdings of PLS/DUMB/DAMP + every curated
+  verified token, the Token approvals hygiene section, the opt-in Username
+  card) but Dumb AI had no knowledge chunk describing the page — only
+  scattered mentions (approvals inside the scam-safety answer, username inside
+  its own question). A newcomer asking "what's on the wallet page?" got no
+  coherent answer, and the approvals hygiene feature stayed undiscoverable
+  through the AI. Now: (1) new "wallet-page" knowledge chunk (holdings +
+  approvals + username, honest scope note on the approvals scan, read-only
+  guarantee); (2) new suggested question "What's on the /wallet page?"; (3)
+  the missing ROADMAP line for the /wallet holdings list (the approvals
+  section already had one). All copy verified against the shipped code
+  (wallet.tsx, ApprovalChecker.tsx, UsernameCard.tsx) before writing. Safety:
+  pure static copy, zero wallet/signing/data/mascot touch, no new data
+  sources. tsc + eslint clean, built, deployed to dump-money-hub-preview —
+  /ai 200 with the new question in the served dump chunk, the served ai chunk
+  carries the wallet-page knowledge chunk, /plan 200 with the roadmap line,
+  / and /wallet 200 on the custom domain. BULLISH-RESEARCH.md updated
+  (shipped). #8 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #9/#10/#13 stay
+  open as recurring.
+
+- 2026-09-28 22:11 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 20:11 #9: the 21:11 run's ProofStrip component + the
+  21:41 run's Dumb AI knowledge additions) → audit-only, NO code changes,
+  no build/deploy — nothing found that earned a change. Reviewed clean: (1)
+  every ProofStrip href is pinned explorerAddress(DEAD|DUMB) →
+  scan.pulsechain.com — zero user-controlled input anywhere in the component;
+  target="_blank" rel="noreferrer" (noreferrer implies noopener in all modern
+  browsers — no reverse-tabnabbing, same as the prior noopener pairing);
+  (2) read-only wagmi hooks only — no signing, no approvals, nothing moves
+  funds; (3) tax-leg math derives from live fees()/feesDistribution() and
+  reproduces the locked canonical framing exactly (DUMB 6% = 5.0% burn/entomb
+  + 1.0% reflect; DAMP 3% = 2.0% + 1.0% — rechecked arithmetic against the
+  verified distribution values); (4) strict ready-gating (typeof bigint +
+  length-4 dist arrays), honest error state with retry, nothing invented —
+  footer correctly notes the dead address isn't fee-excluded (backlog #1);
+  Number() precision on the ≈%-of-supply figure is fine at these magnitudes;
+  fmtCompactTok assumes 18 decimals — correct for DUMB/DAMP; "immutable ·
+  ownership renounced" copy matches standing verified facts; aria roles on all
+  states; (5) the new AI copy matches shipped code — the quote-card
+  description matches SwapBox's card strings + risk disclosure, the named
+  buy-input list (PLS/HEX/TEDDY/SOLIDX/PCOCK/HELGO/INC/PLSX/PRVX/pTGC/WBTC)
+  matches the code's curated set (DAI removal + four WPLS-routed additions
+  present), and the proof-strip answer matches ProofStrip behavior (block
+  number, read age, explorer link, 60s refresh). Live health: / /burn /wallet
+  /scan /ai all 200 on the custom domain. #9 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-28 21:41 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **Dumb AI knowledge staleness fix: quote card + proof strip** — a
+  research-found audit unit, not the backlog: two big ships from today's loop
+  runs were invisible to Dumb AI. (1) "How do I trade DUMB?" now names the
+  "Before you sign" card ("You pay X → Y% tax (A burned forever · B shared
+  with holders) → you receive ≈Z", above the swap button on a live quote, with
+  the "price can move either way" disclosure) — the exact tax moment a
+  newcomer asks "why will I get less?" (2) new suggested question "What are
+  the numbers at the top of the homepage?" describing the proof strip — total
+  DUMB destroyed, fixed supply, 6%/3% tax legs read live from the contracts'
+  fees()/feesDistribution(), each figure with block number, read age, and
+  explorer link. (3) the "proof" RAG chunk (Proof Hub and receipts) extended
+  to cover the homepage strip + its tags ("homepage", "strip", "hero"). All
+  copy matches the shipped code (SwapBox.tsx card strings, ProofStrip.tsx
+  block/age/explorer-line rendering verified before writing). Safety: pure
+  static copy, zero wallet/signing/data/mascot touch, no new data sources;
+  answers stay inside the honesty frame (nothing promised, everything
+  verifiable). tsc + eslint clean, built, deployed to dump-money-hub-preview
+  — /ai and / 200 on the custom domain, the served /ai HTML carries the new
+  question and the served dump-CMMyWpEo.js chunk carries the updated answers.
+  BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 21:11 ET run: backlog #16 DONE (live proof strip on the hero,
+  Antonio's request) → SHIPPED a research-free one-shot unit: new `ProofStrip`
+  component (`src/components/dumb/ProofStrip.tsx`) mounted right under the
+  homepage hero — "Live from the chain": total DUMB destroyed (dead balance,
+  % of live supply), fixed DUMB total supply, and the transfer-tax legs
+  (6% DUMB / 3% DAMP) derived live from the contracts' own `fees()` +
+  `feesDistribution()` (verified on-chain pre-ship: DUMB 600/(3333,3333,1667,1667),
+  DAMP 300/(3333,0,3333,3334) — reproduces the locked 5%/1% and 2%/1% framing
+  from chain state, never pinned copy). Each figure has block number, age, and
+  an explorer link; honest loading/error/retry states; nothing invented, no new
+  data sources, read-only RPC. New minimal `taxAbi` in `src/lib/pulsechain.ts`.
+  ROADMAP gains a "Proof-first homepage" Now group. tsc + eslint clean, built,
+  deployed to dump-money-hub-preview — / 200 with the strip strings in the
+  served HTML, /plan 200 with the roadmap line, custom domain healthy.
+  Production push needs Antonio's word.
+- 2026-09-28 20:41 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit of every claim from all ships since the 18:41 #10, in src AND the
+  served HTML on the custom domain — then a doc-only fix to BUILD_LOOP.md
+  backlog #4, no code changes, no build/deploy. Verified accurate: (1) the
+  19:41 run's new ROADMAP "Feed the Burn" group (dump.ts:205) — the vault
+  address line, the curated token list (WPLS/HEX/INC/PRVX/PLSX), and the
+  donor-leaderboard line all match code (pulsechain.ts:122/140,
+  FeedTheBurn.tsx share row + useUsernames registry), and the served /plan
+  HTML on the custom domain carries the lines verbatim (SSR'd); (2) the
+  updated "How do I share DUMB?" AI answer names the Feed-the-Burn donor
+  board share row (dump.ts:328) and the served dump chunk
+  (dump-BDHcx0pZ.js) on the custom domain carries it verbatim; (3) the
+  19:11 FeedTheBurn.tsx tsc cleanup (22 errors → 0) earned no roadmap line —
+  no user-visible change, correctly absent. FIX (doc-only): backlog #4's
+  description documented the OLD leaderboard (USD-ranked, All/Voluntary
+  toggle); now reflects the Sept-21-epoch rebuild — raw-token ranking, no
+  USD, separate DUMB/DAMP tabs, ties-first-burned-first, epoch block
+  27599124 (verified in pulsechain.ts:131), PLS-burn legs re-attributed to
+  the signing wallet (burns.ts), "That's you" banner + share row, opt-in
+  display names. Confirmed against the live code before writing. done flags
+  still honest (future-phase groups all correctly done:false). Live health:
+  /plan /burn /wallet /scan /ai all 200 on the custom domain. #10 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-28 20:11 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 17:41 #9: the 19:41 run's "Share your rank" row on the
+  Feed-the-Burn donor board + the 18:11 run's leaderboard footer link) →
+  audit-only, NO code changes, no build/deploy — nothing found that earned a
+  change. Reviewed clean: (1) the share row's pre-filled copy carries ONLY
+  numbers (rank + the board's own USD-estimate) — no wallet address, no
+  opt-in username, no user-controlled string anywhere in the text; the X and
+  Telegram intent URLs are fully encodeURIComponent'd and both anchors carry
+  target="_blank" + rel="noreferrer noopener" (no reverse-tabnabbing); the
+  shared link is window.location.origin + "/burn" (own origin, no attacker
+  input, invoked only with a connected wallet so no SSR window hazard); the
+  native-share path dismisses silently on AbortError and opens popups with
+  noopener; nothing ever posts automatically — the row renders only when the
+  connected wallet actually ranks (meRank >= 0 on the usd>0-filtered rows);
+  trackEvent("share_tap") is on the analytics allowlist; honesty holds —
+  "Every donation verified on-chain" is true (Transfer logs) and the board's
+  footer already discloses the estimate-for-bragging-rights methodology,
+  consistent with the burn leaderboard's accepted share copy; (2) the 18:11
+  footer link is a plain internal TanStack Link to /wallet — no external
+  surface; (3) zero dangerouslySetInnerHTML in the new surface, usernames are
+  charset-restricted + React-escaped and never enter the share payload.
+  Live health: /burn /wallet /scan all 200 on the custom domain. #9 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-28 19:41 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Share your rank" row on the Feed-the-Burn donor board** — a
+  research-found unit, not the backlog: the all-time donor leaderboard (vault
+  donors, live since this morning) highlighted the connected wallet as "you"
+  but had no share surface — every other rally point does (burn-leaderboard
+  "That's you" banner, milestone strip, brag cards). A donor who just fed the
+  vault had no one-tap way to post their verified rank. Now the board shows a
+  "Share your rank:" row for any connected wallet that ranks (top 10 or
+  outside it): native-share + Post to X + Share to Telegram with the board's
+  own live numbers ("I donated $X to the Feed-the-Burn vault — rank #N on the
+  Dumb Money all-time donor board. Every donation verified on-chain."); the
+  link re-renders the same live /burn board for the viewer. Renders only when
+  the wallet actually ranks; zero wallet/signing/data/mascot touch, no new
+  data sources, nothing posts automatically. Considered + REJECTED:
+  per-donation brag cards — the brag-image endpoint verifies burns only, and
+  extending it would duplicate the board's own data for a new server surface.
+  Also updated the "How do I share DUMB?" Dumb AI answer and added a "Feed
+  the Burn" ROADMAP group (the vault itself had no roadmap line at all —
+  closes part of the drift the 19:11 run flagged; the DAI removal + TEDDY/
+  SOLIDX/PCOCK/HELGO addition and the Sept-21 leaderboard rebuild are still
+  undocumented here and stay on the main agent's plate). tsc + eslint clean,
+  build + deploy + live verify: /burn 200 both domains, the served burn chunk
+  on the custom domain is the new build (burn-COkeAT0Y.js, carries the new
+  copy), /plan carries the new roadmap section + AI answer. BULLISH-
+  RESEARCH.md updated (shipped + rejected). #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 19:11 ET run: backlog #13 slot (real-utility research, recurring) →
+  SHIPPED **the flagged FeedTheBurn.tsx tsc cleanup (22 errors → 0)** instead of a
+  research-found unit — the 16:11 run flagged these for a future maintenance run
+  and the strict-null debt sat in a money-flow-adjacent component (donate card +
+  donor board), so it earned the slot. All 22 were `noUncheckedIndexedAccess`
+  index-into-undefined sites: `DRIP_VAULT_TOKENS[tokenIdx]` (selector only ever
+  sets 0..4 — honest `!`), `bals[tokenIdx]`/`bals[i]` (fixed 5-tuples), the
+  `amounts[i]` accumulator (now `?? 0n` before adding), the possibly-undefined
+  `PRICE_KEY[symbol]` index into `prices` (extracted + guarded — this was a real
+  latent crash shape: an unmapped symbol would have produced `prices[undefined]`),
+  `d.amounts[i]` into formatUnits (`?? 0n`), and `rows[meRank]` (optional-chain +
+  `?? 0`). Zero behavior change on valid state; the `PRICE_KEY` guard now degrades
+  honestly instead of indexing with undefined. tsc clean repo-wide, eslint clean
+  (one --fix), build + deploy + live verify: /burn 200 both domains, served
+  burn chunk on the custom domain carries the FeedTheBurn component. OBSERVED
+  DRIFT (not acted on — for the main agent): three big user-directed changes are
+  live in code but absent from this file's run log (they happened outside loop
+  runs): the DAI removal + TEDDY/SOLIDX/PCOCK/HELGO addition, the Sept-21-epoch
+  burn-leaderboard rebuild, and the wallet username registry. Backlog #4's
+  description still documents the OLD leaderboard design. #13 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot approval,
+  #11 on his trading feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-28 18:41 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from both ships
+  since the 16:41 #10 verified accurate, in src AND in the served /plan HTML
+  on the custom domain. (1) 17:11 "Token approvals hygiene section on
+  /wallet" — ApprovalChecker is mounted on /wallet (wallet.tsx:347), shows
+  what the PulseX router can still move from the wallet and revokes in one
+  click; roadmap line at dump.ts:151 ("the site never moves your funds")
+  matches the code (user signs approve(router, 0) themselves; the 17:41 #9
+  already security-audited the surface). Served /plan HTML carries the line
+  verbatim. (2) 18:11 "username discoverability" — BurnLeaderboard footer at
+  BurnLeaderboard.tsx:287 renders "Display names are opt-in — claim yours on
+  the /wallet page" as an internal TanStack Link (verified live in served
+  /burn HTML); roadmap line at dump.ts:192 ("rows show opt-in display names
+  (claim on /wallet)") matches; Dumb AI answer (dump.ts:331) verified against
+  src/lib/username.ts — 3–20 chars, [a-zA-Z0-9_-], signature-only (no gas,
+  no posting, no fund control) all accurate. Served /plan HTML carries the
+  line verbatim. (3) done flags still honest — the four future-phase groups
+  remain correctly done:false; nothing shipped qualifies as flipping them.
+  (4) burn-contest AI answer still accurate ("Not live yet — the full design
+  is done, but the format is still being picked" = backlog #5 blocked state).
+  No new planned/thinking items earned a roadmap line this run — no churn.
+  Live health: /plan /wallet /burn all 200 on the custom domain. #10 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-28 18:11 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **username discoverability: Dumb AI answer + leaderboard footer
+  link** — a research-found unit, not the backlog: the opt-in wallet username
+  registry shipped earlier (names on the burn + Feed-the-Burn boards, card on
+  /wallet) but was invisible everywhere else — a newcomer seeing named rows
+  had no path to claim one, and Dumb AI had no answer for "Can I put a name
+  on my wallet?" Now: (1) new AI_QA entry answering exactly that (sign one
+  wallet message, no gas; 3–20 chars letters/numbers/_/-; unique
+  first-come-first-served; one per wallet; rename/clear any time; lives in the
+  hub's signed registry — never posts, never moves funds); (2) one line in the
+  burn-leaderboard footer — "Display names are opt-in — claim yours on the
+  /wallet page" with an internal TanStack Link. Also fixed UsernameCard's
+  stale docstring (said "NOT mounted on any route yet" — mounted on /wallet
+  since wiring). ROADMAP "Voluntary burns" leaderboard line updated. Safety:
+  all copy is the hub's own words + the verified rules from src/lib/
+  username.ts; zero wallet/signing/data/mascot touch, no new data sources.
+  tsc + eslint clean, build + deploy + live verify: /burn 200 both domains,
+  served burn chunk carries the footer copy, served data chunk carries the AI
+  answer + roadmap line. BULLISH-RESEARCH.md updated (shipped). #8 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 17:41 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 15:11 #9: the 17:11 run's Token approvals hygiene section
+  on /wallet + the 15:41 deep-scan share copy + the 16:11 "Rally the milestone"
+  share row) → audit-only, NO code changes, no build/deploy — nothing found
+  that earned a change. Reviewed clean: (1) the approvals revoke is
+  approve(PULSEX_V2_ROUTER, 0n) — exact router, zero amount, never moves
+  tokens; every revoke is user-signed with receipt-status gating ("Revoked ✓"
+  only on success, honest "Rejected — nothing changed" / "Reverted on-chain"
+  states); the "Revoked ✓" label is on-chain-true when shown (the row
+  unmounts once the post-confirm refetch shows allowance 0 — traced the only
+  stale window: a lagging RPC could show a stale nonzero figure beside the
+  label for ≤1.5s before refetch resolves it, which is a stale number next
+  to a true label, not a safety lie); (2) the section's scope claim verified
+  against the codebase — SwapBox's only approval call (line 866-870) targets
+  PULSEX_V2_ROUTER with exact amounts, so "the only contracts this site has
+  ever asked the wallet to approve" is accurate; the 13-token scan + "approvals
+  you granted anywhere else won't show here" copy is honest about scope; no
+  new data sources, no new contracts, no mascot touch. (3) deep-scan share
+  copy: parent resets deepBurn + deepChecks on every fresh runScan, the link
+  carries only address + burn tx, the verdict is named only when both are
+  present, the viewer re-verifies the burn on-chain and re-runs the scan
+  live; "100,000 DUMB was burned" matches the verifier's ≥100k arrival
+  threshold; 30-day-pass scans can't produce the deep copy (deferred by
+  design). (4) milestone share row: renders only on a live on-chain number
+  (null-gated), own-origin URL, encodeURIComponent'd intent URLs with
+  rel="noreferrer noopener"; NativeShareButton primitive unchanged and
+  SSR-safe. Live health: /wallet /scan /burn 200 on the custom domain. #9
+  stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-28 17:11 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **Token approvals hygiene section on /wallet** — a research-found
+  unit, not the backlog: the hub claims to be the safest hub on PulseChain but
+  had zero surface for the #1 wallet-drain vector (stale token approvals).
+  Every on-site swap asks the wallet to approve the PulseX router, and those
+  approvals stay open until revoked. Now a "Token approvals" section sits on
+  /wallet for connected wallets: reads allowance() to the PulseX router for
+  all 13 curated tokens (proven single-readContract pattern, failures resolve
+  null), flags "Unlimited" allowances, and offers one-click revoke — the user
+  signs approve(router, 0) themselves with receipt-status verification and
+  honest rejected/reverted states. Honest scope: only contracts this site has
+  ever asked the user to approve are scanned, and the copy says so ("approvals
+  you granted anywhere else won't show here"). All-clear + RPC-error states
+  included; revoking never moves tokens and costs only a little gas. Safety:
+  same user-signed pattern as swaps/burns (nothing new), no new data sources,
+  no new contracts, no mascot touch. Dumb AI "Scam safety" chunk + "How do I
+  stay safe and spot scams?" answer + ROADMAP "Live on PulseChain" line
+  updated. tsc clean on touched files (22 pre-existing FeedTheBurn errors
+  untouched), eslint clean, build + deploy + live verify: /wallet 200 both
+  domains, served wallet chunk byte-identical to the local build on both,
+  roadmap line live on /plan on both. BULLISH-RESEARCH.md updated (shipped).
+  #13 stays open as recurring; #5 still blocked on Antonio's format pick, #6
+  on mascot approval, #11 on his trading feedback; #8/#9/#10 stay open as
+  recurring.
+
+- 2026-09-28 16:41 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim from all five
+  ships since the 12:11 #10 verified accurate, in src AND in the served /plan
+  HTML on the custom domain. (1) 12:41 "scan token" links — TxExplainer.tsx:251
+  carries m.token (the receipt log's emitting contract) per row with a
+  zero-address guard; roadmap explainer line matches. (2) 14:11 "What the tax
+  cost" — swapTaxNote() in src/lib/tx-explain.ts names the exact tax from the
+  receipt's own burn legs (dead×6 DUMB / dead×3 DAMP) with the honest
+  slippage-caveat; roadmap line matches. (3) 14:41 "Explain this swap" —
+  SwapBox.tsx:1354 gated on txSucceeded && hash, internal TanStack Link
+  ?tx=; roadmap "Live on PulseChain" line matches. (4) 15:41 deep-scan share
+  copy — TokenScanner.tsx:271 names the deep scan, its verdict, and the
+  100,000 DUMB burned; roadmap "Token safety scanner" share line matches.
+  (5) 16:11 "Rally the milestone" row — BurnMilestones.tsx:111 renders only
+  when the burned number is live (shareText null-gated), uses the exact live
+  burned number + next milestone, links /burn with native/X/Telegram; roadmap
+  milestones line matches. Dumb AI chunks verified current too: "How do I
+  share DUMB?" names the 11:11 leaderboard share buttons + the 16:11 milestone
+  row; "What did my transaction actually do?" covers the tax breakdown,
+  brag-card link, and scan-token links; "How do I check if a token is safe?"
+  covers the upgradeability check + deep-scan share copy. done flags honest
+  ("Community engine", "Products and rails", "DUMB Burn Engine" all still
+  correctly done:false). No new planned/thinking items earned a line — no
+  churn. Live health: /scan /burn /trade /roots all 200 on the custom domain.
+  #10 stays open as recurring; #5 still blocked on Antonio's format pick, #6
+  on mascot approval, #11 on his trading feedback; #8/#9/#13 stay open as
+  recurring.
+
+- 2026-09-28 16:11 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Rally the milestone" share row on the burn-milestones strip** —
+  a research-found unit, not the backlog: the 16B/17B/18B strip (mounted on
+  /trade, /roots, /burn — the community's rally point) had no share surface;
+  anyone excited about burn progress had to hand-compose a post, and
+  hand-composed milestone posts risk invented numbers. Now "Rally the
+  milestone:" sits under the markers (native sheet + Post to X + Share to
+  Telegram) with pre-filled copy from the strip's own live on-chain number
+  ("DUMB burn update: X burned — the Y milestone is next. 1% of every taxed
+  transfer burns. Verified on-chain."; adapts once 18B is hit). Renders only
+  on a live number, never the loading state; zero wallet/signing/data/mascot
+  touch, no new data sources. Also fixed two staleness gaps the audit found:
+  "How do I share DUMB?" now names the 11:11 leaderboard share buttons and
+  the new milestone row; "How do I check if a token is safe?" now names the
+  15:41 deep-scan share copy; share knowledge chunk + ROADMAP milestones line
+  updated. FLAGGED for a future maintenance run: `npx tsc --noEmit` reports
+  22 pre-existing errors in FeedTheBurn.tsx (today's earlier Feed-the-Burn
+  runs, untouched here — vite build doesn't typecheck, so the deploy is
+  unaffected; left alone rather than touched blindly in a money flow). tsc
+  clean on all touched files, eslint clean, build + deploy + live verify:
+  /burn 200 both domains, served BurnMilestones chunk byte-identical to the
+  local build (md5 fb3482d8a777c60c46dabf8c61f0e9e1) and carries the new copy,
+  roadmap line live on /plan, /trade /roots / homepage 200. BULLISH-
+  RESEARCH.md updated (shipped). #8 stays open as recurring; #5 still blocked
+  on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 15:41 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **deep-scan share copy that names the deep scan, its verdict,
+  and the burn** — a research-found unit, not the backlog: a burn-backed deep
+  scan's share link already re-ran the real deep scan for the viewer, but the
+  pre-filled copy only ever said "Safety scan for 0x…: no red flags found" —
+  the sharer who paid 100,000 DUMB had the weakest brag. Now, when a deep
+  scan ran, the copy reads "Deep scan for 0x…: [verdict] — 100,000 DUMB was
+  burned to run it" (verdict from the deep-scan checks: "clean on the
+  on-chain buy-to-sell test" or the honest fail/warn counts). Plumbing:
+  `onDeepComplete` passes the deep checks up with the burn hash; parent
+  resets both on fresh scans. Safety: the shared link re-verifies the burn
+  on-chain before the viewer sees anything, so the named verdict can never
+  be stale or fabricated; the "100,000 DUMB was burned" wording covers both
+  the one-click burn and the PLS-fallback path; zero wallet/data/mascot
+  touch, no new data sources. Dumb AI token-scanner chunk + ROADMAP "Token
+  safety scanner" share line updated. Considered + DEFERRED: deep-scan share
+  links for 30-day pass holders (no fresh burn) — the `?token=` link gives
+  the viewer a quick scan only, so naming a deep scan would be dishonest.
+  tsc + eslint (one --fix) clean, build + deploy + live verify done: /scan
+  200 both domains, the served scan-f6XCTila.js chunk on the custom domain
+  carries the new copy, roadmap line live on /plan. #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 15:11 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 13:11 #9: the 14:11 run's "What the tax cost" breakdown in
+  the /scan transaction explainer + the 14:41 run's "Explain this swap" link on
+  the swap success panel) → audit-only, NO code changes, no build/deploy —
+  nothing found that earned a change. Reviewed clean: (1) swapTaxNote() fires
+  only on the two swap branches (outs=1&&ins=1; valueIn>0&&ins=1&&outs=0),
+  never on voluntary-burn txs — the only place where dead-leg sums aren't
+  pure 1%-burn legs; for every swap path the hub itself generates, dead
+  arrivals are exactly the 1% protocol burn legs, so dead×6 (DUMB) / dead×3
+  (DAMP) is the verified tax math, pre-ship validated on live receipts;
+  per-token keying keeps DUMB↔DAMP multihop honest (each leg's own tax);
+  non-DUMB/DAMP tokens can never produce the note (lookup keyed to DUMB_LC/
+  DAMP_LC only); the "priced into the swap, not charged on top" + slippage-
+  caveat copy stays inside what a receipt can prove. One traced edge left as
+  documented-inherited, not churn: a hand-rolled tx bundling a voluntary
+  burn with a swap would misclassify at the headline level first (pre-existing
+  classifier limit, not the note's), and the note inherits that — no
+  hub-generated tx can hit it. (2) "Explain this swap" is gated on
+  txSucceeded (isConfirmed + receipt status success — confirmed state only,
+  never the confirming state), passes only the receipt's own hex hash via
+  internal TanStack navigation, and the consumer re-gates ?tx= with the hash
+  regex; static title attribute, no new wallet/signing/data/mascot surface.
+  Live health: /scan /burn /plan /trade all 200 on the custom domain. #9 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-28 14:41 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → SHIPPED **"Explain this swap" link on the swap success panel** — a
+  research-found unit, not the backlog: after a confirmed on-site swap, the
+  success panel showed "View on explorer" + "Brag about it" but no path into
+  the /scan transaction explainer — the one surface that names the exact
+  transfer-tax cost the 14:11 run shipped. Now a single "Explain this swap"
+  link sits next to "View on explorer" (confirmed state only — never the
+  confirming state, where an unmined tx would show "not found"), opening
+  /scan?tx=<receipt hash>, which re-runs the explanation live on-chain. Closes
+  the swap → verify → understand loop at the exact moment a newcomer asks
+  "did I get what I was quoted?" and showcases the explainer's tax-cost
+  breakdown. Safety: the hash is the receipt's own confirmed hash (internal,
+  hex-gated by the explainer), pure client navigation, zero wallet/signing/
+  data/mascot touch, no new data sources. Dumb AI "How do I trade DUMB?"
+  answer + ROADMAP "Live on PulseChain" line updated. Considered + REJECTED as
+  churn: per-row "add to wallet" buttons in the explainer's movements table —
+  the scanner report card already carries the chain-checked button, reachable
+  via the same row's "scan token" link; a second button would duplicate an
+  existing surface. Also verified clean: full Dumb AI knowledge + suggested
+  answers audit vs today's ships (tax-cost breakdown, scan links, share-your-
+  rank, upgradeability check, sell sim all present) — nothing stale. tsc +
+  eslint clean, build + deploy + live verify done: /trade 200 both domains,
+  the served trade-dNF8mY7j.js chunk is byte-identical to the local build
+  (md5 50ffc4845a8a87763b79f1464fa36eea) and carries "Explain this swap",
+  roadmap line live on /plan. BULLISH-RESEARCH.md updated (shipped). #8
+  stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #9/#10/#13 stay open as
+  recurring.
+
+- 2026-09-28 14:11 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"What the tax cost" swap-cost breakdown in the /scan transaction
+  explainer** — a research-found unit, not the backlog: the explainer's swap
+  branches promised "what a swap really cost you" but only told users to
+  compare against their own quote. Now, on DUMB/DAMP swaps, the result names
+  the exact transfer-tax cost as an info flag: the tax is computed from the
+  receipt's own 1% protocol burn legs (dead-leg sum × 6 for DUMB, × 3 for
+  DAMP — "priced into the swap itself, not charged on top"), with the honest
+  caveat that slippage can't be measured from the receipt alone. Pre-ship
+  live-chain validation on real swaps: buy 0x73a44f04… (1M PLS → DUMB):
+  dead×100 = pre-tax, received/preTax = 0.9398 ✓; sell 0xb1c92cc3…: pair
+  94.95% / dead 1.01% / contract 4.04% ✓. Swap sublines tightened to point at
+  the breakdown ("anything beyond that is slippage…"). Non-DUMB/DAMP swaps
+  get no note (no invented tax math). Read-only, zero wallet/data/mascot
+  touch, no new data sources. Dumb AI "What did my transaction actually do?"
+  answer + token-scanner knowledge chunk + ROADMAP "Token safety scanner"
+  explainer line updated. tsc + eslint clean, build + deploy + live verify
+  done: /scan 200 both domains, the served scan-DnyEFV1J.js chunk on the
+  custom domain carries the new copy, roadmap line live on /plan. BULLISH-
+  RESEARCH.md updated (shipped). #13 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-28 13:11 ET run: backlog #9 DONE (security pass on the newest shipped
+  surface since the 11:41 #9: the 12:41 run's "Scan this token" links on the
+  /scan transaction explainer's movement rows) → audit-only, NO code changes,
+  no build/deploy — nothing found that earned a change. Reviewed clean:
+  (1) the link carries ONLY the hex contract address (`search={{ token:
+  m.token }}`) — m.token is the receipt log's emitting contract, validated
+  as an address by viem on receipt parse, so a malformed value can't even
+  reach the URL; TanStack URL-encodes the search param and the navigation is
+  internal (no open redirect, no attacker-built external URL);
+  attacker-controlled symbol() is rendered as React-escaped text only, never
+  in the link; the link's title attribute is a static literal; zero
+  dangerouslySetInnerHTML on the whole scan path (only the two pre-existing
+  static JSON-LD literals in routes/index.tsx and chart.tsx, same as the
+  07:41 audit found); (2) the zero-address guard skips the link for
+  0x000…000 — defensive, receipt logs always carry real contracts;
+  (3) the consumer side trusts nothing: TokenScanner re-gates the shared
+  ?token= param with viem isAddress() before any RPC use, so a hand-crafted
+  garbage URL silently does nothing; (4) no new action surface — pure
+  client-side GET navigation into a read-only, no-wallet, no-signing scan;
+  no new information exposed (the address is already displayed in the row).
+  Considered and REJECTED: clamping pathological symbol() lengths (a scam
+  token can return a 500-char phishing string) — it's a pre-existing cosmetic
+  concern of the whole explainer from the 04:41 build, not a genuine finding
+  of the new link surface; manufactured churn per code minimalism. Live
+  health: /scan /burn /plan all 200 on the custom domain. #9 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-28 12:41 ET run: backlog #8 DONE (bullish-demand research) → SHIPPED
+  **"Scan this token" links on every movement row of the /scan transaction
+  explainer** — a research-found unit, not the backlog line: someone explains a
+  swap or airdrop tx, sees an unfamiliar token in the legs, and previously had
+  no path into the scanner — now one click on the token's row opens
+  /scan?token=<exact contract>, flips to the "Scan a token" tab (the 05:41
+  retarget fix covers in-page navigation), and re-runs the quick scan live
+  on-chain. Closes the explainer → scanner loop exactly where curiosity peaks:
+  "what IS this token that just moved in my tx?" — the north-star verify loop,
+  and the classic scam flow (unfamiliar tokens appearing in your tx) now lands
+  one click from a safety report. Safety: the URL carries only the hex
+  contract address (attacker-controlled symbol() is rendered as escaped text
+  only, never in the link); the 05:41 fixes already guarantee the shared link
+  re-runs live; zero-address guard skips the link for non-token legs (defensive
+  — movements only ever carry Transfer-log contracts); no wallet, no signing,
+  no new data sources, no mascot touch. Dumb AI "What did my transaction
+  actually do?" answer + token-scanner knowledge chunk + ROADMAP "Token safety
+  scanner" explainer line updated. tsc + eslint + prettier clean, build +
+  deploy + live verify done: /scan 200 both domains, the served
+  scan-CtBmz-kg.js chunk on the custom domain carries "scan token", roadmap
+  line live in the served /plan HTML. BULLISH-RESEARCH.md updated (shipped).
+  #8 stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #9/#10/#13 stay open as
+  recurring.
+
+- 2026-09-28 12:11 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim verified,
+  nothing stale or missing found. (1) Both ships since the 10:11 #10 carry
+  accurate lines, verified in src AND in the served /plan HTML on the custom
+  domain: the 10:41 #13 upgradeability check ("an upgradeability check (reads
+  the EIP-1967 proxy slots — flags the upgrade-rug shape when a live key can
+  swap the token's code)" in the "Token safety scanner" group — the served
+  /plan HTML carries the string verbatim) and the 11:11 #8 "Share your rank"
+  row ("your row highlights with a 'That's you' banner + rank when your
+  wallet is connected, with X/Telegram/native-share buttons for your verified
+  rank" in the "Voluntary burns" group — served HTML confirmed, and
+  BurnLeaderboard.tsx:174 renders the "Share your rank:" row only on the
+  user's own highlighted row, so the claim matches the code). The 11:41 #9
+  was audit-only and owed no line. (2) done flags honest: "60 days /
+  Community engine", "90 days / Products and rails", and "Planned / DUMB Burn
+  Engine" are all still correctly done:false — nothing shipped qualifies as
+  flipping them. (3) Rot spot-check: BurnMilestones still reads the live
+  dead-address balance via fetchRootEngines (not a frozen number); raid XP
+  copy still honest ("fun scoreboard, not a reward promise"; the roadmap's
+  "Raid leaderboard fills with real names" reads as the user's own XP on
+  their local board); no frozen numbers or invented claims found. (4) No new
+  planned/thinking items earned a roadmap line this run — no churn. Live
+  health: /plan /scan /burn 200 on the custom domain. #10 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-28 11:41 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 09:41 #9: the 10:41 run's upgradeability check in the /scan
+  quick scan + the 11:11 run's "Share your rank" share row on the burn
+  leaderboard's "That's you" banner) → audit-only, NO code changes, no
+  build/deploy — nothing found that earned a change. Reviewed clean:
+  (1) the upgradeability check is read-only (getStorageAt + getBytecode, no
+  wallet, no signing), bounded via tryRead ×3 with backoff, and conservative
+  everywhere — RPC silence → "unknown" (never a pass); proxy with
+  renounced/dead admin → pass; LIVE upgrade key → warn; impl slot with no
+  contract code → "unknown, treat as risky". Displayed addresses are
+  hex-sliced on-chain slot values rendered as React-escaped text; no
+  dangerouslySetInnerHTML anywhere on the scan/burn path; the "pass" copy
+  openly notes non-standard proxy layouts are covered by the deep scan. One
+  traced edge: getBytecode failing (null) while the admin-slot read succeeds
+  cannot produce a falsely safe "pass" — the pass claim ("upgrade key
+  renounced, code can't be swapped") holds whenever admin = zero, regardless
+  of the impl-code read. (2) the share row uses only the user's own verified
+  numbers + our own literals in the text — no attacker-controlled content, no
+  wallet address in the shared copy; rank is computed across all rows with
+  the All/Voluntary filter respected; X/Telegram intent URLs are
+  encodeURIComponent'd with rel="noreferrer noopener"; native share reuses
+  the allowlisted NativeShareButton. (3) no new check-id collisions ("code"
+  is mutually exclusive branches in one function); no leftover test code
+  from the 10:41 unit tests shipped to src. #9 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-28 11:11 ET run: backlog #8 DONE (bullish-demand research) → SHIPPED
+  **"Share your rank" row on the burn leaderboard's "That's you" banner** — a
+  research-found unit, not the backlog: a connected wallet that ranks on the
+  /burn leaderboard now gets native-share + Post to X + Share to Telegram
+  buttons in the banner, pre-filled with honest copy ("I burned X DUMB —
+  rank #N on the Dumb Money burn leaderboard. All burns verified on-chain.")
+  linking to /burn. Closes the share loop the 08:41 "That's you" banner and
+  the 09:11 /brag brag-card link opened — scan → burn → see your rank lit up
+  → brag it, which is exactly the #8 community-rally mandate. Only the
+  wallet's OWN verified rank/amounts are ever shared (nothing invented,
+  nothing auto-posts); reuses the proven NativeShareButton pattern
+  (share_tap allowlisted) and intent URLs with the site's own words plus
+  verified numbers. Dumb AI "Sharing DUMB moments" chunk + ROADMAP "Voluntary
+  burns" leaderboard line updated. tsc + eslint (one prettier --fix) clean,
+  build + deploy + live verify done: /burn 200 both domains, the served
+  burn-DCqGgdpy.js chunk on both is byte-identical to the local build
+  (md5 31d2bfd73af3e9fc054098f9b47a31a8) and carries "Share your rank",
+  roadmap line live on /plan. BULLISH-RESEARCH.md updated (shipped). #8
+  stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #9/#10/#13 stay open as
+  recurring.
+
+- 2026-09-28 10:41 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **upgradeability check in the /scan quick scan** — a
+  research-found unit, not the backlog: the scan had no answer for the
+  upgrade-rug shape (clean token today, honeypot after a code swap). The
+  quick scan now reads the EIP-1967 implementation + admin storage slots
+  (read-only, no wallet, no signing): no slot → pass; proxy with
+  renounced/dead admin → pass; LIVE upgrade key → caution (warn, not fail —
+  legitimate tokens use proxies); RPC silence or custom/stale layouts →
+  unknown ("treat as risky", never a pass). Pre-ship live validation:
+  DUMB + DAMP carry empty EIP-1967 slots on the live RPC (pass path real);
+  address-extraction + status-decision matrix unit-tested with fabricated
+  slots (11/11 green). Dumb AI "How do I check if a token is safe?" answer
+  + token-scanner knowledge chunk + ROADMAP "Token safety scanner" line
+  updated. Zero wallet/data/mascot touch, no new data sources. tsc + eslint
+  clean, build + deploy + live verify done: /scan 200 both domains, served
+  token-scan-Cn1-SJDZ.js chunk on both carries the check + slot constants,
+  roadmap line live on /plan. BULLISH-RESEARCH.md updated (shipped). #13
+  stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #8/#9/#10 stay open as
+  recurring.
+
+- 2026-09-28 10:11 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim verified,
+  nothing stale or missing found. (1) All three ships since the 08:11 #10
+  carry accurate lines: the 08:41 #13 "That's you" leaderboard highlight
+  (verified in BurnLeaderboard.tsx — youAddr match, rank, banner + chip —
+  matches the "Voluntary burns" line), the 09:11 #8 brag-card link on the tx
+  explainer (TxExplainer passes ?tx= via TanStack Link search — matches the
+  "Token safety scanner" explainer line), and the 09:41 #9 /brag honest-degrade
+  fix is in brag.tsx (img onError → "Couldn't verify that burn.") and correctly
+  carries no line (invisible in the happy path). (2) done flags honest: the
+  three done:false groups (Community engine, 90 days / Products and rails,
+  DUMB Burn Engine) are genuinely unshipped. (3) Rot spot-check: BurnMilestones
+  strip still reads the live dead-address balance via fetchRootEngines (not a
+  frozen number); raid XP copy still honest ("local fun scoreboard, not a
+  financial reward"); Dumb AI burn/scan answers match shipped features.
+  Live health: /plan /scan /burn 200 on the custom domain; /brag 307 →
+  /brag?tx= (normalize) → 200 with og:image and the honest empty-tx state.
+  #10 stays open as recurring; #5 still blocked on Antonio's format pick, #6
+  on mascot approval, #11 on his trading feedback; #8/#9/#13 stay open as
+  recurring.
+
+- 2026-09-28 09:41 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 07:41 #9: the 08:41 run's "That's you" leaderboard
+  banner + the 09:11 run's brag-card link on the tx-explainer result) → audited
+  + SHIPPED one genuine honesty fix found by the review: **/brag now degrades
+  honestly for well-formed-but-unverified tx hashes**. Bug: the page rendered
+  "Verified burn / Someone burned. Supply shrank." unconditionally for ANY
+  TX_RE-valid hash, even one /api/brag-image 404s — a hand-typed or shared
+  /brag?tx=<non-burn> link showed a broken image under an asserted burn, a
+  false claim on our own domain. Fix: img onError flips to an honest
+  "Couldn't verify that burn" state (headline + eyebrow swap, no broken
+  image); the explorer link stays as the manual-verification escape hatch.
+  Rest of the pass reviewed clean: the 09:11 brag gate is a strict subset of
+  /api/brag-image's own checks (same DUMB/DAMP constants, transfer selector
+  via ABI decode, decoded recipient = dead, amount > 0, mined receipt,
+  sender→dead arrival log) — it cannot promise a card the endpoint 404s, in
+  either direction; the "That's you" match is exact (burns.ts lowercases
+  senders, youAddr lowercased, filter-aware); no dangerouslySetInnerHTML in
+  either surface; shortAddr/explorerAddress built from hex-only values;
+  ROADMAP lines for the brag-card link verified accurate. tsc + eslint clean,
+  build + deploy + live verify done: /brag 200 both domains, served
+  brag-BI49GHnj.js chunk carries the new copy, /api/brag-image still 200 PNG
+  for the verified burn and 404 for a non-burn. Invisible in the happy path —
+  no roadmap line. #9 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback; #8/#10/#13
+  stay open as recurring.
+
+
+- 2026-09-28 09:11 ET run: backlog #8 DONE (bullish-demand research) → SHIPPED
+  **brag-card link on the tx explainer for detected voluntary burns** — a
+  research-found unit: someone who burned DUMB/DAMP manually (not through the
+  /burn BurnBox) and pastes the tx into the /scan "Explain a transaction" tab
+  previously hit a dead end — the explainer said "Sent X to dead" with no path
+  to share it. Now, when the explainer detects a direct DUMB/DAMP transfer()
+  to the dead address, the result carries a flame-tinted "That was a voluntary
+  burn — get your shareable brag card" row linking to /brag?tx= (whose og:image
+  unfurls the server-rendered card). Turns an explained burn into share
+  material — exactly the #8 mandate — and closes the loop the 08:41 "That's
+  you" feature started on the leaderboard side. The gate mirrors /api/brag-image
+  exactly (tx.to = DUMB/DAMP, transfer selector, recipient = dead, amount > 0,
+  mined, Transfer log from sender to dead in the receipt), so a card is never
+  promised that the endpoint would 404 — swap-burns and other tokens get the
+  explanation but no link. Pre-ship live-chain validation caught a REAL bug in
+  the first gate draft: it required "every leg is a burn leg," but Safemoon
+  forks emit the 4% bucket legs to the token contract alongside the dead legs
+  (decoded live: transfer(dead, 10 DUMB) → 9.4 + 0.1 to dead, 0.19998 x2 to the
+  contract) — the naive gate would have been dead code that never fired. Fixed
+  the classification too: the old "every leg is burn" branch mislabeled real
+  direct burns as "Sent X to dead …no burn legs," and the "Sent" branch claimed
+  "no burn legs" even when the 1% protocol leg existed — both sublines are now
+  honest, and burn legs are flagged in every branch. End-to-end proof: real
+  direct burn 0xc0a9abf2733fd59f2b847d6cd7b47db6361494edf5ea4555b5381af1bfeac0a6
+  passes the gate AND /api/brag-image returns a real 200 PNG for it. Dumb AI
+  FAQ ("What did my transaction actually do?"), both token-scanner/share
+  knowledge chunks, and the ROADMAP "Token safety scanner" explainer line
+  updated. Zero wallet/data/mascot touch, no new data sources. tsc + eslint +
+  prettier clean, build + deploy + live verify done: /scan 200 both domains,
+  new scan chunk on the custom domain carries the row, roadmap line live on
+  /plan. #8 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback; #9/#10/#13 stay open as
+  recurring.
+
+
+- 2026-09-28 08:41 ET run: backlog #13 DONE (real-utility research, recurring)
+  → SHIPPED **"That's you" highlight on the burn leaderboard** — a
+  research-found unit, not the backlog: a connected wallet that appears among
+  the board's real on-chain burners now gets a gold banner ("That's you — rank
+  #N on this board with X DUMB / Y DAMP burned in the scanned window") and a
+  highlighted row with a "That's you" chip. Completes the newcomer feedback
+  loop (scan → burn → see YOUR row lit up with its voluntary flame badge);
+  rank computed across all burners (not just the top 25 shown), respects the
+  All/Voluntary filter with filter-aware copy, and connected-but-absent wallets
+  get an honest one-liner (never a spend prompt). Read-only, no signing, no new
+  data sources, zero wallet/data/mascot touch beyond the wagmi address already
+  in the app; sender addresses are already lowercased in burns.ts so matching
+  is exact. Roadmap "Voluntary burns" leaderboard line updated. tsc + eslint +
+  prettier clean, build + deploy + live verify done: /burn + /plan 200 on both
+  domains, the served burn chunk on the custom domain carries the new copy.
+  BULLISH-RESEARCH.md updated (shipped). #13 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #8/#9/#10 stay open as recurring.
+
+- 2026-09-28 08:11 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim verified,
+  nothing stale or missing found. (1) All eight "Token safety scanner" lines
+  verified against shipped code: quick scan + sell simulation (token-scan.ts
+  check #8 "Sell simulation", rendered by TokenScanner), deep scan (burn
+  gate + 30-day pass + one-click wallet burn + PLS fallback), shareable
+  report cards (?token= re-runs live), one-tap add-to-wallet
+  (AddToWalletButton rendered in TokenScanner), identity/lookalike check,
+  pass-panel feedback link ("Watch your burn land on the burn leaderboard"
+  live in TokenScanner), transaction explainer ("Spread the word" share row
+  live in TxExplainer + /scan?tx= re-runs live), homepage "Scan any token"
+  card (routes/index.tsx). All three ships since the 06:11 #10 carry their
+  lines: the 06:41 sell-sim probe, the 07:11 explainer share row, and the
+  07:41 #9 was audit-only (no line owed). (2) "Voluntary burns" all 13 lines
+  verified (burn box, ticker, leaderboard, milestones, brag cards
+  /api/brag-image server-side, tax-flow visualizer, Burn with PLS card,
+  resilient 5k-block chunk scan); "Live on PulseChain" all 6 lines accurate
+  (verified guardrail + add-to-wallet, first-swap walkthrough, canonical
+  6%/3% framing). (3) Rot spot-check: BurnMilestones strip still reads the
+  live dead-address balance via fetchRootEngines (not a frozen number);
+  raid XP board copy still honest ("local fun scoreboard, not a financial
+  reward") — "Shared XP leaderboard" correctly stays done:false; no other
+  stale or missing claims. (4) No status flips earned — done flags honest
+  across all groups. Live health: /plan /scan /burn all 200 on the custom
+  domain, roadmap HTML carries the sell-simulation line. #10 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-28 07:41 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 05:41 #9: the 06:41 run's sell-simulation honeypot probe
+  in the /scan quick scan + the 07:11 run's "Spread the word" share row on the
+  tx-explainer result) → audit-only, NO code changes, no build/deploy —
+  nothing found that earned a change. Reviewed clean: (1) the sell simulation
+  is read-only eth_call with the holder as simulated sender — no state
+  changes, no wallet, no signing; bounded to 2 attempts with revert-sniffing
+  conservative toward "unknown" on transport noise (never a false pass); amount
+  is min(1 unit, holder balance) so it can't overdraw; false-fail copy is
+  honest ("rarely, unusual transfer logic can also fail — the deep scan tests
+  the real DEX path"); holder picked from the token/WPLS pair first, then the
+  token contract, both verified non-zero before the call; (2) the explainer
+  share row uses only our own literals + the hex-validated tx hash — shareText
+  carries hash.slice(0,10) only, attacker-controlled symbols render as
+  React-escaped text only, explorer hrefs are built from hex-sliced topics;
+  intent URLs encodeURIComponent'd, X/Telegram links carry
+  rel="noreferrer noopener"; shared /scan?tx= links re-run live on-chain at
+  view time so a share can never show a stale story; (3) repo-wide grep found
+  no other dangerouslySetInnerHTML beyond two static JSON-LD literals
+  (homepage WebSite schema, shadcn chart theming) — zero user-input injection;
+  NativeShareButton re-verified (own text/url only, share_tap allowlisted).
+  #9 stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback; #8/#10/#13 stay open as
+  recurring.
+
+- 2026-09-28 07:11 ET run: backlog #8 DONE (bullish-demand research) → SHIPPED
+  **share buttons on the /scan transaction-explainer result** — a research-found
+  unit, not the backlog line: the "Explain a transaction" tab had only a
+  copy-link button while the token scan report card has full share buttons
+  (native sheet + Post to X + Share to Telegram). The explainer answers the
+  most emotionally urgent version of "verify" — someone who just learned what
+  a suspicious tx did wants to warn their community now, not copy a link and
+  compose a warning by hand. The result now carries a "Spread the word" row
+  with the same proven pattern (NativeShareButton + X + Telegram intents);
+  pre-filled copy uses only our own words about what the tool does — never
+  the tx's attacker-controlled token symbols — and the shared /scan?tx= link
+  re-runs the explanation live on-chain for the viewer (never a stale story).
+  Copy-link kept for paste-anywhere. Dumb AI "How do I share DUMB?" answer,
+  token-scanner + share knowledge chunks, and the ROADMAP "Token safety
+  scanner" explainer line updated. Zero wallet/data/mascot touch, no new data
+  sources. tsc + eslint + prettier clean, build + deploy + live verify done:
+  /scan 200 on both domains, the served scan-7HqdyHFa.js chunk on the custom
+  domain carries the new row. #8 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback;
+  #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 06:41 ET run: backlog #13 DONE (real-utility research) → SHIPPED
+  **sell-simulation honeypot probe in the /scan quick scan** — a research-found
+  unit, not the backlog: the free quick scan can now actually catch the
+  classic honeypot shape. New "Sell simulation" check (src/lib/token-scan.ts):
+  a read-only eth_call probes a small transfer() out of a real holder's
+  balance (the token/WPLS pair when one exists, else the token contract
+  itself) — no state changes, no wallet, no signing. A revert is the honeypot
+  shape (buys go through, sells don't) → red flag; success → pass with the
+  honest caveat that DEX-specific sell blocks are what the burn-gated deep
+  scan tests; RPC silence or no holder balance → "unknown, treat as untested"
+  (never a pass). Closes the gap the old copy admitted ("may block sells in
+  ways this quick scan can't see" — that line now points at the simulation).
+  Pre-ship validation against live chain data: DUMB simulated clean ("ok"),
+  and an impossible transfer classified "reverted" — both paths confirmed
+  before writing the code. Roadmap "Token safety scanner" line, Dumb AI "How
+  do I check if a token is safe?" answer, and the token-scanner knowledge
+  chunk updated. Zero wallet/data/mascot touch, no new data sources. tsc +
+  eslint clean, build + deploy + live verify done: /scan 200 on both domains,
+  the served token-scan-HfksLLy_.js chunk on the custom domain + preview
+  worker carries "Sell simulation" + the honeypot copy, roadmap line live on
+  /plan. #13 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#10 stay
+  open as recurring.
+
+- 2026-09-28 06:11 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audited every roadmap claim against shipped code since the 04:11 #10, one
+  SHIPPED line. (1) Verified the three ships since the last audit are all
+  real in code: the 04:41 #13 tx-explainer tab (tab + ?tx= retarget logic in
+  scan.tsx — matches its roadmap line), the 05:41 #9 invisible share-link tab
+  retarget (explicitly no line, per its own run), and the 05:11 #8
+  deep-scan pass → leaderboard feedback link (TokenScanner.tsx, real but
+  missing its line — ADDED to "Token safety scanner": "Pass-panel feedback
+  loop — after a verified deep-scan burn, the panel points you to the /burn
+  leaderboard…"). (2) Rot spot-check: BurnMilestones strip still reads the
+  live dead-address balance via fetchRootEngines (not a frozen number);
+  raid XP board copy still honest ("local fun scoreboard, not a reward
+  promise") — "Shared XP leaderboard" correctly stays done:false; no other
+  stale or missing claims found; done flags honest across all groups. (3)
+  No status flips earned beyond the added line. tsc + eslint clean, build +
+  deploy + live verify done: /plan carries the new line in served HTML on
+  both domains, /scan /burn 200, all 13 canonical pages 200 on the custom
+  domain. #10 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#13 stay
+  open as recurring.
+
+- 2026-09-28 05:41 ET run: backlog #9 DONE (security pass on the newest shipped
+  surfaces since the 03:41 #9: the 04:41 #13 tx-explainer tab + 05:11 #8
+  deep-scan pass feedback-loop link) → audited + SHIPPED one genuine fix found
+  by the review: **shared /scan links now retarget the tab on client-side
+  navigation**. Bug: ScanPage initialized the token/tx tab only at mount, so
+  following a shared `/scan?tx=0x…` (or `?token=`/`&burn=`) link while already
+  on /scan changed search params without remounting — the linked tool never
+  opened and the share silently did nothing. Fresh page loads were fine, which
+  is why it survived to review. Fix: a small useEffect in src/routes/scan.tsx
+  retargets the tab whenever the params point at the other tool
+  (?tx= → "Explain a transaction", ?token=/&burn= → "Scan a token"); the
+  mounted tool's existing share-param effect then re-runs the scan/explanation
+  live as before. Rest of the pass reviewed clean: the explainer renders only
+  React-escaped text (attacker-controlled symbol() values never hit
+  dangerouslySetInnerHTML — no innerHTML on the whole scan path), the tx-hash
+  regex gates both the input and the share link, explorer hrefs are built from
+  hex-only values, RPC reads are bounded (tryRead ×3 with backoff, sequential
+  symbol/decimals reads per unique token, getBytecode check breaks after the
+  first contract-recipient warning), no wallet/signing/spending anywhere, the
+  failed-tx branch correctly hides attempted-but-reverted movements, and the
+  "Watch your burn land on the burn leaderboard" link is honest (the pass is
+  only minted from a fresh verified burn inside the leaderboard's 20k-block
+  scan window). tsc + eslint clean, build + deploy + live verify done: /scan
+  200 on both domains, the served scan chunk on the custom domain is
+  byte-identical to the local build carrying the fix (new chunk hash, so the
+  deploy definitely picked it up). Invisible fix — no roadmap line. #9 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#10/#13 stay open as recurring.
+
+- 2026-09-28 05:11 ET run: backlog #8 DONE (bullish-demand research) → SHIPPED
+  **burn-leaderboard feedback loop on the deep-scan pass panel** — a
+  research-found unit, not the backlog line: when a 30-day deep-scan pass is
+  active, the /scan panel now carries "Watch your burn land on the burn
+  leaderboard" linking to /burn. Why it matters: a newcomer who just burned
+  100,000 DUMB (often their first-ever burn) previously got a dead end — no
+  pointer anywhere to see their own burn show up in the ticker/leaderboard
+  with its "voluntary burner" flame badge. That feedback loop (scan → burn →
+  see it celebrated on-chain-verified, real-data-only) is exactly the
+  north-star newcomer loop, and every pass burn is a voluntary burn the
+  leaderboard already verifies. Pure client link, zero wallet/data/mascot
+  touch, no new data sources, copy stays honest (no prize promises). tsc +
+  eslint clean, build + deploy + live verify done: /scan 200 on the custom
+  domain, served scan-ChYppWRT.js chunk carries the new copy. BULLISH-
+  RESEARCH.md updated (shipped). #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 04:41 ET run: backlog #13 DONE (real-utility research) → SHIPPED
+  **transaction explainer tab on /scan** — a research-found unit, not the
+  backlog: the #1 question in every crypto community ("what happened to my
+  money?") now has a first-class answer on the hub. New "Explain a transaction"
+  tab next to "Scan a token": paste any PulseChain tx hash → plain-English
+  breakdown from the live receipt — what moved where (leg-by-leg table with
+  explorer links), burn legs flagged, swap summarized ("1 PLS → 2.507 DUMB")
+  with the router function decoded, contract-recipient and failed-tx warnings,
+  and a shareable /scan?tx= link that re-runs live at view time (hash in, fresh
+  report out — never a stale story). Free and read-only like the quick scan;
+  the burn economy stays on the deep scan. New `src/lib/tx-explain.ts`
+  (tx + receipt reads, Transfer-log decode, sender-net classification:
+  burn / swap / plain send / complex, honest "movements not intent" framing)
+  + `TxExplainer.tsx` component. Pre-ship validation against live chain data
+  caught two real bugs before they shipped: (1) a hand-written Transfer topic
+  hash was wrong — copied the verified constant from brag-image.ts; (2) the
+  contract-recipient warning fired on normal router→pair plumbing — now scoped
+  to legs the sender initiated directly. Dumb AI FAQ ("What did my transaction
+  actually do?") + /scan knowledge chunk + ROADMAP "Token safety scanner" line
+  updated. tsc + eslint clean, build + deploy + live verify done: /scan 200 on
+  both domains, /scan?tx=<real hash> 200 with no normalize redirect, and the
+  served scan chunk on the custom domain carries the tab + explainer copy +
+  the correct topic hash. #13 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback;
+  #8/#9/#10 stay open as recurring.
+
+- 2026-09-28 04:11 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audit-only, NO code changes, no build/deploy — every claim verified,
+  nothing stale found. (1) All six "Token safety scanner" roadmap lines
+  verified present and accurate: quick scan, deep scan (burn gate + 30-day
+  pass + PLS fallback copy), shareable report cards, one-tap add-to-wallet,
+  identity/lookalike check (source in token-scan.ts; served bundle carries
+  "Lookalike warning" per the 03:41 verification), and the new homepage
+  room-card line — "Scan any token" confirmed live in the served homepage
+  HTML on the custom domain, and both new lines ("Identity check…",
+  "Homepage 'room by room' grid…") confirmed in the served /plan HTML.
+  (2) Rot spot-check: BurnMilestones strip still reads the live dead-address
+  balance (not a frozen number) with its honest "14B launch-day burn" framing;
+  /proof 200 with Proof rendering it; raid missions/vibe packs (ContentEngine)
+  still in the tree; /raid /proof /roots /scan /culture all 200 on the
+  custom domain. (3) No status flips earned — done flags honest across all
+  groups; "90 days / Products and rails" and "Planned / DUMB Burn Engine"
+  still correctly done:false. #10 stays open as recurring; #5 still blocked
+  on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback; #8/#9/#13 stay open as recurring.
+
+- 2026-09-28 03:41 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 01:41 #9: the 02:41 run's identity/lookalike
+  check in token-scan.ts + TokenScanner rendering, and the 03:11 run's
+  homepage "Scan any token" room card) → audit-only, NO code changes, no
+  build/deploy — nothing found that earned a change. Reviewed clean: (1) the
+  identity check's rendered copy uses only our own curated literals
+  (known.symbol, curated addresses) — the attacker-controlled symbol() value
+  is used solely for case-insensitive matching and never interpolated into
+  displayed text; "pass" fires only on an exact curated-address match,
+  "fail" (lookalike warning) on a symbol match at a different address, and
+  unknown tokens deliberately get no check at all ("not flagged" must not
+  teach "safe"); (2) all check details render as React text ({c.detail}), no
+  dangerouslySetInnerHTML anywhere on the scan path; the AddToWalletButton
+  doneLabel shows the scanned symbol but as escaped text only; (3) supply
+  display math (10n ** BigInt(decimals)) can't throw or DoS at real contract
+  values; an empty/missing symbol degrades silently with no false claim either
+  way; (4) AddToWalletButton re-verified: eth_chainId gate before the EIP-747
+  prompt, refuses wrong AND unknown chains, read-only prompt, no gas, no
+  signing; (5) the homepage card is copy-only, honest framing, no wallet/data/
+  mascot touch. Live verification this run: /scan 200 on both domains; the
+  served token-scan-CMwrHSFB.js chunk on the custom domain AND the preview
+  worker carries the identity check (md5 e3538830386249cc4bc76fbc3e131ff3 —
+  byte-identical, same deploy as the local tree, so the 03:11 rebuild shipped
+  the check intact — the scan shell chunk alone doesn't contain it because
+  token-scan.ts is a separate lazy chunk). No concurrent loop instance
+  detected. #9 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback; #8/#10/#13 stay
+  open as recurring.
+
+- 2026-09-28 03:11 ET run: backlog #8 DONE (recurring research) → SHIPPED
+  **homepage "Scan any token" room card** — a research-found unit, not a
+  backlog line: the homepage's room-by-room grid had 8 stations (story, trade,
+  burn, proof, raid, AI, culture, plan) and never mentioned /scan, the
+  flagship real-utility outsider magnet — "verify any token" is one of the
+  NORTH STAR's five newcomer verbs, and the scanner was reachable only via the
+  nav "Scan" link. A newcomer landing on the homepage never learned the hub
+  had a safety scanner at all. A 9th card now sits next to "Receipts" (the
+  verify pair together): "Scan any token — paste any PulseChain token address
+  for a plain-English safety report — real vs claimed tax, owner powers,
+  liquidity locks. Quick scan is free; the deep scan costs a small DUMB
+  burn." Homepage meta description now lists the scanner; ROADMAP "Token
+  safety scanner" gained the line. Honest copy (no safety-certificate claims),
+  zero wallet/data/mascot touch, no new data sources. tsc + eslint clean,
+  build + deploy + live verify done: homepage 200 on both domains with the
+  card + meta string in served HTML; health sweep this run — all 14 canonical
+  pages 200. BULLISH-RESEARCH.md updated (shipped). #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot approval,
+  #11 on his trading feedback; #9/#10/#13 stay open as recurring.
+
+- 2026-09-28 02:41 ET run: backlog #13 DONE (real-utility research) → SHIPPED
+  **identity / lookalike check in the /scan quick scan** — a research-found
+  unit, not a backlog line: the quick scan now verifies the scanned token's
+  identity against the site's curated, on-chain-verified contract list
+  (DUMB, DAMP, WPLS, HEX, DAI + DAI2, INC, PLSX, PRVX, pTGC, WBTC). A match
+  gets an "Identity — pass: this is the REAL {symbol} on PulseChain" check;
+  a token wearing one of those symbols at a DIFFERENT address gets a red-flag
+  "Lookalike warning: this token uses the '{symbol}' symbol, but the curated
+  {symbol} contract is {address(es)}. Name-copying is a classic scam
+  pattern." The check only fires on curated-symbol matches — unknown tokens
+  get no check at all (deliberately: a "pass" for every unknown token would
+  teach users that "not flagged" means "safe"). Copy uses only our own
+  literals, never the attacker-controlled symbol (checked against the 16:11
+  audit precedent: no dangerouslySetInnerHTML, React-escaped text only).
+  Directly serves the NORTH STAR: the scanner is the outsider magnet, and
+  name-collision is the scam pattern this site fights everywhere else
+  (guardrail, verified addresses, add-to-wallet) — now it fights it inside
+  the scanner too. Pre-ship validation: all 11 curated symbols confirmed via
+  live symbol() reads against rpc.pulsechain.com (DAI2 returns "DAI" —
+  handled as two curated addresses; pTGC case-insensitive). tsc + eslint
+  clean (one --fix pass), build + deploy + live verify done: /scan 200 on
+  both domains, the served token-scan chunk on the custom domain + preview
+  worker carries "Lookalike warning", the "Identity check" roadmap line is
+  live on /plan. Dumb AI "How do I check if a token is safe?" answer +
+  token-scanner knowledge chunk updated. BULLISH-RESEARCH.md updated
+  (shipped). #13 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback; #8/#9/#10
+  stay open as recurring.
+
+- 2026-09-28 02:11 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  audited every roadmap claim against shipped code, one status flip SHIPPED.
+  (1) Verified all four "Token safety scanner" lines against code + live
+  site: quick scan (scan.tsx handles ?token=, re-runs live), deep scan
+  (deepScan() 1-WPLS buy + sell-back + 1-vs-10 WPLS depth probe, 100k DUMB
+  burn gate, dumb-scan-pass 30-day ledger), shareable report cards
+  (?token=/&burn= re-verify on-chain at view time), one-tap add-to-wallet
+  (AddToWalletButton in TokenScanner, chain-checked). All shipped per
+  backlog #12 + #14 — flipped the group to done:true; /plan now shows the
+  "Shipped" badge instead of "Now". (2) Rot spot-check: ContractGuardrail
+  still mounted on home/trade/story/wallet; NativeShareButton still on
+  burn/swap/raid success surfaces (plus /scan). No other stale or missing
+  claims found — every shipping run since the 18:41 #10 has kept its line
+  current. tsc + eslint clean, build + deploy + live verify done (/plan 200
+  both domains with the Shipped badge confirmed in served HTML; /scan 200).
+  #10 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback; #8/#9/#13 stay open
+  as recurring.
+
+- 2026-09-28 01:41 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 21:41 #9: the 00:11/00:41/01:11 runs' one-click
+  burn, PLS-fallback router paths, 30-day pass ledger, and the
+  AddToWalletButton extraction) → SHIPPED one genuine hardening fix found by
+  the review: **TokenScanner's deep-scan wallet calls now pin `chainId:
+  pulsechain.id`** on both `writeContract` calls (one-click burn + PLS swap).
+  BurnBox's PLS path already had the belt-and-suspenders pin; the /scan panel
+  relied only on the React-side `onPulse` button gates — a wallet that flips
+  networks between the gate enabling and the signature could have prepared the
+  tx against the wrong chain (hardcoded router address = value into the void
+  on another network). Pass ledger reviewed clean (shape-checked load, expiry
+  enforced, tx-hash validated); used-burn one-time ledger intact; both PLS
+  verifiers conservative (tx.to=router, exact fn, path=[WPLS,DUMB], to=dead,
+  receipt-log arrival sums); verifyScanBurn correctly checks calldata amount
+  (user-sent 100k; the 6% arrival tax is the verified #1 math, not a
+  shortfall); AddToWalletButton read-only prompt, refuses unknown chains.
+  tsc + eslint clean, build + deploy + live verify done (/scan 200 on custom
+  domain + preview worker). Invisible fix — no user-facing change, no roadmap
+  line. #9 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback; #8/#13 stay open as
+  recurring.
+
+- 2026-09-28 01:11 ET run: backlog #8 DONE (recurring research) → SHIPPED
+  **one-tap "Add this token to wallet" on the /scan report** — a unit found by
+  the research lens, not the backlog: the scan report now ends the
+  scan → verify → hold loop. Every completed quick scan shows a chain-checked
+  EIP-747 button that adds the EXACT contract just scanned to the user's
+  wallet — no hand-typing a 42-char address (the guardrail's one-click
+  buttons stopped at DUMB/DAMP; a newcomer from another community scanning
+  a token they intend to hold had no safe path into their wallet — exactly
+  the lookalike/name-collision error the site fights elsewhere). Built by
+  extracting the guardrail's hardened AddToWalletButton to a shared
+  `src/components/dumb/AddToWalletButton.tsx` (chain-checked first, refuses
+  on wrong/unknown network, read-only prompt, no gas, no signing — guardrail
+  behavior unchanged); the scanner only renders it when the scan verified
+  standard ERC-20 metadata (symbol/decimals now exposed on QuickScanResult;
+  non-standard tokens get no button) and the label stays neutral ("Add this
+  token to wallet") so it never echoes a possibly-spoofed contract symbol.
+  Dumb AI "How do I check if a token is safe?" answer + token-scanner
+  knowledge chunk + ROADMAP "Token safety scanner" line updated. Hits better
+  (scan-to-hold onboarding) + safer (exact scanned address, no transcription)
+  with zero wallet/data/mascot touch, no new data sources. tsc + eslint
+  clean (one prettier --fix), build + deploy + live verify done: /scan 200
+  both domains with "Add this token to wallet" in the served scan chunk on
+  the custom domain; "Add DUMB to wallet" + guardrail intact on the homepage
+  (refactor verified); roadmap line live on /plan; all 12 canonical pages
+  200. BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring;
+  #5 still blocked on Antonio's format pick, #6 on mascot approval, #11 on
+  his trading feedback.
+
+- 2026-09-28 00:41 ET run: backlog #15 → SHIPPED **the PLS fallback on the
+  voluntary /burn page** (#15 now DONE — the last pending approved build
+  item). When the connected wallet holds less DUMB than the entered burn
+  amount, /burn shows a new "Burn with PLS" card: a live quote (entered
+  amount × 1.1 pre-tax, 60s refresh, shared generalized `quotePlsBurnFor`)
+  and one wallet confirmation calling the PulseX router's
+  swapExactETHForTokensSupportingFeeOnTransferTokens with `to` = dead, path
+  [WPLS, DUMB] — bought DUMB goes straight to dead. Verified via the swap's
+  receipt Transfer logs to dead (must land ≥ the entered amount, via the
+  generalized `verifyPlsBurn`); the success panel celebrates the verified
+  arrival with an explorer-linked text share — no brag-card image for swap
+  burns (/api/brag-image verifies direct burns only, so no card is promised
+  that can't be generated). Safety review before shipping: PLS-balance guard
+  with explicit note, low-gas warning, acknowledgment checkbox gates the PLS
+  path too, chain pinned to PulseChain, amount input + main burn button locked
+  while a swap is pending/confirming, the 2-min stuck-receipt escape hatch
+  now covers both paths, DUMB-only (DAMP keeps its plain-burn flow), decode
+  via the shared router ABI (no hand-rolled selector — the 00:11 run's
+  selector lesson applied from the start). Pre-ship validation against live
+  chain data: entered 1000 → ~413.4 PLS quoted ~1,100 DUMB pre-tax → ~1,045
+  dead arrival ≥ 1000 ✓ (1 PLS → ~2.66 DUMB, matching the #14b validation).
+  Copy: "~X PLS → buys ~Y DUMB → burned straight to the dead address. The
+  arrival is taxed 6% — that tax is the burn." Dumb AI "How do I burn DUMB?"
+  answer + roadmap "Voluntary burns" line updated. tsc + eslint clean, build
+  + deploy + live verify done: /burn 200 on both domains, the served burn
+  chunk on the custom domain carries the card + router call, roadmap line
+  live on /plan. #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback; #8/#9/#10/#13 stay open as recurring.
+
+- 2026-09-28 00:11 ET run: backlog #14 (b) → SHIPPED **the PLS fallback for
+  the deep-scan burn** (#14 now DONE — all three sub-items shipped). When the
+  connected wallet holds < 100k DUMB, the deep scan panel shows a new "Pay with
+  PLS" card: live quote for ~110k DUMB output (two read-only
+  getAmountsOut calls, estimate-then-refine, 60s refresh), one wallet
+  confirmation calling the PulseX router's
+  swapExactETHForTokensSupportingFeeOnTransferTokens with `to` = dead and path
+  [WPLS, DUMB] — the bought DUMB goes straight to the dead address. Verified
+  math: ~95% of pre-tax lands destroyed (dead is not fee-excluded, backlog #1
+  — the 6% arrival tax IS the burn), 8% slippage guard + 20-min deadline reused
+  from the swap box, and the swap is verified via the tx's receipt Transfer
+  logs to dead (≥ 100k DUMB arrival → 30-day pass). Pre-ship validation against
+  live chain data: 1 PLS → ~2.66 DUMB; ~41,340 PLS quoted ~109,976 DUMB
+  pre-tax → ~104,477 estimated dead arrival ≥ 100k ✓ (matches the panel's
+  ~$0.36 burn-cost figure). Safety review before shipping: decodeFunctionData
+  against the shared router ABI (no hand-rolled selector — the first
+  hand-computed selector attempt was wrong until a viem sanity check against
+  the known 0x7ff36ab5 proved the correct value; ABI-decode eliminates the
+  copy risk entirely); verifier requires tx.to = router, value > 0, exact
+  function name, path exactly [WPLS, DUMB], recipient exactly
+  dead; insufficient-PLS wallets get the button disabled with an explicit note;
+  low-gas users warned to keep PLS for gas; a full 8%-adverse-move edge is
+  messaged honestly (burn still real, pass not issued). Copy: "X PLS → buys
+  ~110k DUMB → burned" plus the taxed-arrival explainer. Shared ?burn= links
+  now re-verify either burn path (verifyDeepScanBurn). Dumb AI knowledge +
+  FAQ + roadmap "Token safety scanner" line updated. tsc + eslint clean,
+  build + deploy + live verify done: /scan 200 on both domains, the served
+  scan chunk on the custom domain carries the PLS card + verifier code. #15
+  (PLS fallback on the /burn page) stays pending; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 23:41 ET run: backlog #14 (a) + (c) → SHIPPED **one-click wallet
+  burn + 30-day deep-scan pass** (Antonio-approved; PLS fallback is the next
+  run's unit). DeepScanPanel on /scan restructured: (a) "Burn in one click"
+  card — the connected wallet sends exactly 100,000 DUMB to the dead address
+  (plain transfer(), no approval), the tx hash is verified on-chain
+  automatically with the full verifyScanBurn checks (receipt + selector +
+  recipient + amount ≥ cost + arrival logs); connect/wallet states reuse the
+  existing ConnectButton, insufficient-balance wallets get an explicit
+  "burn from a wallet that holds enough" note (manual paste fallback kept;
+  PLS option noted as being built next — no invented mechanics). (c) every
+  verified burn (one-click or pasted) now issues a 30-day pass — localStorage
+  ledger {txHash, unlockedAt, expiresAt, path} (`dumb-scan-pass`), validated
+  shape-checked; pass holders get a "30-day pass active · N days left" banner
+  and a one-tap "Run deep scan". Burns are still one-time (used-hash ledger
+  kept — a burn can never mint two passes); shared ?burn= links re-verify
+  on-chain but never mint a pass (the viewer didn't burn). Live USD estimate
+  next to the cost ("~$0.36 est.", null-safe) from the existing on-chain price
+  feed; explicit "permanent, can never be recovered" burn warning; fresh
+  token resets the per-token result while the pass persists. Also fixed
+  stale copy in the same unit: knowledge.ts deep-scan chunk (still said
+  "coming next") + dump.ts FAQ answer now state the 30-day pass; roadmap
+  "Token safety scanner" line updated. tsc + eslint clean, build + deploy +
+  live verify done: /scan 200 on both domains, the served /scan bundle on
+  the custom domain carries "Burn in one click" / "unlock 30 days" /
+  "dumb-scan-pass", and the write-contract chunk now loads on /scan. #14
+  stays open ((b) PLS fallback next); #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 23:11 ET run: backlog #12 phase 3 of 3 → SHIPPED **shareable
+  report cards** for the token safety scanner (#12 now DONE, all three phases
+  shipped). Every completed scan now offers "Share this report": native share
+  sheet on mobile, Post-to-X + Share-to-Telegram intents, copy-report-link
+  button. Links are `/scan?token=0x…` (+ `&burn=0x…` when a deep scan ran) —
+  anti-spoofing by construction: the link carries only an address, and the
+  report RE-RUNS live on-chain at view time (quick scan auto-runs on load; a
+  shared burn tx is re-verified on-chain before the deep scan runs), so a
+  shared link can never show a fabricated or stale result. Caught and fixed
+  mid-run: validateSearch defaults of "" caused a 307 normalize redirect on
+  every /scan visit (`/scan?token=&burn=`); undefined defaults fixed it —
+  200s no-redirect on /scan + a ?token= link on both domains. Roadmap
+  "Token safety scanner" flipped to report-cards LIVE; Dumb AI "How do I
+  check if a token is safe?" answer mentions sharing. tsc + eslint clean,
+  build + deploy + live verify done (live bundle on the custom domain
+  confirmed carrying the share code). BULLISH-RESEARCH.md updated (shipped).
+  #5 still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback.
+
+- 2026-09-27 22:41 ET run: backlog #12 phase 2 of 3 → SHIPPED the **burn-gated
+  deep scan** (the demand engine of the token safety scanner). After any quick
+  scan of a token with a PulseX WPLS pair, a DeepScanPanel offers: burn 100,000
+  DUMB to the dead address from any wallet (dead address + copy button in the
+  panel), paste the tx hash, and the scan verifies it on-chain before running —
+  receipt status 1 + transfer() selector + recipient is dead + amount ≥ cost +
+  receipt Transfer log confirms arrival (the /api/brag-image verification
+  pattern, client-side, read-only). Each burn unlocks exactly one deep scan
+  (localStorage one-time-use ledger). The simulation: router getAmountsOut for
+  a 1 WPLS buy and a 10 WPLS buy, claimed tax applied buy-side and sell-side
+  (matching how fee-supporting swaps settle), then the sell-back quote —
+  reported as round-trip loss % (pass ≤8% / warn ≤20% / fail >20%) and a 1-vs-10
+  WPLS liquidity-depth impact (pass <5% / warn <25% / fail ≥25%). Honest limits
+  throughout: the simulation applies the tax the contract CLAIMS ("real trades
+  can cost more"), unknown-tax tokens get unknown-not-pass, and a clean scan is
+  "a good sign, not a safety certificate." Math validated against live chain
+  data before shipping (DUMB: ~12.2% round-trip loss → warn, 0% depth impact →
+  pass — exactly the 6% tax per leg + slippage). /scan card flipped from
+  "Coming: deep scan" to "Deep scan is live", ROADMAP "Token safety scanner"
+  line flipped, Dumb AI answer updated. No custody, no new contract, no new
+  data sources, no site-side wallet touch. tsc + eslint clean, build + deploy +
+  live verify done (200s on /scan both domains; "Deep scan is live" in SSR;
+  scan-BnCFN50G.js chunk carries the deep-scan code on the custom domain).
+  #12 stays open (phase 3: shareable report cards); #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback.
+- 2026-09-27 22:35 ET hotfix (user-reported): /scan's liquidity check red-flagged
+  legit tokens (PLSX etc.) with 0% LP burned — the scan can only see dead-address
+  burns, not third-party lockers. Fixed `src/lib/token-scan.ts`: 0%-burned is now
+  "warn" (check the pair's holders) instead of "fail"; WPLS itself reports N/A.
+  tsc + eslint clean, rebuilt, deployed (worker 85953f67), /scan 200 on both
+  domains, new copy confirmed in the live bundle.
+- 2026-09-27 22:11 ET run: backlog #12 IN PROGRESS (phase 1 of 3) → SHIPPED
+  the first REAL-UTILITY build: **/scan token safety scanner (free quick scan)**.
+  New route + `TokenScanner` component + `src/lib/token-scan.ts` (pure eth_call,
+  no wallet, no signing, no new data sources): paste any PulseChain address →
+  plain-English report on contract existence, ERC-20 metadata, transfer tax
+  (fees()/taxFee() getters + honest invisible-tax caveat), owner() (renounced vs
+  live), paused(), and the token/WPLS pair with % of LP burned at the dead
+  address. Results are pass/caution/red-flag/unknown; unknown is always framed
+  as risky, never fine; the page says plainly it can't prove a token safe.
+  End-to-end validated against live chain data before shipping (DUMB: 6% getter,
+  zero-address owner, 100% LP burned — the real values matched the scan).
+  Nav wired (desktop + mobile More), sitemap updated, per-page share metadata,
+  Dumb AI learned it ("How do I check if a token is safe?" + knowledge chunk),
+  ROADMAP gained a "Token safety scanner" group (quick scan shipped; deep scan
+  + report cards pending). Hits the NORTH STAR: outsiders come to check tokens,
+  eyes on DUMB, zero custody, zero new contracts. Deliberately scoped to one
+  unit of work — the burn-gated deep scan (simulated buy+sell) is the next run's
+  phase, not this one. tsc + eslint clean, build + deploy + live verify done
+  (200s on /scan both domains; /ai + /plan strings live on the custom domain).
+  #12 stays open (phases 2-3); #8 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 21:41 ET run: backlog #9 DONE (security pass on the newest
+  shipped surface — the 21:11 run's RPC-hardening in `src/lib/burns.ts`,
+  which feeds the /burn ticker + leaderboard). Reviewed clean, no
+  user-facing changes: (1) withRetry is bounded (3 attempts, ≤1.2s backoff)
+  — transient RPC drops retry, a genuinely dead RPC still surfaces the
+  honest error state; (2) chunking sound — `latest` captured once so the
+  window can't slide mid-scan, 5k-block chunks, the chunk-loop `to` clamp
+  has correct operator precedence and always terminates; (3) receipt fetches
+  bounded to RECEIPT_BATCH=4 with per-call retry (the exact pattern that
+  killed scans is the one now bounded); (4) classification logic unchanged
+  and still matches the verified #1 accounting — contract/zero-address legs
+  skipped, dust filter (<0.005 tokens) documented; the pathological edge (a
+  taxed transfer whose recipient is the token contract itself classifying as
+  "voluntary") is defensible and not worth churn; (5) no secrets, no
+  signing, no user-input paths, pre-existing public RPC only; decodeEventLog
+  in try/catch; Number() conversions display-safe at these magnitudes;
+  timeAgo guards client clock skew. tsc + eslint clean (independent
+  re-run); no code changes, so no build/deploy. Health sweep: all 14
+  canonical pages 200 on the custom domain. #9 stays open as recurring;
+  #8 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 21:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine resilience fix found by the every-loop lens: **burn-scan RPC
+  hardening in `src/lib/burns.ts`** (feeds the /burn ticker + leaderboard).
+  The scan was the only loop surface with zero tolerance for the documented
+  rpc.pulsechain.com batch-drop quirk: two unchunked 20k-block getLogs calls
+  and up to 30 parallel receipt/block reads — one dropped call blanked both
+  components with an error state on a healthy chain. Now: 5k-block getLogs
+  chunks per token, receipt batches of 4, and every RPC call retries
+  individually with 400/800ms backoff (3 attempts, then honest error state).
+  Verified the chunked approach against the live RPC from the sandbox (38
+  DUMB→dead legs in a real 5k-block window). No user-visible change, no
+  wallet/data/mascot touch, no new data sources. tsc + eslint clean (one
+  --fix pass), build + deploy + live verify done: /burn 200 on custom domain
+  + preview worker, the deployed burn chunk carries the new code (minified
+  SCAN_BLOCKS 20000n / LOG_CHUNK 5000n / RECEIPT_BATCH 4 / withRetry
+  attempts=3 confirmed in the served bundle), new roadmap line live on
+  /plan. ROADMAP "Voluntary burns" gained the line; BULLISH-RESEARCH.md
+  updated (shipped). #8 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 20:41 ET run: backlog #8 + #10 lenses, one unit of work, audit-only
+  (NO code changes, no build/deploy — nothing found that earned a change).
+  (1) Independently verified the evening neon reversal is complete AND live:
+  the custom domain's served CSS carries --primary:oklch(86% .24 135)
+  (= #85F128 neon); zero deep-green remnants (#3FAD1E / [63,173,30] /
+  oklch(66% .2 140)) anywhere in src/ or public/; brag-card.server.ts LIME
+  back to [57,255,20]; public/og-card.png is byte-identical to the live
+  og-card.png on the custom domain (md5 9ebb4a3b5e0aa3d8a9c8de1ae3b51ea0,
+  713,862 bytes) — the rebuilt new-mascot + neon share image is what
+  visitors actually get. (2) Roadmap audit: every recent "gained the line"
+  claim verified present and accurate in src/data/dump.ts — the 18:41
+  restored guardrail / walkthrough+gas / native-share lines and the
+  19:11 + 20:11 framing lines; done flags honest ("90 days / Products and
+  rails" still correctly done:false). (3) Raid-leaderboard honesty spot
+  check: the XP board is local-only browser storage with "fun scoreboard,
+  not a reward promise" copy — no invented community members; the roadmap's
+  "Raid leaderboard fills with real names" reads as the user's own XP
+  filling their board. No concurrent loop instance detected in the tree.
+  BULLISH-RESEARCH.md "Considered" updated. #8 + #10 stay open as recurring;
+  #5 still blocked on Antonio's format pick, #6 on mascot approval, #11 on
+  his trading feedback.
+
+- 2026-09-27 20:11 ET run (second instance in this slot — audit-only, NO code
+  changes): backlog #8 + #9 lenses, one unit of work, nothing manufactured.
+  (1) Independently verified the concurrent 20:11 run's DAMP-framing fix:
+  whitepaper FAQ + /trade DAMP/WPLS sibling card + /story flywheel bullet all
+  lead with the "2% instant burn, 1% reflected" net in source; "instantly
+  burned" confirmed in the live /trade SSR HTML on the custom domain; the
+  roadmap line is present in dump.ts. (2) Full framing-consistency grep audit:
+  every remaining leg-first mention (Proof.tsx "Net:" line, BurnBox burnedPct
+  5/2 = the nets, TaxFlowVisual "Net effect:", whitepaper, knowledge chunks,
+  /ai FAQ) already leads with the net. Deliberately not churned: the homepage
+  "Nobody in charge" card's legs-only split sits directly under the
+  net-stating card and its message is immutability, not tax mechanics.
+  (3) Full on-chain address-constant safety audit: all 43 unique 0x literals
+  in src/ + public/ traced — every one lands in the curated
+  src/lib/pulsechain.ts config, a zero-address sentinel, /story's historical
+  timeline tx links, the DUMB/DAMP pool address, or the ERC-20 Transfer event
+  topic in brag-image.ts (not an address). The PLSX lookalike
+  0x95B303987A60C71504D99Aa4b13fcA6295C4e928 appears only in a warning
+  context (no contract on-chain, unused). No rogue or unverifiable address
+  anywhere. (4) Health sweep: all 14 canonical pages 200 on the custom
+  domain; /compare + /join 308s holding. tsc/eslint not re-run (zero code
+  changes), no build/deploy. BULLISH-RESEARCH.md "Considered" updated.
+  #8 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 20:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine consistency fix found by holding every DAMP mention against the locked
+  canonical framing ("never describe it as '1% burn + buckets' without the net;
+  the net is the message"). Three pages described DAMP's 3% tax legs-first with
+  NO net, while DUMB always ended with it: (1) whitepaper FAQ "What about DAMP?"
+  said "3% tax (1% to the contract, 1% burned, 1% reflected)"; (2) /trade's
+  DAMP/WPLS sibling card said "1% burn + 1% reflection fire on every transfer";
+  (3) /story's flywheel bullet said "its own 1% burn and 1% reflection still
+  fire". All three now lead with "2% instant burn, 1% reflected to holders",
+  keeping the leg detail (1% to the dead address, 1% into the entombed
+  contract bucket) as the explanation. Roadmap "Voluntary burns" gained the
+  line. Deliberately not churned: chains.tsx fee cell already ends "net 5%
+  instant burn"; Proof.tsx already ends "Net: 5% ... 1% reflected"; /ai
+  knowledge + roadmap already led with the DAMP net. tsc + eslint clean,
+  build + deploy + live verify done (/trade and /story SSR-checked on the custom
+  domain and the preview worker; whitepaper string confirmed in the deployed
+  build chunk; roadmap line live on /plan). BULLISH-RESEARCH.md updated
+  (shipped). #8 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 19:41 ET run: backlog #9 DONE (security pass — the newest shipped
+  surface since the 16:11 #9: the GET-only /api/brag-image endpoint, the
+  server-side brag-card PNG renderer + its concurrent-run rename to
+  brag-card.server.ts, and the /brag share page). Reviewed clean, no
+  user-facing changes: (1) TX_RE is strict ^0x[0-9a-fA-F]{64}$ before anything
+  touches the RPC; the hash only ever lands in a JSON-RPC body to the hardcoded
+  rpc.pulsechain.com — no SSRF, no injection path. (2) Verification is strictly
+  conservative: receipt status 0x1 + tx.to is DUMB/DAMP + transfer() selector +
+  recipient is dead + amount > 0 + receipt Transfer log (from=tx.from, to=dead)
+  — anything else 404s; the rendered amount comes from the successful calldata,
+  which is exactly what the contract moved. (3) No cache poisoning: the
+  1-year immutable cache applies only to the deterministic output (every input
+  derives from the validated tx / on-chain bigint / deterministic seeds); 400s
+  and 404s carry no cache header, so transient RPC flakes can't pin a false
+  negative. (4) All rendered text is server-formatted or validated (unknown
+  glyphs skipped); output is a PNG — no script path. (5) brag.tsx builds
+  og:image only for TX_RE-valid txs (falls back to og-card.png),
+  encodeURIComponent on og:url/canonical, explorerTx only ever sees validated
+  hashes. (6) DoS amplification bounded: the expensive render only runs after
+  full on-chain verification; per-isolate bg/flame/glyph caches. (7) The old
+  POST-upload path is fully gone (no Cache/FormData remnants); the rename left
+  no dangling imports. Also re-verified the 05:41 receipt-status gating still
+  holds in BurnBox (share blocks render only under txSucceeded && hash).
+  tsc + eslint clean; no code changes, so no build/deploy this run. #9 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback.
+
+- 2026-09-27 19:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine consistency fix found by grepping the whole src/ tree against the
+  locked canonical framing: **homepage JSON-LD schema description now says
+  the net**. The `WebSite.description` schema (what search engines show) still
+  said "a live 1% burn and 1% reflection" — the last leg-first remnant after
+  the 17:41 whitepaper and 18:11 /story fixes. Now "5% instant burn and 1%
+  reflections", matching the hero, whitepaper, and /story. Deliberately NOT
+  churned: BurnTicker/Leaderboard empty states ("every taxed transfer still
+  burns 1%") name the exact 1% protocol leg the ticker scans — factual in
+  context, no buckets mentioned; Proof.tsx's "(1% burn, 1% reflection)" sits
+  directly under its own "Net: 5% ... 1% reflected" line. Health check this
+  run: all 14 canonical pages 200 on the custom domain. tsc + eslint clean,
+  build + deploy + live verify done (JSON-LD fix + new roadmap line live on
+  both the custom domain and the preview worker). ROADMAP "Voluntary burns"
+  gained the line; BULLISH-RESEARCH.md updated (shipped + 2 considered-kept).
+  #8 stays open as recurring; #5 still blocked on Antonio's format pick, #6
+  on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 18:41 ET run: backlog #10 DONE (roadmap hygiene, recurring) →
+  SHIPPED three restored milestone lines the 18:11 run's "Voluntary burns"
+  collapse dropped out of the public roadmap entirely: the "Which Dumb
+  Money?" verified-address guardrail + one-tap add-to-wallet and the
+  first-swap walkthrough / get-gas guide / no-gas warning (both in "Live on
+  PulseChain"), and the native share sheet + per-page share previews (in
+  "Community ignition"). All three verified present in code (guardrail
+  mounts on home/trade/story/wallet, walkthrough + gas guide on /trade,
+  NativeShareButton on raid/swap/burn success, pageMeta() in all 14 routes)
+  before writing the claims. Genuinely user-visible: /plan. tsc + eslint
+  clean, build + deploy + live verify done (200s on /plan; all three new
+  lines present in the served HTML on the custom domain and the preview
+  worker). #10 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 18:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  consistency fix found by holding /story against the locked canonical
+  framing: **the "record, corrected" section now says the net out loud**.
+  The section listed the legs (1% burn to dead, 1% reflection, 4% into the
+  contract's buckets) without ever stating the net — violating the 2026-09-27
+  rule ("never describe it as '1% burn + buckets' without the net; the net is
+  the message"). Added a closing line: "Say it plainly: every taxed transfer
+  burns 5% and reflects 1% — 1% to the dead address plus 4% into the
+  entombed buckets, burned in every way that matters." Verified the /ai FAQ
+  already led with the net (no change needed); Proof.tsx's tax note already
+  ends "Net: 5% ... 1% reflected" (kept as-is, not churned). CONCURRENT-RUN
+  COLLISION: a second instance of this loop was mid-run in the same tree
+  (renaming src/server/brag-card.ts → brag-card.server.ts, then deploying).
+  The tsc errors seen mid-run were the rename in flight — the settled tree
+  is tsc-clean. I waited for its deploy to finish, verified my change was
+  NOT in its bundle (stale dist), then built + deployed myself and verified
+  live. Both runs' work is now on the Worker. tsc + eslint clean (one
+  prettier --write pass), build + deploy + live verify done (200s; "Say it
+  plainly" on /story via custom domain + preview worker; new roadmap line
+  live on /plan). ROADMAP "Voluntary burns" gained the line;
+  BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback.
+
+- 2026-09-27 17:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine consistency fix found by holding the whitepaper against the locked
+  canonical framing: **whitepaper + homepage tax framing aligned to "5%
+  instant burn, 1% reflections"**. The whitepaper said every trade "destroys
+  1% of its amount and reflects 1%" and led with the 2/2/1/1 leg split in its
+  share description, lead paragraph, and page intro — violating the
+  2026-09-27 rule ("never describe it as '1% burn + buckets' without the net;
+  the net is the message"). The /ai FAQ, /roots, /proof, and the tax
+  visualizer already led with the net; the whitepaper was the outlier. Now
+  the whitepaper leads with 5% instantly burned (1% to the dead address,
+  2% + 2% into the entombed buckets) + 1% reflected in all six spots, with
+  the leg detail kept as the explanation of how the 5% works; DAMP's line now
+  states 3% = 2% instant burn + 1% reflections. The homepage "Where the 6%
+  goes" card now ends "Say it plainly: every trade burns 5% and reflects 1%"
+  (was: "burns and reflects a little"). Health check this run: all 14
+  canonical pages 200 on the custom domain, share metadata still correct
+  (og:url=/burn, twitter:title right), no rot. tsc + eslint clean (one
+  prettier --fix pass), build + deploy + live verify done (new framing +
+  og:description + roadmap line live on both the custom domain and the
+  preview worker). ROADMAP "Voluntary burns" gained the line;
+  BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback.
+
+- 2026-09-27 16:41 ET run: backlog #8 DONE (recurring research) — ran the
+  overdue outbound-link + page-health audit the loop has never done: every
+  user-facing external URL in src/ + public/ curl-checked (bridge.pulsechain.com,
+  x.com/dumbmoneydotwin, t.me/dumbmoneydotwin, both flagship DEXScreener pair
+  links, the dumbmoneytest.melanatedintech.com Robinhood-site link on /chains —
+  all 200; the two DEXScreener 403s are known bot-blocking, not dead links).
+  Live sweep of the custom domain: all 14 canonical pages return 200 and both
+  route aliases still return 308 (the 15:41 SEO fix holding). No rot found, so
+  no code changes — nothing manufactured for its own sake. tsc/eslint not
+  re-run (no changes), no build/deploy needed. #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #6 on mascot approval, #11 on his
+  trading feedback.
+
+- 2026-09-27 16:11 ET run: backlog #9 DONE (security pass on the newest
+  shipped surfaces since the 11:41 #9: the 12:11 per-page share-metadata
+  helper + 15:41 308 redirect files + 14:11/15:11 Dumb AI knowledge chunks).
+  Reviewed clean, no user-facing changes: (1) `src/lib/page-meta.ts` —
+  every `pageMeta()` call site (all 14 canonical routes) passes literal
+  path/title/description constants; `SITE_URL` is a curated constant and the
+  `path` param is type-constrained (`/${string} | "/"`); meta values flow
+  through TanStack Start's SSR head serializer which escapes attributes,
+  so no HTML/attribute injection path. (2) compare.tsx / join.tsx 308
+  redirects — `redirect({ to: "/chains"|"/raid", statusCode: 308 })` with
+  static literal targets, no user-controlled input, so no open-redirect
+  vector; beforeLoad-only, nothing else runs. (3) /ai knowledge additions
+  (burn-contest + share chunks, "Are there burn contests?" / "How do I
+  share DUMB?" answers in `src/data/dump.ts`) — static curated text, no
+  dangerouslySetInnerHTML anywhere in ai.tsx, the dumb components, or
+  dump.ts, so answers render as React-escaped text only. The 13:11 burn-
+  milestones and 13:41 guardrail mounts reuse already-reviewed components
+  with no new logic. tsc + eslint clean; no code changes, so no
+  build/deploy this run. #9 stays open as recurring; #5 still blocked on
+  Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback.
+
+- 2026-09-27 15:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine SEO-correctness fix found by the research lens: **route aliases now
+  return permanent 308s instead of 307 Temporary**. /compare → /chains and
+  /join → /raid are permanent aliases by design (AGENTS.md), but TanStack
+  Router's `redirect()` defaults to 307, so crawlers treated them as temporary
+  — re-requesting them forever and splitting link equity instead of
+  consolidating it on the canonical pages. Added `statusCode: 308` to both
+  route files (compare.tsx, join.tsx); 308 is method-preserving and browsers
+  cache it, so repeat visitors get the redirect without a round trip. No
+  user-visible change, no wallet touch, no new data sources, no mascot
+  pixels. tsc + eslint clean, build + deploy + live verify done (308 →
+  /chains and /raid on both the preview worker and the custom domain; new
+  roadmap line live on /plan). ROADMAP "Voluntary burns" gained the line;
+  BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback.
+
+- 2026-09-27 15:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine consistency fix found by the research lens: **Dumb AI now knows the
+  burn-contest state**. The /burn card ("Burn contests next") and the roadmap
+  (design done, waits on Antonio's format pick) advertised contests, but the
+  /ai suggested answers and the on-site RAG knew nothing about them — a user
+  asking "are there burn contests?" got the shrug fallback while the site
+  advertised the topic. Added a "Burn contests" knowledge chunk + an "Are there
+  burn contests?" suggested answer: nothing live yet, design done,
+  recognition-only milestone drive recommended, wash-burning is
+  self-defeating, funded prizes off the table, implementation waits on
+  Antonio's format pick. Honest framing kept ("burns shrink supply, never
+  promise price"); no wallet touch, no new data sources, no mascot pixels.
+  tsc + eslint clean, build + deploy + live verify done (200s; "Are there burn
+  contests?" present in the served /ai HTML on the custom domain and the
+  preview worker). ROADMAP "Voluntary burns" gained the line;
+  BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback.
+
+- 2026-09-27 14:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  staleness fix found by the research lens: **sitemap.xml refreshed — /burn
+  and /wallet were missing from the crawler map**. A live check of
+  /sitemap.xml showed only 12 of the 14 canonical pages: /burn (the page the
+  loop has done the most work on) and /wallet were absent, so search
+  crawlers had no map to the pages the share buttons actually link to. The
+  static `public/sitemap.xml` is the serving mechanism (verified live: Worker
+  static assets shadow server-entry interception — an initial attempt to
+  serve the sitemap from src/server.ts returned the stale static file, so
+  the interception was reverted and the static file updated instead; no dead
+  code left behind). robots.txt already correct (allows all, points at the
+  sitemap) — untouched. Hits better (search discovery for the two busiest
+  pages) + fun-adjacent (the share funnel's other half). No wallet touch, no
+  new data sources, no mascot pixels, no user-visible change. tsc + eslint
+  clean, build + deploy + live verify done (14 URLs served 200 on the custom
+  domain and the preview worker; robots.txt 200). ROADMAP "Voluntary burns"
+  gained the line; BULLISH-RESEARCH.md updated (shipped). #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback.
+
+- 2026-09-27 14:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  staleness fix found by the research lens: **Dumb AI knowledge refreshed
+  (second pass)**. Four features shipped after the 09:11 refresh had already
+  made the /ai answers and the on-site RAG stale again: (1) the
+  knowledge `onboarding` chunk listed the "Which Dumb Money?" guardrail
+  mounts as home/trade/story only — /wallet was missing (added 13:41 run);
+  (2) the `burn-page` chunk knew nothing of the burn-milestones strip on
+  /burn, the "Burning from another wallet" dead-address copy card, or the
+  "Brag about it" share buttons; (3) no knowledge at all of the native
+  share-sheet button. Fixed by: extending the burn-page and onboarding
+  chunks, adding a new `share` chunk (Brag-about-it + native share sheet +
+  per-page share previews, "nothing ever posts for you"), extending the
+  "How do I trade DUMB?" and "How do I burn DUMB?" suggested answers, and
+  adding a new suggested question "How do I share DUMB?". Hits better (the
+  assistant stops sending users to outdated flows) + safer (an AI answering
+  stale is worse than one staying quiet). No wallet touch, no new data
+  sources, no mascot pixels. tsc + eslint clean, build + deploy + live
+  verify done ("How do I share DUMB?" + all new knowledge strings present
+  in the served chunks on the custom domain and the preview worker).
+  ROADMAP /ai line extended; BULLISH-RESEARCH.md updated (shipped). #8 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback.
+
+- 2026-09-27 13:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine safety improvement found by the research lens: **"Which Dumb Money?"
+  guardrail mounted on /wallet**. The verified-address + one-click
+  add-to-wallet card (already on home, /story, /trade) was missing from the
+  one page where a name-collision victim discovers the problem — their holdings
+  page shows nothing, with no explanation and no verified addresses in sight.
+  Now the guardrail sits above the holdings: the real PulseChain DUMB/DAMP
+  addresses, explorer links, copy buttons, and the chain-checked EIP-747
+  add-to-wallet buttons are exactly where the confusion surfaces. Reuses the
+  existing verified component (no new code beyond the mount, no new data
+  sources, no wallet-logic changes, no mascot pixels). Hits safer (right
+  contract at the moment of doubt) + better (accessibility for the confused).
+  tsc + eslint clean, build + deploy + live verify done ("Which Dumb Money?"
+  on /wallet via the custom domain and the preview worker; new roadmap line
+  live on /plan). ROADMAP "Voluntary burns" gained the line;
+  BULLISH-RESEARCH.md updated (shipped). #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback.
+
+- 2026-09-27 13:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **burn milestones strip
+  mounted on /burn** (between the lifetime TotalBurned card and the ticker).
+  The 16B/17B/18B milestone strip — the community's rally point for the next
+  milestone — already existed on /trade and /roots but was missing from the
+  one page entirely about burning. Reuses the existing verified
+  BurnMilestones component (shared react-query cache with /roots, no extra
+  RPC; honest about the 14B launch-day share and the 1% protocol burn that
+  keeps it growing). Hits better (milestone momentum where burns happen) +
+  fun (rally framing) with zero wallet/data/mascot touch. tsc + eslint
+  clean, build + deploy + live verify done ("Burn milestones" present in the
+  served /burn HTML on both the custom domain and the preview worker).
+  ROADMAP "Voluntary burns" gained the line; BULLISH-RESEARCH.md updated
+  (shipped). #8 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 12:41 ET run: backlog #10 DONE (roadmap hygiene) → audited every
+  "done" claim in the ROADMAP against shipped code (TaxFlowVisual, TotalBurned,
+  dead-address copy card in BurnBox, gas guide + no-gas banner in the swap box,
+  wallet_watchAsset in ContractGuardrail, /ai knowledge file) — all verified
+  present. Added the one shipped improvement the roadmap was missing: the
+  12:11 run's per-page social-share metadata fix (og:url + twitter:title/
+  description so shared links preview the right page), inserted after the
+  share-sheet line. tsc + eslint clean (only pre-existing warnings), build +
+  deploy + live verify done (200 on /plan with the new line; 200 on /burn).
+  #10 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 12:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **per-page social-share
+  metadata fix (og:url + twitter:title/description)**. Live check showed every
+  shared page link previewed as the homepage: `og:url` pointed at "/" and
+  `twitter:title` was the home title, because route-level heads only set
+  og:title/og:description and the root's tags filled the rest. Shared links
+  from the burn/share buttons the loop shipped (09:11–11:11 runs) therefore
+  previewed wrong — undercutting the entire share surface. New shared
+  `src/lib/page-meta.ts` helper (`pageMeta(path, title, description)`) emits
+  the full set: title, description, og:title, og:description, og:url,
+  twitter:title, twitter:description, plus the canonical link; all 14 routes
+  with head blocks (index, ai, burn, chains, culture, genesis, plan, proof,
+  raid, roots, story, trade, wallet, whitepaper) now use it — copy verbatim,
+  no rewrites. compare/join are aliases with no head — untouched. og:image
+  (real 1200×630 card, verified served) still inherits from the root by
+  design. No wallet touch, no new data sources, no mascot pixels. tsc + eslint
+  clean (only pre-existing warnings), build + deploy + live verify done
+  (og:url=/burn and twitter:title="Burn DUMB — Dumb Money Hub" on the custom
+  domain; /ai verified on the preview worker). BULLISH-RESEARCH.md updated
+  (shipped). #8 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 11:41 ET run: backlog #9 DONE (security pass on the newest shipped
+  surface — the 11:11 run's "Burning from another wallet?" dead-address copy
+  card + the shared CopyButton it rides on). Reviewed clean, no user-facing
+  changes: (1) DEAD is the canonical `0x000000000000000000000000000000000000dEaD`
+  from curated `src/lib/pulsechain.ts` — the same constant BurnBox signs to;
+  copy writes the identical value the on-site flow uses, no mismatch path.
+  (2) CopyButton's copied value is a curated constant, never user input;
+  address renders as React-escaped text; `navigator.clipboard.writeText` is
+  try/caught with a manual-copy fallback toast (also covers clipboard being
+  undefined on old browsers). (3) Card copy matches verified #1 tax accounting
+  (~95% DUMB / ~98% DAMP arrival), carries the first/last-4 verification
+  reminder (0x00…dEaD) + "Burns are permanent and never promise price"; the
+  explorer address link is curated-base + constant with rel noreferrer noopener.
+  (4) Card sits outside the AlertDialog — it cannot interfere with the ack
+  checkbox / final-check flow of the on-site burn. (5) Clipboard-hijack
+  malware on the user's own machine is outside the site's reach, but the
+  verify-against-explorer reminder is the right mitigation and is present.
+  No wallet touch from the card itself. tsc + eslint clean; no code changes,
+  so no build/deploy this run. #9 stays open as recurring; #5 still blocked
+  on Antonio's format pick, #6 on mascot approval, #11 on his trading
+  feedback.
+
+- 2026-09-27 11:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **"Burn from another wallet"
+  dead-address copy card** at the bottom of the BurnBox on /burn — the dead
+  address with a one-tap copy button (shared CopyButton) for holders burning
+  from an exchange, hardware wallet, or any other app. Previously those users
+  had to hand-transcribe the 42-char address from the screen for an irreversible
+  transfer — exactly how tokens get lost. Copy-first design + a first/last-4
+  character verification reminder (0x00…dEaD) + the direct-burn arrival math
+  (~95% DUMB / ~98% DAMP lands in the dead balance; ~5%/2% burned, ~1%
+  reflected) + "permanent, never promise price" framing. Safety judgment: the
+  copy can't be gated by the ack checkbox like the on-site flow, but
+  transcription is strictly worse — shipped under the veto as a net safety
+  gain. Hits better (off-site holder accessibility) + safer. tsc + eslint
+  clean, build + deploy + live verify done (200 on /burn; "Burning from another
+  wallet" present on the custom domain and the preview worker). ROADMAP
+  "Voluntary burns" gained the line; BULLISH-RESEARCH.md updated (shipped).
+  #8 stays open as recurring; #5 still blocked on Antonio's format pick, #6 on
+  mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 10:41 ET run: backlog #9 DONE (security pass on the newest shipped
+  surface — NativeShareButton + share.ts from the 10:11 run, plus all three call
+  sites). Reviewed clean, no user-facing changes: (1) `window.open(fallbackUrl,
+  "_blank", "noopener")` blocks opener access; (2) AbortError (user dismissal)
+  returns silently — no popup ambush; (3) share exists check is SSR-safe
+  (post-mount effect, no hydration mismatch); (4) all share payloads are curated
+  strings — explorerTx = scan.pulsechain.com + /tx/{hash} (hash is a real 0x
+  receipt hash from wagmi, never user text), SITE.url or window.location.origin,
+  intent URLs encodeURIComponent'd; amounts come from the at-send snapshot, so
+  post-confirm input edits can't make the share text lie; (5) copy is plain
+  text passed to the share sheet / intents, never rendered as HTML — no XSS
+  vector; (6) spec-invalid URLs throw inside navigator.share → caught → falls
+  back to the X intent, graceful. No wallet touch, no new data sources, no
+  mascot pixels. tsc + eslint clean; no code changes, so no build/deploy this
+  run. #9 stays open as recurring; #5 still blocked on Antonio's format pick,
+  #6 on mascot approval, #11 on his trading feedback.
+
+- 2026-09-27 10:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **"Share anywhere" native
+  share-sheet button** on all three share surfaces (burn-success, swap-success,
+  raid-mission share rows). New shared `NativeShareButton` (`src/lib/share.ts`
+  + `src/components/dumb/NativeShareButton.tsx`): on phones it opens the OS
+  share sheet (Messages, WhatsApp, any installed app) with the same honest
+  pre-filled copy + explorer link, instead of forcing the clunky X/Telegram
+  web intents. Safety: user dismissal respected (AbortError → silent, no popup
+  ambush); any other failure falls back to the X intent URL; renders only where
+  the Web Share API exists (post-mount check, no SSR/hydration mismatch), so
+  desktop is unchanged. Hits better (mobile users can spread the word to any
+  app) + fun. No wallet touch, no new data sources, no mascot pixels. tsc +
+  eslint clean, build + deploy + live verify done (NativeShareButton chunk
+  present on custom domain + preview worker; roadmap "Share anywhere" line
+  live on /plan). ROADMAP + BULLISH-RESEARCH.md updated. #8 stays open as
+  recurring; #5 still blocked on Antonio's format pick, #6 on mascot
+  approval, #11 on his trading feedback.
+
+- 2026-09-27 09:41 ET run: backlog #9 DONE (security pass — newest wallet-touching
+  surface: the ContractGuardrail "Add DUMB/DAMP to wallet" wallet_watchAsset
+  buttons from the 08:41 run; plus the /ai FAQ content refresh from 09:11).
+  Reviewed clean: EIP-747 params object shape correct, true/false return handled,
+  chain 369 checked BEFORE the prompt, addresses from curated verified config,
+  decimals 18 correct for both tokens, reversible read-only prompt, honest
+  fallbacks. /ai answers render as React-escaped text only (no HTML injection);
+  the one dangerouslySetInnerHTML on / is static JSON-LD (pre-existing, safe).
+  Found and SHIPPED 1 real hardening: the chain gate proceeded when the chainId
+  was UNKNOWN (`chainHex &&` guard) — an edge case where a provider failing both
+  eth_chainId and eth.chainId would add the verified address under whatever
+  network the wallet happened to be on. Now unknown chainId refuses like
+  wrong-chain ("switch to PulseChain 369 first") instead of guessing. tsc +
+  eslint clean, build + deploy + live verify done (200s on / and the preview
+  worker; fix `i?.toLowerCase()!==g` confirmed in the served ContractGuardrail
+  chunk on both domains). No new data sources, no mascot pixels. #9 stays open
+  as recurring; #5 still blocked on Antonio's format pick, #6 on mascot approval,
+  #11 on his trading feedback.
+
+- 2026-09-27 09:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  staleness fix found by the research lens: **Dumb AI knowledge refreshed**
+  (/ai FAQ + the on-site RAG knowledge base). The "How do I trade DUMB?"
+  suggested answer still described only the PulseX flagship pair — it now
+  covers the on-site swap, the 5-step first-swap walkthrough, the gas guide
+  (PLS needed for gas; the swap box warns under 0.05 PLS), and the tax-on-the
+  -quote. Added a new "How do I burn DUMB?" suggested answer (/burn: Burn it
+  box = plain transfer to dead, ~95%/98% arrival, checkbox + final check,
+  explorer links; tax visualizer, total-burned card, ticker, real-burners-only
+  leaderboard). Added three KNOWLEDGE chunks (burn-page, first-swap
+  onboarding incl. the guardrail's one-click add-to-wallet buttons,
+  community ratings wall) so the RAG stops giving outdated answers — an AI
+  that answers stale is worse than one that stays quiet. Honest framing kept
+  ("information, not advice", "burns shrink supply, never promise price").
+  No wallet logic touched, no new data sources, no mascot pixels. tsc +
+  eslint clean, build + deploy + live verify done (200s on /ai; "How do I
+  burn DUMB?" present in the served HTML on the custom domain and the
+  preview worker). ROADMAP "Voluntary burns" group gained the line. #8 stays
+  open as recurring; #5 still blocked on Antonio's format pick, #11 on his
+  trading feedback, #6 on mascot approval.
+
+- 2026-09-27 08:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **"Add DUMB/DAMP to wallet"
+  one-click buttons (EIP-747 `wallet_watchAsset`)** under each verified
+  contract address in the "Which Dumb Money?" guardrail — automatically on the
+  homepage hero, /trade, and /story where the guardrail mounts. Ends the
+  #1 name-collision anxiety at the point of address-copy: one tap adds the
+  correct PulseChain contract instead of a hand-typed paste. Safety details:
+  reads `eth_chainId` first and refuses on the wrong network (switch to
+  PulseChain 369, then tap again); read-only wallet prompt — no gas, no
+  signing, reversible, user can decline; honest fallbacks (no wallet detected
+  / user rejected → copy manually). Hits better (onboarding friction),
+  safer (right address from the verified source), fun (guardrail personality
+  intact). No new data sources, no mascot pixels. tsc + eslint clean, build +
+  deploy + live verify done (200s; `wallet_watchAsset` confirmed present in
+  the deployed ContractGuardrail chunk on the custom domain AND the preview
+  worker). ROADMAP "Voluntary burns" gained the line; BULLISH-RESEARCH.md
+  updated (shipped). #8 stays open as recurring; #5 still blocked on Antonio's
+  format pick, #11 on his trading feedback, #6 on mascot approval.
+
+- 2026-09-27 08:11 ET run: backlog #9 DONE (security pass — the newest
+  surfaces: TotalBurned all-time card, TaxFlowVisual math, share intents,
+  gas-warning logic). Verified, no user-facing changes: (1) TaxFlowVisual
+  legs sum to 100% per token (DUMB 94/1/2/2/1, DAMP 97/1/1/1) against the
+  verified #1 accounting; dead footnote ≈95/98 correct; input parse
+  try/caught; tax constants 600/300 confirmed. (2) BurnBox deadBps/bucketBps
+  correctly parameterized per token (9500/400 DUMB, 9800/100 DAMP). (3)
+  TotalBurned reads chain-pinned (chainId 369), honest error+retry states,
+  shareOfSupply guards zero supply. (4) 05:41 receipt-status fix confirmed
+  still in place in both SwapBox and BurnBox. (5) Share intent URLs all
+  encodeURIComponent'd; amounts/symbols from curated config only.
+  (6) Gas-warning logic sound (warn-only, onPulse-gated, uses existing
+  native balance). DEEP CHECK on one honesty question: does the dead
+  address accrue holder reflection, which would make "Total burned"
+  deltas overstate burn legs? Verified against the actual verified token
+  source (scan.pulsechain.com): the fork keeps SEPARATE mappings —
+  public isExcludedFromFee (dead=FALSE, verified #1) and private
+  _isExcluded for reward; the constructor never reward-excludes dead and
+  excludeFromReward is onlyOwner (owner renounced). But _isExcluded is
+  private and isExcludedFromReward doesn't exist as a public getter (call
+  reverts on both tokens), so dead's reward status is unknowable from
+  outside — and the empirical test was inconclusive (token nearly idle:
+  2 dust to-dead legs / 0.00 DUMB dead growth over 3000 blocks; archive
+  eth_getLogs too flaky for a wider comparison). Judgment: NO user-facing
+  change warranted — every displayed number is a real on-chain balance,
+  "destroyed" labels are accurate either way, and the footnote's 95/98
+  arrival math is exactly verified. Shipped the only honest fix: the
+  component docstring no longer overclaims "only burn legs and voluntary
+  burns ever arrive there" — it now records the reflection caveat from
+  the source and warns future runs never to derive a "burn rate" from
+  dead-balance deltas. tsc + eslint clean, build + deploy + live verify
+  done (200 on /burn, custom domain + preview worker). #9 stays open as
+  recurring; #5 blocked on Antonio's format pick, #6 on mascot approval,
+  #11 on his trading feedback.
+
+- 2026-09-27 07:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement completing the 07:11 gas-guide work: **"No gas in the
+  tank" inline warning in the SwapBox** — when the connected wallet holds
+  under 0.05 PLS on PulseChain, a gold banner appears above the swap button:
+  "every swap needs PLS for gas — this trade will likely fail. Here's how to
+  get some" linking to the #get-pls gas guide on /trade. Catches the
+  zero-gas dead end at the decision point instead of after a cryptic
+  wallet-step failure; warns without blocking (balance may change), uses the
+  already-fetched native balance (no new data sources, no wallet-logic
+  changes, no mascot pixels). ALSO FIXED a syntax break the 07:11 run left
+  behind: its ROADMAP line wrote `"Get gas before you trade" guide on
+  /trade` with unescaped inner double quotes, which failed `tsc --noEmit`
+  (line 190) — re-quoted with single quotes and added the new roadmap line;
+  tsc is clean again. tsc + eslint clean, build + deploy + live verify done
+  (200 on /trade; "No gas in the tank" present in the served trade chunk on
+  the custom domain and the preview worker). #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #11 on his trading feedback, #6 on
+  mascot approval. (Also this run: reviewed /api/ping.ts as a #9 candidate —
+  clean, JSON.stringify neutralizes log-injection, no finding; ROADMAP
+  checked for #10 — current after this run's line.)
+
+- 2026-09-27 07:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **"Get gas before you trade"
+  guide on /trade** — the first-swap walkthrough told newcomers to "keep a
+  little PLS for gas" but never said how to GET PLS, a dead end for anyone with
+  no PulseChain exposure (the #1 onboarding blocker for real new buyers). New
+  section below the walkthrough: PLS is the native gas token (no PLS = nothing
+  can be sent), then the three common routes — official PulseChain bridge
+  (bridge.pulsechain.com, URL verified 2026-09-27; ETH still needed on the
+  Ethereum side), buying PLS on a listing exchange + withdrawing to chain 369,
+  or swapping a small slice to PLS on PulseX if you already hold PulseChain
+  assets. Safety: lookalike-bridge warning (type the URL yourself), never enter
+  a seed phrase, "verify everything yourself — information, not an endorsement".
+  Walkthrough step 2 links down to it ("No PLS yet? Here's how to get some.").
+  Pure static content — no wallet touch, no new data sources, no mascot pixels.
+  tsc + eslint clean, build + deploy + live verify done (200 on /trade; "Get
+  gas before you trade" + bridge.pulsechain.com present in the served SSR HTML
+  on the custom domain and the preview worker). ROADMAP "Voluntary burns" group
+  gained the line; BULLISH-RESEARCH.md updated (shipped + 2 rejected: fiat
+  onramp widget, naming specific exchanges). #8 stays open as recurring; #5
+  still blocked on Antonio's format pick, #11 on his trading feedback, #6 on
+  mascot approval.
+
+- 2026-09-27 06:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **burn-share-of-supply % on
+  the /burn total-burned card** — each token now shows "≈ X% of total supply"
+  under its destroyed amount, computed from a live `totalSupply()` read (both
+  tokens 18-decimal; null when supply is unread — never invented). This lifts
+  the 2026-09-26 rejection, whose entire reason was a hardcoded supply
+  constant drifting from chain state; reading the supply live removes that
+  risk (the research log's own escape hatch: "read totalSupply() live if ever
+  wanted"). Hits better (the raw burn number now has context: 56.5% of DUMB
+  destroyed is a different story than a bare 15.8B) + fun (big share-of-supply
+  is the stat worth sharing — and the burn-share buttons are already there).
+  Two extra read-only calls on the same token contracts, chain 369 — no
+  wallet needed, no new data sources, no mascot pixels. tsc + eslint clean,
+  build + deploy + live verify done (200 on /burn; "of total supply" present
+  in the served burn chunk on both the custom domain and the preview worker).
+  ROADMAP "Voluntary burns" line updated; BULLISH-RESEARCH.md updated
+  (shipped + rejection lifted). #8 stays open as recurring; #5 still blocked
+  on Antonio's format pick, #11 on his trading feedback, #6 on mascot
+  approval.
+
+- 2026-09-27 06:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **"Total burned · all time"
+  card on /burn** (between BurnBox and the ticker — lifetime view vs the
+  ticker's 20k-block window). Shows the live DUMB + DAMP balances of the dead
+  address with per-token amounts and a combined est. USD from the existing
+  on-chain WPLS-pair pricing, plus the honest footnote: dead is NOT
+  fee-excluded, so only ~95% of DUMB / ~98% of DAMP sent actually arrives —
+  the balance is what really landed, never naive 1:1 math (this unblocks and
+  reverses the 2026-09-26 rejection, now that the direct-to-dead accounting
+  is verified). Two read-only balanceOf calls pinned to chain 369 — no wallet
+  needed, no new data sources, no mascot pixels, "burns shrink supply, never
+  promise price" framing intact. Considered + rejected alongside it: a
+  share-of-supply % from a hardcoded supply constant (risks drifting from
+  chain state; read totalSupply() live if ever wanted). tsc + eslint clean,
+  build + deploy + live verify done (200 on /burn; "Total burned · all time"
+  present in the served SSR HTML on the custom domain). ROADMAP "Voluntary
+  burns" gained the line; BULLISH-RESEARCH.md updated (shipped + rejected
+  logged). #8 stays open as recurring; #5 still blocked on Antonio's format
+  pick, #11 on his trading feedback, #6 on mascot approval.
+
+- 2026-09-27 05:41 ET run: backlog #9 DONE (recurring security pass — the
+  two money-touching flows' new share-success surfaces). Found and fixed 1
+  real honesty bug, shipped to the preview Worker: both SwapBox (/trade) and
+  BurnBox (/burn) treated `useWaitForTransactionReceipt`'s `isSuccess` as
+  "transaction succeeded" — but in wagmi that flag only means a receipt was
+  *fetched*, and a reverted tx still returns a receipt. A reverted swap or
+  burn would have shown a green "Confirmed"/"Burned — respect" panel PLUS the
+  pre-filled "Brag about it" share buttons, letting a user publicly claim a
+  trade/burn that never happened (the explorer link would have shown a
+  reverted tx). Both components now read the receipt's `status`:
+  `txSucceeded = isSuccess && status === "success"`, `txReverted` routes to
+  the "Transaction failed on-chain" block, and the post-confirm cleanup
+  (input clear, refetches) only runs on real success. Share blocks remain
+  gated on `txSucceeded && hash` — they can never celebrate a reverted tx.
+  Scanned for the pattern elsewhere: only these two components use the
+  receipt hook. tsc + eslint clean, build + deploy + live verify done (200s
+  on /burn and /trade, custom domain + preview worker). No new data sources,
+  no wallet-logic changes, no mascot pixels. Next pending: #8 recurring
+  research, #10 roadmap hygiene; #5 implementation still blocked on
+  Antonio's format pick, #11 on his trading feedback, #6 on mascot approval.
+
+- 2026-09-27 05:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **first-swap walkthrough on
+  /trade** ("New here? Your first swap, in 5 steps") — a beginner guide below
+  the swap box: connect wallet / PulseChain auto-switch, keep PLS for gas,
+  curated + verified inputs only, tax already shown in the quote, exact-amount
+  approve → swap → check the receipt on the explorer, never enter a seed
+  phrase anywhere. Accessibility improvement that also lowers onboarding
+  friction (new buyers must be able to complete a trade safely for demand to
+  grow) + safety (no-seed-phrase line, exact-approval reassurance). No wallet
+  logic touched, no new data sources, no mascot pixels. ROADMAP "Voluntary
+  burns" group gained the line; BULLISH-RESEARCH.md updated (shipped + 3
+  rejected ideas: burn-streak recognition, pitch cards, mascot staging page —
+  all rejected with reasons). tsc + eslint clean, build + deploy + live
+  verify done (200 on /trade; "Your first swap, in 5 steps" live on the custom
+  domain; "First-swap walkthrough" live on /plan). #8 stays open as recurring;
+  #5 still blocked on Antonio's format pick, #11 on his trading feedback,
+  #6 on mascot approval.
+
+- 2026-09-27 04:41 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **interactive tax-flow
+  visualizer** on /burn ("Follow the money — Where the 6% tax actually goes"):
+  DUMB/DAMP toggle + amount input renders the verified on-chain tax split as a
+  proportional stacked bar with per-leg amounts (recipient 94%/97%, 1% protocol
+  burn, 2%/1% entombed buckets, ~1% reflection), plus honest footnotes (dead
+  address collects recipient leg + burn leg on burns ≈95/98 per 100; buckets
+  are entombed — engine dead, owner renounced; reflection approximate, never a
+  promise). Replaced the static "How the math works" card (same verified info,
+  now interactive). Hits better (clarity on the #1 confusion: "I sent 100 but
+  only 95 arrived"), safer (users see where money goes before signing), fun
+  (playful visual, zero mascot pixels). Pure client-side math — no wallet, no
+  new data sources. tsc + eslint clean, build + deploy + live verify done
+  (200 on /burn; "Follow the money" + "Entombed" present in the served burn
+  chunk). ROADMAP "Voluntary burns" item added; BULLISH-RESEARCH.md updated
+  (shipped + rejected ideas logged). #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #11 on his trading feedback, #6 on mascot
+  approval.
+
+- 2026-09-27 04:11 ET run: backlog #8 DONE (recurring research) → SHIPPED a
+  genuine improvement found by the research lens: **"Brag about it" share
+  buttons in the SwapBox success state on /trade** — extends the proven
+  burn-share pattern to every on-site trade. Pre-filled, honest X/Telegram
+  share intents (`x.com/intent/post`, `t.me/share/url`, same pattern as the
+  raid missions) with the REAL traded amounts + explorer receipt; nothing is
+  ever posted automatically. Safety details: the trade (input/output symbols,
+  decimals, est. after-tax output) is snapshotted at send time, so editing
+  the input after confirmation can't make the share text lie; the snapshot
+  is cleared on any approve or selector change so approval confirmations
+  never show trade share buttons. Copy is factual only ("No promises — do
+  your own homework"). Renders only for a confirmed real swap. tsc + eslint
+  clean, build + deploy + live verify done (200 on /trade; "Brag about it" +
+  both intent URLs present in the served trade chunk). ROADMAP "Voluntary
+  burns" group gained a "Share-your-trade" line. #8 stays open as recurring;
+  #5 still blocked on Antonio's format pick, #11 on his trading feedback,
+  #6 on mascot approval.
+
+- 2026-09-27 03:41 ET run: backlog #10 DONE (roadmap hygiene, recurring).
+  Fixes found by holding the ROADMAP against the honesty rules: (1) the
+  "90 days / Products and rails" group claimed Smiley merch drop, sponsor
+  spots, premium AI kits, and education products as SHIPPED — nothing on the
+  site backs that up, so the group is now `done: false` (planned, not
+  shipped). (2) The burn-contests line now reflects the real state: design
+  complete, recognition-only milestone drive recommended as the pilot,
+  implementation waiting on Antonio's format pick (no funded prizes).
+  (3) Added the Smiley gallery placement plan as a planned roadmap item,
+  gated on Antonio's visual approval (mascot rule). Also tidied
+  BULLISH-RESEARCH.md: moved the live burns ticker (#3) and burn
+  leaderboard (#4) from "Considered" to "Shipped". tsc + eslint clean,
+  build + deploy + live verify done (200s; /plan shows the group as
+  planned; new burn-contest + gallery lines live on the custom domain).
+  Next pending: #8 recurring research; #5 implementation still blocked on
+  Antonio's format pick, #11 on his trading feedback, #6 on mascot
+  approval.
+
+- 2026-09-27 03:11 ET run: backlog #9 DONE (security pass on the newest shipped
+  surface — the /culture community ratings wall, #7). Reviewed CommunityRatings.tsx +
+  ratings.ts: review text is React-escaped (no XSS), form is client-side only with
+  bounded lengths and no auto-posting, no wallet touch, no new data sources. Found
+  and fixed 1 defensive issue, shipped to the preview Worker: `rating.link` was
+  rendered raw as an anchor `href` — React doesn't block `javascript:` URLs, so a
+  future bad link in the manually-curated data file could have executed script for
+  every visitor. Links are now protocol-whitelisted (http/https only) at render
+  time; anything else renders as plain text. tsc + eslint clean, build + deploy +
+  live verify done (200 on /culture; ratings wall live). #9 stays open as
+  recurring; #5 blocked on Antonio's format pick, #6 on mascot approval, #11 on
+  his trading feedback.
+
+- 2026-09-27 02:41 ET run: backlog #8 (recurring research) → SHIPPED a genuine
+  improvement found by the research lens: **"Brag about it" share buttons** in
+  the BurnBox success state on /burn — pre-filled, honest X/Telegram share
+  intents (`x.com/intent/post`, `t.me/share/url`, same pattern as the raid
+  missions) with the REAL burned amount + explorer link; nothing is ever posted
+  automatically. Safety detail: the burned amount/token is snapshotted at send
+  time (new `burned` state), so editing the input after confirmation can't make
+  the share text lie. Copy stays honest ("supply shrank a little, no promises"
+  / "Burns shrink supply, never promise price"). Renders only for a confirmed
+  real burn. tsc + eslint clean, build + deploy + live verify done (200 on
+  /burn; "Brag about it" + X intent URL present in the served burn chunk).
+  ROADMAP "Voluntary burns" item updated. #8 stays open as recurring; #5 still
+  blocked on Antonio's format pick, #11 on his trading feedback, #6 on mascot
+  approval.
+
+- 2026-09-27 02:11 ET run: backlog #6 PREP DONE (no site changes, no deploy —
+  approval gate holds) — spec pre-check + placement plan written to
+  `~/workspace/dumb-visuals-review/GALLERY-PLACEMENT-PLAN.md`. All 6 staged
+  Smiley renders scored against MASCOT-SPEC.md: smiley-reaction-v3 is the
+  closest match (deep green, rectangular $DUMB plate, no stray text); recurring
+  flags — bright-chartreuse head green vs Antonio's deep-green correction,
+  Nike-like swoosh on every sneaker, "$DUMB RALLY" background text in
+  hype-rally-v2, Wall-Street neon signage in meme-drop-v2. Per-image placements
+  proposed (/raid gallery, /burn masthead, /culture, homepage rotation);
+  wiring plan is mechanical once Antonio approves each image. Zero mascot
+  pixels added to the site. Next pending: #8 recurring research, #10 roadmap
+  hygiene; #5 implementation blocked on Antonio's format pick, #11 on his
+  trading feedback.
+
+- 2026-09-27 01:41 ET run: backlog #7 DONE — community ratings infrastructure
+  shipped to the preview Worker: new "Real voices, real stars" section on
+  /culture. `src/data/ratings.ts` holds real opt-in reviews only (empty by
+  default; wall shows an honest "The wall is empty — on purpose" empty state,
+  never seeded). Submission form (handle + 1–5 star picker + 20–400 char
+  review) builds a pre-filled review with "Post in Telegram"
+  (t.me/dumbmoneydotwin) + copy button — reviews are added to the data file
+  manually after verification; nothing auto-posted. Average renders only when
+  ≥1 real review exists. No backend, no new data sources, no wallet touch.
+  ROADMAP "Community engine" item updated. tsc + eslint clean, build +
+  deploy + live verify done (200 on /culture, new copy live). Next pending:
+  #6 visual gallery (approval-gated), #8 recurring research, #10 roadmap
+  hygiene; #5 implementation blocked on Antonio's format pick, #11 on his
+  trading feedback.
+
+- 2026-09-27 01:11 ET run: backlog #9 DONE (security pass on the newest
+  money-touching feature — the /burn flow, BurnBox + burns.ts). Found and
+  fixed 2 issues, both shipped to the preview Worker: (1) real UX bug — the
+  "what actually happens" panel hardcoded "94% transfer leg" for BOTH tokens,
+  but DAMP's is 97% (3% tax); now parameterized per token (DUMB 94% / DAMP 97%).
+  (2) chain-switch race — the AlertDialog can stay open if the user switches
+  networks after triggering it; doBurn now refuses unless chainId is still 369
+  AND pins `chainId: pulsechain.id` on the writeContract call so the burn can
+  never be signed on another chain. burns.ts review: voluntary/protocol
+  classification logic sound (bucket legs to the token contract correctly
+  excluded from the "non-dead recipient" test, receipt-level sender grouping
+  consistent with the verified #1 tax accounting). tsc + eslint clean, build +
+  deploy + live verify done (200 on /burn, "94% transfer leg" live for DUMB).
+  Next pending: #6 visual gallery (approval-gated), #7 ratings plumbing, #8
+  recurring research, #10 roadmap hygiene.
+
+- 2026-09-27 00:41 ET run: backlog #5 DESIGN DONE (design-only, nothing
+  shipped to the site) — wrote `BURN-CONTESTS-DESIGN.md`: entry = verified
+  voluntary burn via the `src/lib/burns.ts` primitive; key safety finding is
+  that wash-burning is self-defeating (burns destroy real tokens + pay the
+  6%/3% tax, so there is no profit path — the real gaming vectors are
+  procedural: sybil counts, retroactive windows, protocol-leg double
+  counting, all mitigated by design). Recommended pilot: recognition-only
+  community milestone drive with an announced ~2-day window (fits the 20k-block
+  scan); funded prizes rejected for the loop (spending + legal = Antonio's
+  call). Implementation blocked on Antonio's format pick — /burn card left
+  reading "Burn contests next". BULLISH-RESEARCH.md updated (moved to
+  "Designed"). No build/deploy this run (design only). Next pending: #6
+  visual gallery (approval-gated), #7 ratings plumbing, #8 recurring
+  research, #9 security pass, #10 roadmap hygiene.
+
+- 2026-09-27 00:11 ET run: backlog #4 DONE — burn leaderboard shipped to the
+  preview Worker: new BurnLeaderboard component on /burn (below the ticker).
+  Extracted the shared scan into `src/lib/burns.ts` (ticker refactored onto it,
+  behavior identical); leaderboard aggregates the verified per-sender legs into
+  ranked wallets: rank, short address + explorer link, DUMB/DAMP totals,
+  "voluntary burner" flame badge, burn-tx count, All/Voluntary-only toggle.
+  Ranked by estimated USD from on-chain WPLS pair reserves (raw-unit fallback);
+  honest loading/error/empty states; shares the ticker's query cache so no
+  extra RPC scan. Only real on-chain burners — never invented. /burn
+  "Leaderboard coming" card flipped to "Burn contests next". tsc + eslint
+  clean, build + deploy + live verify done. ROADMAP "Voluntary burns" items
+  updated. Next pending: #5 burn contests.
+
+- 2026-09-26 23:41 ET run: backlog #3 DONE — live burns ticker shipped to the
+  preview Worker: new BurnTicker component on /burn (below BurnBox). Scans the
+  last 20,000 blocks of Transfer(to=dead) logs on DUMB + DAMP via the public
+  RPC, groups legs per tx per sender from full receipts, classifies each burn
+  as "voluntary burn" vs "1% protocol burn of a ~X transfer" (verified tax leg
+  × 100). Header totals real burn arrivals per token; rows link receipts on
+  scan.pulsechain.com with relative time. Honest loading/error/empty states,
+  60s refetch, no new data sources, no invented numbers. tsc + eslint clean,
+  build + deploy + live verify done. ROADMAP "Voluntary burns" item updated.
+  Next pending: #4 burn leaderboard (can aggregate senders from the same leg
+  primitive).
+
+- 2026-09-26 23:11 ET run: backlog #2 DONE — voluntary "Burn it" button shipped
+  to the live preview Worker: new /burn page (BurnBox component), DUMB/DAMP
+  toggle, amount + MAX with live balance, verified tax-math panel, acknowledgment
+  checkbox + AlertDialog final check, wallet-only signing, on-chain status with
+  explorer links. Honest framing throughout ("burns shrink supply, never promise
+  price"). Linked from desktop nav, mobile More sheet, homepage card. tsc +
+  eslint clean, build + deploy + live verify done. Next pending: #3 live burns
+  ticker.
+- 2026-09-26: loop created by Mosheh at Antonio's request (every 30 min,
+  reports in "DUMB on PulseChain" chat). Backlog seeded from Antonio's
+  community/burn/bullish goals.
+- 2026-09-26 22:41 ET run: backlog #1 DONE — direct-to-dead tax accounting
+  verified on-chain (read-only): dead is NOT fee-excluded, so voluntary burns
+  are taxed at the full rate — DUMB: dead +0.95A / contract +0.04A / 1% reflected;
+  DAMP: dead +0.98A / contract +0.01A / 1% reflected. Burn button (#2) now
+  unblocked with exact display math. No site changes this run (research unit).
+
+## 2026-09-28 — DRIP VAULT (Mosheh-owned, loop stays out)
+Antonio approved a PulseChain drip vault ("Feed the Burn" style): open ERC20 deposits, permissionless
+drip() buys DUMB and burns it. NEW CONTRACT = hard boundary: the loop must NOT design, build, or
+deploy it. Spec: ~/workspace/pulse-drip-vault/SPEC.md. No mainnet without Antonio's explicit final
+approval after fork tests + red-team + Mosheh audit.
+
+- 2026-09-29 17:13 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — adversarial review of the
+  16:43 #13 ship (the "Owner rescue/withdraw power" probe, 5n), per the
+  15:43 → 16:03 review-of-ship precedent. VERDICT: APPROVED, no required
+  revisions. Independently verified, not trusted from the ship log: (1) the
+  pre-write diff claim holds (the 5n block is genuinely new; zero pre-existing
+  rescue/withdraw coverage); (2) arg encoding recomputed fresh in node — 6
+  distinct keccak256 selectors matching the ship log exactly (0xf5648a4f,
+  0xd201b01e, 0xcb963728, 0x57376198, 0xd28e3ed4, 0x8980f11f), calldata
+  4B/36B/36B/68B/68B/68B with dead-address + 1-wei fail-safe args; (3) all
+  four 16:33 ship-run notes honored (check id owner-rescue-withdraw, family
+  pass-caveat wording verbatim, PLS-vs-tokens warn tailoring per shape
+  arity, block placed after 5m before #6); (4) ROADMAP (dump.ts:231) + both
+  Dumb AI scanner answers (dump.ts:388, knowledge.ts) carry the 5n clause in
+  each surface's own words, no drift. Served-bundle verification (independent):
+  the live scan chunk BurnBragCard-BSdvZfJd.js carries the check id ×4, title
+  ×4, all 6 sigs, the fail-safe caveat, and the full warn copy; /plan SSR
+  carries the roadmap clause. The 14:03-class hunt found nothing: fail-safe
+  args hold (non-zero dead address, 1 wei), permissive-fallback control runs
+  FIRST and breaks the loop before any selector call, revert→absent /
+  noise→unknown triage matches the family, warn at capability level names
+  the power + hit shape (never a balance, never accusation), the block sits
+  inside if(liveOwner) (renounced skips), RPC budget matches the 16:23
+  design's 7 typical / 13 worst. Two family-wide residuals noted in
+  BULLISH-RESEARCH.md (selector collision; balance-gated rescues on empty
+  contracts) — not required revisions; a redesign touches all owner probes,
+  not this ship. Live health: / /scan /burn /plan 200 on the custom domain;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution (thirteenth confirmation of the 09:23 reasoning).
+  Zero wallet/signing/data-source/mascot touch, no new data sources.
+  NOT CHURN: no code change earned — the review found the ship exactly as
+  strong as the 16:43 log claimed. #9 stays open as recurring; #5 on
+  Antonio's idea-only hold, #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13
+  stay open as recurring.
+
+- 2026-09-29 19:53 ET run: backlog #9 DONE (security pass, recurring) →
+  audit-only, NO code changes, no build/deploy — the concurrent process is
+  STILL actively editing (knowledge.ts 19:47, ChatMarkdown.tsx 19:48,
+  AiPreview.tsx 19:50 ET — 3 min before run start), so the window is HOT and
+  the loop wrote zero src per the standing no-collision rule (the 5o
+  try/catch fix is NOT applied to src without deploying — rejected per the
+  19:33 precedent). (1) Live health: / /scan /burn /plan /ai /trade 200 on
+  the custom domain; /api/scan-stats unchanged ({deep_scans:3, pass_burns:1,
+  dumb_destroyed_min:100000}) — flat since 03:50, honest, still
+  traffic/distribution. (2) Served-bundle verification (independent): live
+  /scan still references BurnBragCard-CQBYZ6Dj.js — the loop's 18:47 deploy
+  hash, byte-unchanged — occurrence counts match the ship log exactly
+  (measured-tax id ×4, "Buy/sell tax, measured" title ×5, owner-rescue-
+  withdraw ×4, "exposes no tax getters" null-guard copy present); the
+  concurrent AI process has NOT deployed. (3) The queued 5o try/catch
+  residual re-verified STILL REAL in src: 0 catch hits in token-scan.ts
+  1906–2248, and the misattributing caller copy ("The scan failed — the
+  RPC didn't answer. Try again in a moment.") still lives in the runScan
+  catch in TokenScanner.tsx — fix stays queued for the post-deploy quiet
+  window: wrap the 5o block → "unknown" measured-tax check, soften the
+  caller copy. (4) Secrets sweep of src/ + scripts/ (privateKey, mnemonic,
+  seed phrase, PEM blocks, hardcoded api-key/password assignments):
+  ZERO hits — nothing credential-shaped in the tree. (5) External
+  first-time-user auditor findings STILL not arrived (checked today's
+  memory log) — the 19:33 design hold on the next probe stays. Zero wallet/
+  signing/data-source/mascot touch, no new data sources. #9 stays open as
+  recurring; #5 on Antonio's idea-only hold, #6 ON HOLD per Antonio
+  2026-09-29; #8/#10/#13 stay open as recurring.
+
+- 2026-09-29 20:33 ET run: backlog #8 DONE (bullish-demand research, recurring) →
+  research-only, NO code changes, no build/deploy — the concurrent AI-subsystem
+  process STILL has not deployed (its unshipped src edits from 19:47–20:00 ET
+  remain in the tree; served /scan still references the loop's 18:47 chunk
+  BurnBragCard-CQBYZ6Dj.js, re-fetched and hash-matched this run), so the
+  no-collision rule held: zero src writes, zero deploys. (1) Fourth real
+  traffic read (KV counters, read-only): 2026-09-29 through ~20:45 ET: 230
+  pageviews / 83 events (vs 227/80 at ~19:45 — +3/+3 in an hour, dead-quiet
+  evening); US 202 + ID 2, CA/MY/PH/SE 1; / 41, /scan 32, /burn 22, /ai 15,
+  /whitepaper 14, /wallet 14; events wallet_connect 63 dominant, scan_started 4,
+  swap_quote 4, singletons bag_scan 1 / burn_voluntary 1 / watchlist_toggle 1.
+  Still confounded (Antonio's Pro testing + the two external auditors' sessions)
+  — NO demand conclusion drawn; the 09:23 "flat = traffic/distribution" thesis
+  stands for the fourth straight read. (2) Demand-surface re-audit: byte-identical
+  served bundle + static src outside the concurrent tree = every 18:53
+  claim-verification still current (ROADMAP measured-tax clause, both Dumb AI
+  scanner answers, share-report counts-only copy, /scan teaser + Try DUMB chip);
+  nothing undersells the 5n/5o ships, nothing drifted. (3) Queued 5o try/catch
+  residual re-verified STILL REAL in src (0 catch hits in token-scan.ts 1906–2248,
+  directly re-measured; misattributing caller copy still at TokenScanner.tsx:148;
+  5o null-guard fix intact) — the wrap-to-unknown + copy-softening fix stays
+  queued for the post-deploy quiet window. (4) External auditor findings STILL
+  not arrived (today's memory log checked) — the 19:33 next-probe design hold
+  stands. Live health: / /scan /burn /plan /ai /trade 200 on the custom domain;
+  /api/scan-stats unchanged ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000})
+  — flat since 03:50, honest. Zero wallet/signing/data-source/mascot touch, no
+  new data sources. #8 stays open as recurring; #5 on Antonio's idea-only hold,
+  #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay open as recurring.

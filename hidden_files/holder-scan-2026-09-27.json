@@ -1,0 +1,826 @@
+{
+ "scanned_at": "2026-09-27",
+ "chain": "PulseChain mainnet (369)",
+ "tokens": {
+  "DUMB": "0xe65112d2f120c8cb23ADC80D8E8122c0c8b7fF8D",
+  "DAMP": "0x8357aA9070dc7d8d154Da74561CEc58cA30c41C3",
+  "dead": "0x000000000000000000000000000000000000dEaD",
+  "total_supply": 28000000000
+ },
+ "dumb_top50": [
+  {
+   "rank": 1,
+   "address": "0x000000000000000000000000000000000000dead",
+   "balance": 15832015542.0,
+   "pct_supply": 56.5429,
+   "kind": "dead",
+   "identity": "Dead address 0x0000...dEaD \u2014 burned supply (already known)"
+  },
+  {
+   "rank": 2,
+   "address": "0xe65112d2f120c8cb23adc80d8e8122c0c8b7ff8d",
+   "balance": 3505393082.4,
+   "pct_supply": 12.5193,
+   "kind": "contract",
+   "identity": "DUMB token contract itself (verified 'Token') \u2014 holds the entombed tax buckets: 2% buy-back + 2% liquidity per taxed transfer. Engine dead, owner renounced, can never leave."
+  },
+  {
+   "rank": 3,
+   "address": "0xf046e04ff986dcae96315046888d85ac27500618",
+   "balance": 1094244661.3,
+   "pct_supply": 3.908,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/DAMP (verified PulseXPair; token0/token1 confirmed on-chain)"
+  },
+  {
+   "rank": 4,
+   "address": "0x498ca08f1e5022eb02d92b76f913858ed821821e",
+   "balance": 911336234.6,
+   "pct_supply": 3.2548,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/ATROPA (verified PulseXPair; token0/token1 confirmed on-chain)"
+  },
+  {
+   "rank": 5,
+   "address": "0x8ff3b2e30a8e9aa2903944d39a7383f6ee112d5e",
+   "balance": 614801017.1,
+   "pct_supply": 2.1957,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/WBTC (verified PulseXPair; token0/token1 confirmed on-chain; ~1.03 WBTC reserve)"
+  },
+  {
+   "rank": 6,
+   "address": "0x0e10dd174e8906d13ec2e96afd6667503842f197",
+   "balance": 608030770.5,
+   "pct_supply": 2.1715,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 7,
+   "address": "0xce7dbd7fa7cb61ebe002dba028e3993a28099fd6",
+   "balance": 516382931.1,
+   "pct_supply": 1.8442,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/PLSX (verified PulseXPair; ~235.7M PLSX reserve)"
+  },
+  {
+   "rank": 8,
+   "address": "0x85f6c49c5c0507204120ed894872f31f9197026f",
+   "balance": 511305694.3,
+   "pct_supply": 1.8261,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/DAI (verified PulseXPair; DAI = 0x6b175474e89094c44da98b954eedeac495271d0f, on-chain symbol 'DAI'; ~979K DAI reserve)"
+  },
+  {
+   "rank": 9,
+   "address": "0x221f63fb54f3fbc6c60b3d22bc9bcb5fd1d0d186",
+   "balance": 501707434.8,
+   "pct_supply": 1.7918,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/WPLS (verified PulseXPair; ~187.5M WPLS reserve)"
+  },
+  {
+   "rank": 10,
+   "address": "0x2ccd79c8bc9f2fd84782e9abd2f2eecc56042106",
+   "balance": 497588741.9,
+   "pct_supply": 1.7771,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/HEX (verified PulseXPair; token0/token1 confirmed on-chain; ~622K HEX reserve)"
+  },
+  {
+   "rank": 11,
+   "address": "0x2d10d66f753b8bcc2cbce4793fd8661fc620aa13",
+   "balance": 432731664.2,
+   "pct_supply": 1.5455,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/INC (verified PulseXPair; ~3,907 INC reserve)"
+  },
+  {
+   "rank": 12,
+   "address": "0xe85896037ead0d20eae5d4af4d214e3d44b47e14",
+   "balance": 300035783.9,
+   "pct_supply": 1.0716,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 13,
+   "address": "0xb1ccc4ae9686b2850a5693383ca20347f1c81495",
+   "balance": 217483187.0,
+   "pct_supply": 0.7767,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 14,
+   "address": "0x5521051903c775636e2858d9e12dadcf64b589a9",
+   "balance": 156718946.8,
+   "pct_supply": 0.5597,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 15,
+   "address": "0xb1d645035a3ca5fe42c5e70dee38deb14e2d5247",
+   "balance": 154470321.1,
+   "pct_supply": 0.5517,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 16,
+   "address": "0x9c57116bc2f7f1f19c01d662e7b1ced957ad145b",
+   "balance": 143050238.7,
+   "pct_supply": 0.5109,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 17,
+   "address": "0x6ddf58ed2966eff5d928cb79625d09352f1197cd",
+   "balance": 141651633.4,
+   "pct_supply": 0.5059,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 18,
+   "address": "0xea4fa4665f8d8efb2d8b45a015750cf53231978f",
+   "balance": 126709566.1,
+   "pct_supply": 0.4525,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 19,
+   "address": "0x27e1e150cbedbbe0fe6a1b9d5d487a41c6a3eb88",
+   "balance": 119403265.4,
+   "pct_supply": 0.4264,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 20,
+   "address": "0x5b67f6ed4109033544c0334d1eeb565de2fa6f30",
+   "balance": 118111155.0,
+   "pct_supply": 0.4218,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 21,
+   "address": "0x62d410b066aec0fde8c869202637f6b8b3b40ab4",
+   "balance": 93608098.9,
+   "pct_supply": 0.3343,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 22,
+   "address": "0xc7cd04b0fa16df1cfcea048c18183d8e1edd9f1b",
+   "balance": 87570749.1,
+   "pct_supply": 0.3128,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 23,
+   "address": "0xd057299123251e663d352b2f94d6b0fd83f31f5f",
+   "balance": 66176962.2,
+   "pct_supply": 0.2363,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 24,
+   "address": "0xb691b4b6d0ed845a306b5fef8be9a80dfca4fdfa",
+   "balance": 63113486.1,
+   "pct_supply": 0.2254,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 25,
+   "address": "0x770ff241e493c15283275920407ca8e0150860b6",
+   "balance": 48226632.4,
+   "pct_supply": 0.1722,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 26,
+   "address": "0x0f13ae9e6b42f7fcbf702262547404fe16ddbdc7",
+   "balance": 47181940.4,
+   "pct_supply": 0.1685,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 27,
+   "address": "0x682c61593d7d59b70d4ac5ae0cf862dd895cf80a",
+   "balance": 45819800.5,
+   "pct_supply": 0.1636,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 28,
+   "address": "0xd53994db41d5f74fb3838180d6453e9a98c8a8c2",
+   "balance": 44609071.6,
+   "pct_supply": 0.1593,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 29,
+   "address": "0x9d76b310819e5f123f073e252a2263c72cba5187",
+   "balance": 39872703.2,
+   "pct_supply": 0.1424,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 30,
+   "address": "0x5df85211aa383994b03a52946b91329c25e622e9",
+   "balance": 38761220.1,
+   "pct_supply": 0.1384,
+   "kind": "contract",
+   "identity": "UNVERIFIED contract (11,479 bytes of code, no published source) \u2014 unknown owner/purpose. Holds 38.8M real DUMB plus a copycat token also named 'DAMP' (0xA8f3260c8a07a1688B23f39C21acA8B02C79A7df, NOT the real DAMP) and assorted meme tokens. Recent activity is all user 'claim()' calls \u2014 behaves like an airdrop claim distributor. FLAGGED: worth Antonio's attention."
+  },
+  {
+   "rank": 31,
+   "address": "0x7628af6a0c4bb3db48727ca6b66da4d2a2f5e353",
+   "balance": 38016235.6,
+   "pct_supply": 0.1358,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 32,
+   "address": "0xc8cbc0dffe3e6f807ffeb509a1faef97b9127513",
+   "balance": 35714438.8,
+   "pct_supply": 0.1276,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 33,
+   "address": "0x5daec7d73f1a2aabce8ed5cddd74b80be1b35001",
+   "balance": 32045171.1,
+   "pct_supply": 0.1144,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 34,
+   "address": "0x7d843e11cd7b2214f89a687d4eac385b24d8fbed",
+   "balance": 31496642.1,
+   "pct_supply": 0.1125,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 35,
+   "address": "0xc1e4d946802d2a3908dd838fd41cf4caf4f3990e",
+   "balance": 30459645.4,
+   "pct_supply": 0.1088,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 36,
+   "address": "0xdc2e4b1804974fa8f17ccf159d7ca2103e888137",
+   "balance": 30314911.9,
+   "pct_supply": 0.1083,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 37,
+   "address": "0xd23c5a0dfb84ad9097b0047ffc3b2c07d7dbe98d",
+   "balance": 26987292.4,
+   "pct_supply": 0.0964,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 38,
+   "address": "0x2441819d5ec4345215806c510612c14470d5e2fd",
+   "balance": 26683726.8,
+   "pct_supply": 0.0953,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 39,
+   "address": "0x8f4c42482c6d11d3f82655a3658d3d4d6fd6abf4",
+   "balance": 24076374.7,
+   "pct_supply": 0.086,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 40,
+   "address": "0xfa7c763a8f8f4cdfd21b8eb932ffef5e4d46a3b1",
+   "balance": 22164959.2,
+   "pct_supply": 0.0792,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 41,
+   "address": "0xf4d20a102135530ab7020bf934f6904e2e3a5bd0",
+   "balance": 20963617.6,
+   "pct_supply": 0.0749,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 42,
+   "address": "0x41550c741f80b1e047cd850158505d46c2a154ff",
+   "balance": 20043831.9,
+   "pct_supply": 0.0716,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 43,
+   "address": "0x67f7b0405960edb7387d3879d619022c4bcef113",
+   "balance": 19745330.3,
+   "pct_supply": 0.0705,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 44,
+   "address": "0xb7da95a9c7a508e51d9a916c21c60f20f0b8021d",
+   "balance": 19446044.1,
+   "pct_supply": 0.0695,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 45,
+   "address": "0x6bfa628b0d625380f327fe639a06f34b31304803",
+   "balance": 18047148.4,
+   "pct_supply": 0.0645,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 46,
+   "address": "0xdb94e395b5523b8551d927a1cc1c4d8eb7962988",
+   "balance": 17641870.6,
+   "pct_supply": 0.063,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 47,
+   "address": "0x0f2a864dba126dcfb18bd0d801e75729627dcf22",
+   "balance": 17624167.5,
+   "pct_supply": 0.0629,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 48,
+   "address": "0xc741defeaf25df9d4d802527be96d2d4b13a3556",
+   "balance": 12906473.8,
+   "pct_supply": 0.0461,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 49,
+   "address": "0xfd8737028826f64296f06b880bca6a6172a6faeb",
+   "balance": 12863250.0,
+   "pct_supply": 0.0459,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 50,
+   "address": "0xc5617c2a71ba197df4473ee3ec94a5816c5efea9",
+   "balance": 12643588.5,
+   "pct_supply": 0.0452,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  }
+ ],
+ "damp_top50": [
+  {
+   "rank": 1,
+   "address": "0x000000000000000000000000000000000000dead",
+   "balance": 364147981.9,
+   "pct_supply": 1.3005,
+   "kind": "dead",
+   "identity": "Dead address 0x0000...dEaD \u2014 burned supply (already known)"
+  },
+  {
+   "rank": 2,
+   "address": "0xf046e04ff986dcae96315046888d85ac27500618",
+   "balance": 196110880.2,
+   "pct_supply": 0.7004,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DUMB/DAMP (verified PulseXPair; token0/token1 confirmed on-chain)"
+  },
+  {
+   "rank": 3,
+   "address": "0x0e10dd174e8906d13ec2e96afd6667503842f197",
+   "balance": 60508717.6,
+   "pct_supply": 0.2161,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 4,
+   "address": "0x9126d62fe533974a87ba16248b3254c9d329b3c7",
+   "balance": 52917517.5,
+   "pct_supply": 0.189,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DAMP/DAI (verified PulseXPair; ~548K DAI reserve)"
+  },
+  {
+   "rank": 5,
+   "address": "0xf93fe23fcd5a822fe40fcfeaa3d848b5bed3bf4c",
+   "balance": 51722402.0,
+   "pct_supply": 0.1847,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DAMP/PLSX (verified PulseXPair; ~129M PLSX reserve)"
+  },
+  {
+   "rank": 6,
+   "address": "0xb256769d6b9d53e0e66a395c17135f8855a8633a",
+   "balance": 51582368.7,
+   "pct_supply": 0.1842,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DAMP/WPLS (verified PulseXPair; ~105.3M WPLS reserve)"
+  },
+  {
+   "rank": 7,
+   "address": "0x8357aa9070dc7d8d154da74561cec58ca30c41c3",
+   "balance": 49341185.2,
+   "pct_supply": 0.1762,
+   "kind": "contract",
+   "identity": "DAMP token contract itself (verified 'TokenAmp') \u2014 holds the entombed 1% contract bucket per taxed transfer. Same dead-engine situation."
+  },
+  {
+   "rank": 8,
+   "address": "0x032f40fd0e48fb7811cf29b8585d88a5c118d48b",
+   "balance": 49226926.8,
+   "pct_supply": 0.1758,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DAMP/HEX (verified PulseXPair; token0/token1 confirmed on-chain; ~345.5K HEX reserve)"
+  },
+  {
+   "rank": 9,
+   "address": "0x594d5ae93a3985bc3cd0fe7d2ca00ecbd344fe0b",
+   "balance": 43606165.3,
+   "pct_supply": 0.1557,
+   "kind": "contract",
+   "identity": "PulseX V2 pair DAMP/INC (verified PulseXPair; ~2,130 INC reserve)"
+  },
+  {
+   "rank": 10,
+   "address": "0x27e1e150cbedbbe0fe6a1b9d5d487a41c6a3eb88",
+   "balance": 15507852.7,
+   "pct_supply": 0.0554,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 11,
+   "address": "0x5b67f6ed4109033544c0334d1eeb565de2fa6f30",
+   "balance": 8084927.6,
+   "pct_supply": 0.0289,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 12,
+   "address": "0x770ff241e493c15283275920407ca8e0150860b6",
+   "balance": 6713047.7,
+   "pct_supply": 0.024,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 13,
+   "address": "0x9d76b310819e5f123f073e252a2263c72cba5187",
+   "balance": 4611680.4,
+   "pct_supply": 0.0165,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 14,
+   "address": "0x0f13ae9e6b42f7fcbf702262547404fe16ddbdc7",
+   "balance": 4544972.3,
+   "pct_supply": 0.0162,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 15,
+   "address": "0x2db83ad621f95ad6f7b316e91c72098c8b29b59f",
+   "balance": 3066417.5,
+   "pct_supply": 0.011,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 16,
+   "address": "0x3db55a59cccb7d8126698f8c447fe39a5f4a3dcd",
+   "balance": 2544248.9,
+   "pct_supply": 0.0091,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 17,
+   "address": "0xb644ba4797c8eab1c5a33c41e00096eb4e06d465",
+   "balance": 2523435.2,
+   "pct_supply": 0.009,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 18,
+   "address": "0x5970b19bbfb9bb23fb718a5516c8bcb4e3b50bb3",
+   "balance": 2265593.0,
+   "pct_supply": 0.0081,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 19,
+   "address": "0x073fb24b2a4154e4aa3b855f68f245cbf1181e1e",
+   "balance": 2117811.3,
+   "pct_supply": 0.0076,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 20,
+   "address": "0xc741defeaf25df9d4d802527be96d2d4b13a3556",
+   "balance": 1675676.2,
+   "pct_supply": 0.006,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 21,
+   "address": "0xfd8737028826f64296f06b880bca6a6172a6faeb",
+   "balance": 1651086.5,
+   "pct_supply": 0.0059,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 22,
+   "address": "0xfc55df4bd90c01ead2e766173e98d52ee4f9bbcb",
+   "balance": 1341356.5,
+   "pct_supply": 0.0048,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 23,
+   "address": "0x0f2a864dba126dcfb18bd0d801e75729627dcf22",
+   "balance": 1265304.2,
+   "pct_supply": 0.0045,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 24,
+   "address": "0x2ae27233ec2a70391d417047f38769cabec59311",
+   "balance": 1202132.6,
+   "pct_supply": 0.0043,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 25,
+   "address": "0x6bfa628b0d625380f327fe639a06f34b31304803",
+   "balance": 1197368.6,
+   "pct_supply": 0.0043,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 26,
+   "address": "0xfa7c763a8f8f4cdfd21b8eb932ffef5e4d46a3b1",
+   "balance": 1187197.0,
+   "pct_supply": 0.0042,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 27,
+   "address": "0xb1c5cf2e9a8e50e5a0d79359080ac6e72f716ec1",
+   "balance": 1117697.6,
+   "pct_supply": 0.004,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 28,
+   "address": "0xcfab6a4b44672120661eb5a0a09f14b4036c8e4c",
+   "balance": 1074788.8,
+   "pct_supply": 0.0038,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 29,
+   "address": "0x08ee79f118825df15449dc91b871e46e6c6a0ad7",
+   "balance": 1021428.8,
+   "pct_supply": 0.0036,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 30,
+   "address": "0x508b4d5b0df2ccca912b33301ace05bd3db4b7c1",
+   "balance": 1005659.5,
+   "pct_supply": 0.0036,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 31,
+   "address": "0x84e3a81a1389cf5ae621b6e2104c14542349500c",
+   "balance": 954038.1,
+   "pct_supply": 0.0034,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 32,
+   "address": "0x27d5ed8c0b749729788b694a8df0193ebdc266ef",
+   "balance": 949500.0,
+   "pct_supply": 0.0034,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 33,
+   "address": "0xc5617c2a71ba197df4473ee3ec94a5816c5efea9",
+   "balance": 944151.1,
+   "pct_supply": 0.0034,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 34,
+   "address": "0xbf04365a9c12cdca2e84cb9f07685d636db1704e",
+   "balance": 931952.3,
+   "pct_supply": 0.0033,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 35,
+   "address": "0xaff37e85ecc3c322c928d138db2eb7e8637a1028",
+   "balance": 893029.2,
+   "pct_supply": 0.0032,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 36,
+   "address": "0x203b96cfa7b5370bec2323829b669ef46e49cabe",
+   "balance": 816098.3,
+   "pct_supply": 0.0029,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 37,
+   "address": "0xca1bb32323e671aca126c513653f4ecee5456a2d",
+   "balance": 813880.0,
+   "pct_supply": 0.0029,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 38,
+   "address": "0xcc6b95394f0b1d44d87c855fa0f2f1fe9250165e",
+   "balance": 777090.9,
+   "pct_supply": 0.0028,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 39,
+   "address": "0xe90c5c1d36ab80ffcccca40c4989633026ef45fa",
+   "balance": 714273.9,
+   "pct_supply": 0.0026,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 40,
+   "address": "0x4c21debe3c47df80ca6c8d441fd82539d21b72dd",
+   "balance": 647298.2,
+   "pct_supply": 0.0023,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 41,
+   "address": "0x2c624ffd76572edf296c0a36447331c396ab7e7f",
+   "balance": 582452.8,
+   "pct_supply": 0.0021,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 42,
+   "address": "0xbb381154c06bb404081cce906ddc66fb237770a5",
+   "balance": 537511.9,
+   "pct_supply": 0.0019,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 43,
+   "address": "0xf0f31ac0cd7179c13c030ca692954dd991bb9e31",
+   "balance": 528748.8,
+   "pct_supply": 0.0019,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 44,
+   "address": "0xfa44da287bca006cf1694b8f93075dbfe129abcf",
+   "balance": 300919.8,
+   "pct_supply": 0.0011,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 45,
+   "address": "0x956505236468af92aac69f7da6eb085521f1673a",
+   "balance": 263378.8,
+   "pct_supply": 0.0009,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 46,
+   "address": "0x16463566ec6326178a47b81d7e6530ed0e00c601",
+   "balance": 249835.4,
+   "pct_supply": 0.0009,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 47,
+   "address": "0xb41c356f2824d5464eaf1fbb8c920f41bc0e2c49",
+   "balance": 247090.8,
+   "pct_supply": 0.0009,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 48,
+   "address": "0xe1dacb337f095ed3e94fd9ab93cf2be977057c0e",
+   "balance": 240226.2,
+   "pct_supply": 0.0009,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 49,
+   "address": "0x0dbdb6a4bccaea2dc6b24d5e89cf87a44d24798d",
+   "balance": 214875.4,
+   "pct_supply": 0.0008,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  },
+  {
+   "rank": 50,
+   "address": "0x7599351833fde9437312b8ab302f3a8ffc68b962",
+   "balance": 197051.9,
+   "pct_supply": 0.0007,
+   "kind": "eoa",
+   "identity": "EOA \u2014 private holder"
+  }
+ ],
+ "method": {
+  "holders": "api.scan.pulsechain.com/api?module=token&action=getTokenHolders (offset=50)",
+  "contract_detection": "api.scan.pulsechain.com/api/v2/addresses/{addr} is_contract + is_verified",
+  "contract_names": "api.scan.pulsechain.com/api?module=contract&action=getsourcecode",
+  "pair_confirmation": "on-chain eth_call token0()/token1()/getReserves() via https://rpc.pulsechain.com for ambiguous pairs; token-balances via Blockscout v2 for the rest",
+  "aggregate_notes": "Spam dust (pcock/emoji tokens) present in pair and token-contract balances is normal on PulseChain and ignored for identification; pair identity rests on verified PulseXPair source + the two dominant reserves."
+ },
+ "flags": [
+  "0x5df85211aa383994b03a52946b91329c25e622e9 is UNVERIFIED and holds 38.76M DUMB (0.138% of supply); behaves like an airdrop claim contract (all recent txs are user claim() calls). Owner/purpose unknown.",
+  "A copycat token also named 'DAMP' exists at 0xA8f3260c8a07a1688B23f39C21acA8B02C79A7df (on-chain name 'INContinence', symbol 'DAMP', 18 decimals) \u2014 15.4B of it sits in the unverified contract above. It is NOT the real DAMP (0x8357aA9070dc7d8d154Da74561CEc58cA30c41C3). Possible scam vector \u2014 community should only trust the verified address.",
+  "The DUMB/DAMP direct pair (0xf046e04ff986dcae96315046888d85ac27500618) is the largest DUMB liquidity pool by DUMB holdings (1.094B DUMB, 3.908% of supply) \u2014 bigger than DUMB/WPLS."
+ ]
+}
