@@ -27,6 +27,7 @@ import {
 import {
   SCAN_BURN_DEADLINE_SECONDS,
   plsBurnMinOut,
+  preTaxForArrival,
   quotePlsBurnFor,
   verifyPlsBurn,
   type PlsBurnQuote,
@@ -255,15 +256,19 @@ export function BurnBox() {
   // burn amount (DUMB only — the fallback buys DUMB through the WPLS pair).
   const showPls = tokenKey === "DUMB" && insufficient && !!address && onPulse;
 
-  // Live PLS quote for the entered amount (target = entered × 1.1), refreshed
-  // every 60s while the wallet is short — the quote the swap button uses.
+  // Live PLS quote for the entered amount, refreshed every 60s while the
+  // wallet is short — the quote the swap button uses.
   useEffect(() => {
     if (!showPls || parsed === null || parsed <= 0n) {
       setPlsQuote(null);
       setPlsQuoteStale(false);
       return;
     }
-    const target = (parsed * 11n + 9n) / 10n; // ceil(parsed × 1.1)
+    // Target the PRE-TAX amount that still lands `parsed` at dead after the
+    // 6% arrival tax AND the full 8% slippage allowance. A flat ×1.1 buffer
+    // is not enough: 95% × 92% = 87.4%, so ×1.1 only reaches ~96% of the
+    // entered amount and the burn settles short of what the user typed.
+    const target = preTaxForArrival(parsed);
     let alive = true;
     const fetchQuote = async () => {
       const q = await quotePlsBurnFor(target);
@@ -652,8 +657,9 @@ export function BurnBox() {
             </p>
           ) : plsQuoteStale ? (
             <p className="mt-3 text-sm text-muted-foreground">
-              The live PLS quote didn't load — the RPC is being flaky. The button stays off until a
-              real quote comes back; nothing is ever estimated or invented.
+              No live PLS quote right now — either the RPC didn't answer, or the pool is too thin
+              to buy enough DUMB for that amount. The button stays off until a real quote comes
+              back; nothing is ever estimated or invented.
             </p>
           ) : (
             <p className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground">

@@ -2753,16 +2753,42 @@ export async function verifyScanBurn(txHash: string): Promise<ScanBurnVerificati
 // per-use arrival thresholds.
 // ---------------------------------------------------------------------------
 
-/** Pre-tax DUMB output the PLS fallback targets: buffer so the ~6%-taxed
- *  arrival at dead still clears the 100k pass threshold with room for slippage. */
-export const PLS_BURN_TARGET_DUMB = 110_000n * 10n ** 18n;
-
 /** Dead's verified DUMB balance increase per pre-tax amount sent (95%) — backlog #1. */
 const DEAD_ARRIVAL_NUM = 95n;
 const DEAD_ARRIVAL_DEN = 100n;
 
 /** Slippage guard on the PLS fallback swap, in bps (matches the swap box default). */
 const PLS_BURN_SLIPPAGE_BPS = 800n;
+
+/**
+ * The share of a pre-tax router output that is guaranteed to reach `dead`,
+ * in bps: 95% arrival × 92% (100% − 8% slippage) = 874.
+ *
+ * `plsBurnMinOut` sets amountOutMin to exactly this fraction, so the router
+ * REVERTS rather than settling below it. That is what protects the user: the
+ * failure mode must be "the swap reverts and they keep their PLS", never
+ * "the swap succeeds, the PLS is gone, and the burn lands under the
+ * threshold they were promised".
+ */
+const PLS_BURN_FLOOR_BPS = (DEAD_ARRIVAL_NUM * (10_000n - PLS_BURN_SLIPPAGE_BPS)) / DEAD_ARRIVAL_DEN;
+
+/**
+ * Smallest PRE-TAX router output that still lands `arrivalDumb` at dead even
+ * at the full slippage allowance — i.e. arrival at the floor, not arrival at
+ * the quoted price. Round up so the guarantee survives integer division.
+ */
+export function preTaxForArrival(arrivalDumb: bigint): bigint {
+  return (arrivalDumb * 10_000n + PLS_BURN_FLOOR_BPS - 1n) / PLS_BURN_FLOOR_BPS;
+}
+
+/** Pre-tax DUMB output the PLS fallback targets.
+ *
+ *  Derived, not guessed: it must be `preTaxForArrival(100k)` so that the
+ *  amountOutMin floor (874 bps) still clears the 100k pass threshold. A plain
+ *  round "110k buffer" is NOT enough — 110k × 0.874 = 96,140, which sits
+ *  BELOW the threshold, so the swap would settle successfully and the pass
+ *  would then be refused on-chain after the user's PLS was already spent. */
+export const PLS_BURN_TARGET_DUMB = preTaxForArrival(100_000n * 10n ** 18n);
 
 /** The swap-box 20-minute deadline, reused by the PLS fallback. */
 export const SCAN_BURN_DEADLINE_SECONDS = 20 * 60;
@@ -2775,24 +2801,49 @@ export interface PlsBurnQuote {
 }
 
 /**
- * Live quote: X PLS such that getAmountsOut(X, [WPLS, DUMB]) ≈ the given
- * pre-tax DUMB target. Two read-only quotes (estimate, then refine) — null
- * when the RPC won't answer. Shared by the deep-scan fallback and the
+ * Live quote: X PLS such that getAmountsOut(X, [WPLS, DUMB]) is at least the
+ * given pre-tax DUMB target. Shared by the deep-scan fallback and the
  * voluntary-/burn-page fallback (different arrival thresholds, same math).
+ *
+ * The quote is VERIFIED, not extrapolated. getAmountsOut is concave in the
+ * input, so scaling the 1-WPLS marginal price linearly systematically
+ * UNDER-quotes at size — badly so on a thin pool. That is not cosmetic: the
+ * user would spend their PLS on a swap whose arrival falls below the
+ * threshold the UI promised, the pass would then be refused on-chain, and the
+ * DUMB would already be sitting in the dead address. So re-quote and scale up
+ * until the target is genuinely met, and return null when the pool cannot
+ * deliver it at any price — the caller keeps the button disabled rather than
+ * quoting a burn that cannot land.
  */
 export async function quotePlsBurnFor(preTaxTargetDumb: bigint): Promise<PlsBurnQuote | null> {
   const path: [`0x${string}`, `0x${string}`] = [WPLS as `0x${string}`, DUMB as `0x${string}`];
   const perPls = await quoteOut(WPLS_UNIT, path);
   if (perPls === null || perPls === 0n) return null;
-  // Round UP so the target is met, not just approached.
-  const plsIn = (preTaxTargetDumb * WPLS_UNIT + perPls - 1n) / perPls;
-  const dumbOut = await quoteOut(plsIn, path);
-  if (dumbOut === null) return null;
-  return { plsIn, dumbOut };
+  // First estimate: linear extrapolation of the marginal 1-WPLS price, rounded up.
+  // Known to under-shoot on a concave curve — the loop below corrects it.
+  let plsIn = (preTaxTargetDumb * WPLS_UNIT + perPls - 1n) / perPls;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const dumbOut = await quoteOut(plsIn, path);
+    if (dumbOut === null) return null;
+    if (dumbOut >= preTaxTargetDumb) return { plsIn, dumbOut };
+    // Scale the input proportionally to the shortfall and overshoot by 2%, so
+    // the sequence approaches the target from above and converges in 1–4
+    // quotes. (Scaling by the marginal 1-WPLS price instead converges far too
+    // slowly to be usable — verified against the pool depths this site ships
+    // against, it never reached the target in 6 attempts.) Over-quoting costs
+    // the user a little PLS; under-quoting costs them the whole burn, so
+    // converge from the safe side.
+    const next = (plsIn * preTaxTargetDumb * 102n) / (dumbOut * 100n) + 1n;
+    if (next <= plsIn) return null; // no progress possible
+    plsIn = next;
+  }
+  // Pool too thin to deliver the target — refuse rather than under-quote.
+  return null;
 }
 
 /**
- * Live quote: X PLS such that getAmountsOut(X, [WPLS, DUMB]) ≈ 110k DUMB.
+ * Live quote: X PLS such that getAmountsOut(X, [WPLS, DUMB]) clears
+ * PLS_BURN_TARGET_DUMB. Null when the pool is too thin to deliver it.
  */
 export async function quotePlsBurn(): Promise<PlsBurnQuote | null> {
   return quotePlsBurnFor(PLS_BURN_TARGET_DUMB);
@@ -2802,6 +2853,12 @@ export async function quotePlsBurn(): Promise<PlsBurnQuote | null> {
  * amountOutMin for the PLS fallback swap: verified dead-arrival math (95% of
  * the pre-tax quote — the router's fee-supporting variant checks the dead
  * address's actual balance increase) with the 8% slippage guard.
+ *
+ * Because quotePlsBurnFor now guarantees dumbOut >= the caller's target, and
+ * the caller's target is itself preTaxForArrival(threshold), this floor lands
+ * at or above `threshold`. So a burn that cannot meet the promised arrival
+ * REVERTS at the router instead of settling short — the user keeps their PLS
+ * rather than watching a pass get refused after the fact.
  */
 export function plsBurnMinOut(quote: PlsBurnQuote): bigint {
   return (

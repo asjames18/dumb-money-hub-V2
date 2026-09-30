@@ -965,12 +965,15 @@ function DeepScanPanel({
                   {((Number(plsQuote.dumbOut) / 1e18) * 0.95).toLocaleString(undefined, {
                     maximumFractionDigits: 0,
                   })}{" "}
-                  DUMB lands destroyed, clearing the 100,000 pass threshold.
+                  DUMB lands destroyed, clearing the 100,000 pass threshold. The swap also carries
+                  a minimum-output guard, so if the pool moves against you before it lands it
+                  reverts and you keep your PLS — it can't settle short of the pass.
                 </p>
               ) : plsQuoteStale ? (
                 <p className="mt-3 text-sm text-muted-foreground">
-                  The live PLS quote didn't load — the RPC is being flaky. The button stays off
-                  until a real quote comes back; nothing is ever estimated or invented.
+                  No live PLS quote right now — either the RPC didn't answer, or the pool is too
+                  thin to buy enough DUMB to clear the pass. The button stays off until a real
+                  quote comes back; nothing is ever estimated or invented.
                 </p>
               ) : (
                 <p className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground">
