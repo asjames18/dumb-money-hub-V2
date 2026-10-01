@@ -1,5 +1,38 @@
 # PulseChain DUMB/DAMP — Build Loop State
 
+- 2026-10-01 16:13 ET run: backlog #10 DONE (roadmap hygiene, recurring)
+  → audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  (1) Roadmap-vs-shipped diff: ONE new commit since the 15:33 #10 run —
+  13a6506 (16:11, another session pulled GitHub fixes: PLS burn quote math,
+  stale-quote guard, deep-scan panel fix, canonical share URLs in dump.ts,
+  `typecheck`/`verify` npm scripts). All are bug fixes to shipped features
+  (#14b/#15 PLS fallback, #12/#14 deep scan) and dev tooling — NO new roadmap
+  item, NO status flip. ROADMAP: 9 done:true / 3 done:false ("Community
+  engine" Soon, "DUMB Burn Engine" Planned, "Vetted Token Directory" Planned)
+  — all three genuinely pending. Live /plan 200 confirmed. Zero additions,
+  zero flips.
+  (2) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 16:03 read, no on-chain movement this interval.
+  (3) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200
+  on the custom domain; /api/market 200 FRESH real DexScreener data
+  (dumb $0.00000357 liq $3,651.57; damp $0.00001918 liq $2,033.40; correct
+  pairAddresses 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186 /
+  0xB256769d6B9d53E0E66a395C17135F8855A8633A); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓. Security headers live (nosniff +
+  strict-origin-when-cross-origin).
+  (4) Drift: "never promise" in 14 files, "5% instant burn" ×8,
+  "95,000 lands" ×2 (TokenScanner.tsx), zero Robinhood refs in dump.ts,
+  no stale 56.5%/15.83B — no drift.
+  (5) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start except 13a6506 (another session's, committed);
+  this run commits only BUILD_LOOP.md. Zero wallet/signing/data-source/
+  mascot touch. #10 stays open as recurring; #5 on Antonio's idea-only hold;
+  #6 ON HOLD per Antonio 2026-09-29; #8/#9/#13 stay open as recurring.
+
 - 2026-10-01 16:03 ET run: backlog #9 DONE (security/safety hardening, recurring)
   → audit-only, NO code changes, no build/deploy — nothing earned a ship.
   (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
@@ -13838,6 +13871,19 @@ ship, period. Never promise price appreciation or new highs.
     (enforcement), src/components/dumb/AiPreview.tsx (client sign + retry).
     No new data sources, no secrets in code, no wallet/signing beyond the
     user's own signMessage, zero mascot touch.
+
+18. **Unit-test the money math (bigint, no React, no network)** (queued 2026-10-01 —
+    the other agent's walkthrough request; his deep-scan regression shipped green
+    through build AND lint, and only adversarial review caught it). Start with
+    the one invariant that matters:
+      for all T: plsBurnMinOut({ dumbOut: preTaxForArrival(T) }) >= T
+    If that ever fails, a user's PLS gets spent against a burn that lands short
+    of the 100k pass threshold — the exact bug deployed 2026-10-01. Edge cases:
+    T = 0, T = 1, T = 10^24, T = 100_000 (pass threshold), and a value that
+    forces integer-truncation at the floor. Plus: MAX_MISSION_XP >= the true
+    max daily award (generateMission adds +10 on top of the type value).
+    Minimal harness only — code minimalism still rules; test the pure math,
+    not the UI.
 
 ## Rejected ideas (with reasons)
 
