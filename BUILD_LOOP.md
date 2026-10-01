@@ -1,5 +1,67 @@
 # PulseChain DUMB/DAMP — Build Loop State
 
+- 2026-10-01 16:43 ET run: backlog #18 DONE (unit-test the money math) —
+  SHIPPED dev-only: `scripts/money-math.test.ts` (5 tests, node:test, zero
+  new deps) + tiny alias loader hook + `npm run test:money-math`. Pins the
+  one invariant that matters —
+  `plsBurnMinOut({dumbOut: preTaxForArrival(T)}) >= T` for all probed T
+  (dense sweep 0..200,000 raw units, 5k deterministic spread to 10^24,
+  edges 0/1/10^24/pass threshold ±1) — plus a regression guard proving a
+  round 110k buffer would NOT clear the 100k threshold (110k × 0.874 =
+  96,140 — the exact shipped bug), and MAX_MISSION_XP == the max real
+  daily award (tight, all types × daily). Imports the REAL modules (not
+  copies); negative control (non-rounding preTaxForArrival variant) fails
+  the invariant at T=1, so the harness catches the bug class. tsc exit 0,
+  eslint 0 errors, prettier clean. NO src changes → bundle byte-identical
+  → no deploy. RUN-STATE NOTE: another session has in-progress uncommitted
+  edits at run start (ProofStrip.tsx) — touched none of it, no build/
+  deploy per the 13:33 rule. Commits (pathspec): BUILD_LOOP.md +
+  package.json + the 3 new script files.
+
+- 2026-10-01 16:33 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — nothing earned a ship.
+  NEW utility angle considered and PARKED (logged in BULLISH-RESEARCH.md):
+  a burn-gated deep-scan JSON API for other PulseChain dApps (per-call
+  DUMB burns to dead, hub verifies on-chain before serving). PARKED on
+  (1) zero measured demand for the human product first (scan-stats flat
+  {deep_scans:3, pass_burns:1}, share_tap never fired, single unredeemed
+  pledge, no dApp ever asked) — the widget (01:03) sequencing error with
+  more machinery; (2) the honest version is a service operation: API keys,
+  rate limits, burn-ledger accounting, docs, abuse handling against the
+  batch-flaky public RPC; (3) downstream verdict-rot — third parties cache
+  and re-label hub-branded verdicts the hub cannot correct (dynamic-OG
+  family); (4) burn-per-call leaks into a prepaid entitlement pool, which
+  is Antonio's #14 pricing-design approval anyway; (5) integrations need a
+  partner and partner outreach is Antonio's call (hard boundary). Distinct
+  from the parked embeddable scan widget (01:03, visual badge) and the bulk
+  scanner (08:03). Revisit only if ≥25 deep scans/month + a concrete dev
+  ask; safe shape = burn-verified session tokens, point-in-time caveats,
+  per-key RPC caps. Revisit scan: nothing ripened — PDF export, jargon
+  definitions, pre-sign decoder, guided wizard, DexScreener info update
+  (Antonio's), liquidity sizer, TTS, free window, reflections tracker,
+  weekly snapshot, red-flag wall (16:23), starter-kit checklist (15:47),
+  discovery feed (15:03), DAMP-denominated pass (15:53) all still blocked
+  on zero measured demand; gift-a-pass remains Antonio's promo call.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 16:23 read, no on-chain movement this interval.
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200;
+  /api/market 200 FRESH real DexScreener data; /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓; brag-image malformed → 400. Security
+  headers live (nosniff + strict-origin-when-cross-origin).
+  (3) Drift: "never promise" ×16 files, "5% instant burn" ×8,
+  "95,000 lands" ×2 (TokenScanner.tsx), zero Robinhood refs in dump.ts,
+  no stale 56.5%/15.83B, ROADMAP 9 done:true / 3 done:false — no drift.
+  (4) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD 74d27d5); this run commits only
+  BUILD_LOOP.md + BULLISH-RESEARCH.md. Zero wallet/signing/data-source/
+  mascot touch. #13 stays open as recurring; #5 on Antonio's idea-only
+  hold; #6 ON HOLD per Antonio 2026-09-29; #8/#9/#10 stay open as
+  recurring.
+
 - 2026-10-01 16:23 ET run: backlog #8 DONE (bullish-demand research, recurring)
   → research-only, NO code changes, no build/deploy — nothing earned a ship.
   NEW demand angle considered and PARKED (logged in BULLISH-RESEARCH.md):
@@ -13922,18 +13984,22 @@ ship, period. Never promise price appreciation or new highs.
     No new data sources, no secrets in code, no wallet/signing beyond the
     user's own signMessage, zero mascot touch.
 
-18. **Unit-test the money math (bigint, no React, no network)** (queued 2026-10-01 —
-    the other agent's walkthrough request; his deep-scan regression shipped green
-    through build AND lint, and only adversarial review caught it). Start with
-    the one invariant that matters:
-      for all T: plsBurnMinOut({ dumbOut: preTaxForArrival(T) }) >= T
-    If that ever fails, a user's PLS gets spent against a burn that lands short
-    of the 100k pass threshold — the exact bug deployed 2026-10-01. Edge cases:
-    T = 0, T = 1, T = 10^24, T = 100_000 (pass threshold), and a value that
-    forces integer-truncation at the floor. Plus: MAX_MISSION_XP >= the true
-    max daily award (generateMission adds +10 on top of the type value).
-    Minimal harness only — code minimalism still rules; test the pure math,
-    not the UI.
+18. **Unit-test the money math (bigint, no React, no network)** (DONE
+    2026-10-01 16:43 run) — `scripts/money-math.test.ts` (5 tests, `npm run
+    test:money-math`, node:test, zero new dependencies) + tiny ESM alias
+    loader (`scripts/test-alias-loader.mjs`, registered via
+    `scripts/test-alias-hook.mjs`) so the tests import the REAL modules
+    (not copies). Pins the one invariant that matters:
+    `plsBurnMinOut({dumbOut: preTaxForArrival(T)}) >= T` for all probed T —
+    dense sweep 0..200,000 raw units, 5k deterministic pseudo-random spread
+    to 10^24, edges 0/1/10^24/pass threshold ±1 — plus the derived
+    `PLS_BURN_TARGET_DUMB` clearing the 100k threshold at full slippage,
+    a regression guard proving a round 110k buffer would NOT clear it
+    (110k × 0.874 = 96,140 — the exact shipped bug), and MAX_MISSION_XP ==
+    the max real daily award (tight, all types × daily). Negative control:
+    a non-rounding preTaxForArrival variant fails the invariant at T=1,
+    so the harness catches the bug class. tsc exit 0, eslint 0 errors,
+    prettier clean. NO src changes → bundle byte-identical → no deploy.
 
 ## Rejected ideas (with reasons)
 

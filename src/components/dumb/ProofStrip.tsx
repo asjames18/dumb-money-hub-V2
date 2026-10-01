@@ -155,7 +155,7 @@ export function ProofStrip() {
         key: "gone",
         label: "DUMB gone for good",
         value: fmtCompactTok(dumbGone),
-        sub: `${shareOfSupply(dumbGone, dumbSupply)} of supply — burned or locked, it can never move`,
+        sub: `${shareOfSupply(dumbGone, dumbSupply)} — burned or locked, it can never move`,
         extra: `${fmtCompactTok(dumbBurned)} burned · ${fmtCompactTok(dumbLocked)} locked in the contract · DAMP: ${fmtCompactTok(dampGone)} gone too`,
         href: explorerAddress(DEAD),
         linkLabel: "Dead address on the explorer",
