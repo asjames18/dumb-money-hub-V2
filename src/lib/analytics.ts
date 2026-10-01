@@ -9,6 +9,7 @@ export type AnalyticsEvent =
   | "pass_burn_pls"
   | "burn_voluntary"
   | "burn_voluntary_pls"
+  | "pro_pass_burn"
   | "wallet_connect"
   | "share_tap"
   | "watchlist_toggle"

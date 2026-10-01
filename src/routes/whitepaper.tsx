@@ -39,7 +39,7 @@ const CHAPTERS: { title: string; body: React.ReactNode }[] = [
         PulseX. Every transfer pays a 6% tax: <B>5% is instantly burned</B> (1% to the dead address,
         2% + 2% into the contract&apos;s fee buckets — entombed forever, the auto-processing engine
         is dead) and 1% is reflected to holders. About 69% of the 28B fixed supply is immobilized:
-        ~56.5% burned, ~12.5% stuck in the contract. Nobody is in charge — ownership is renounced
+        ~56.6% burned, ~12.5% stuck in the contract. Nobody is in charge — ownership is renounced
         and the fee split can&apos;t change. The raid exists to bring people into the protocol:
         every new buyer is volume on the live pairs. Memes on the front, receipts on everything.
       </P>
@@ -78,7 +78,7 @@ const CHAPTERS: { title: string; body: React.ReactNode }[] = [
         </Li>
         <Li>
           <B>Every trade burns 5% and reflects 1%.</B> Say it plainly: on top of the historical
-          burns (~56.5% of supply, verifiable on-chain), 5% of every taxed transfer is permanently
+          burns (~56.6% of supply, verifiable on-chain), 5% of every taxed transfer is permanently
           destroyed and 1% is reflected to holders. That&apos;s the live mechanic — not history.
         </Li>
         <Li>
@@ -98,7 +98,7 @@ const CHAPTERS: { title: string; body: React.ReactNode }[] = [
     body: (
       <Ul>
         <Li>
-          <B>~56.5% burned</B> — roughly 15.83B of 28B sent to the dead address. Gone, verifiable
+          <B>~56.6% burned</B> — roughly 15.84B of 28B sent to the dead address. Gone, verifiable
           on-chain.
         </Li>
         <Li>
@@ -197,7 +197,7 @@ const CHAPTERS: { title: string; body: React.ReactNode }[] = [
           Yes — 5% of every taxed transfer is permanently destroyed: 1% burned to the dead address,
           4% entombed in the contract&apos;s fee buckets (the auto-processing engine is dead and
           ownership is renounced, so nothing ever spends them) — and 1% is reflected to holders. The
-          historical burns (~56.5% of supply) are real, and the mechanic is still live today.
+          historical burns (~56.6% of supply) are real, and the mechanic is still live today.
         </P>
         <P>
           <B>Can the tax be changed or removed? </B>

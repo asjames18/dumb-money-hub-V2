@@ -6,7 +6,7 @@ import { pageMeta } from "@/lib/page-meta";
 
 const TITLE = "Supply story — Dumb Money Hub";
 const DESCRIPTION =
-  "The supply story of the live DUMB token on PulseChain: 28B fixed supply, ~56.5% historically burned, ~12.5% entombed in the contract — 69% immobilized. Immutable and renounced.";
+  "The supply story of the live DUMB token on PulseChain: 28B fixed supply, ~56.6% historically burned, ~12.5% entombed in the contract — 69% immobilized. Immutable and renounced.";
 
 export const Route = createFileRoute("/genesis")({
   head: () => pageMeta("/genesis", TITLE, DESCRIPTION),

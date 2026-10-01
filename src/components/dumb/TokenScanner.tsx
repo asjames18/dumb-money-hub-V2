@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 
 import {
+  DAMP,
   DEAD,
   DUMB,
   PULSEX_V2_ROUTER,
@@ -303,6 +304,26 @@ export function TokenScanner({
             Anything unverified above is marked unknown — treat unknown as risky, not fine. Always
             double-check the contract on the explorer yourself before you ape.
           </p>
+
+          {(result.address.toLowerCase() === DUMB.toLowerCase() ||
+            result.address.toLowerCase() === DAMP.toLowerCase()) &&
+            redFlags === 0 && (
+              <div className="mt-4 rounded-md border border-primary/40 bg-primary/10 px-3 py-2.5">
+                <p className="text-sm leading-relaxed">
+                  <strong className="text-foreground">This is the hub's own token</strong> — you
+                  just scanned the contract this site is built around. The swap box shows the
+                  after-tax amount you'll actually receive (
+                  {result.address.toLowerCase() === DUMB.toLowerCase() ? "6%" : "3%"} tax) before
+                  you sign.
+                </p>
+                <Link
+                  to="/trade"
+                  className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 font-display text-xs uppercase tracking-widest text-primary-foreground hover:bg-primary/90"
+                >
+                  Trade {result.symbol ?? "on the hub"} on the hub →
+                </Link>
+              </div>
+            )}
 
           {result.pair && (
             <DeepScanPanel

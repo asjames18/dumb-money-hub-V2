@@ -246,10 +246,10 @@ function StoryPage() {
                 </span>
               </li>
               <li className="flex gap-2.5">
-                <span className="font-bold text-foreground">15.83B, not 18B.</span>
+                <span className="font-bold text-foreground">15.84B, not 18B.</span>
                 <span>
-                  Marketing tweets say &ldquo;18B+ incinerated.&rdquo; The chain says 15.83B
-                  (56.5%). We use the chain&apos;s number.
+                  Marketing tweets say &ldquo;18B+ incinerated.&rdquo; The chain says 15.84B
+                  (56.6%). We use the chain&apos;s number.
                 </span>
               </li>
             </ul>
@@ -283,7 +283,7 @@ function StoryPage() {
             <div className="rounded-xl border-2 border-foreground/20 bg-card p-5">
               <h3 className="font-display text-lg uppercase tracking-wide">69% can never move</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                56.5% of DUMB (15.83B) sits at the dead address; another ~12.5% (3.5B) is entombed
+                56.6% of DUMB (15.84B) sits at the dead address; another ~12.5% (3.5B) is entombed
                 in the token contract itself. Track both live on{" "}
                 <a
                   href="/roots"

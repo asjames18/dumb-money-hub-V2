@@ -26,6 +26,7 @@ export const ANALYTICS_EVENTS = new Set([
   "pass_burn_pls",
   "burn_voluntary",
   "burn_voluntary_pls",
+  "pro_pass_burn",
   "burn_started",
   "swap_quote",
   "swap_attempt",

@@ -20,7 +20,7 @@ const RECEIPTS = [
   {
     label: "Supply",
     value: "28B fixed",
-    note: "~56.5% historically burned, ~12.5% entombed in the token contract — roughly 69% immobilized.",
+    note: "~56.6% historically burned, ~12.5% entombed in the token contract — roughly 69% immobilized.",
   },
   {
     label: "Tax",

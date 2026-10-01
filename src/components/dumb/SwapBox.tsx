@@ -1200,6 +1200,14 @@ export function SwapBox() {
               {inputTokenAddress}
             </a>
             <CopyButton value={inputTokenAddress} label={`${inputSymbol} contract address`} />
+            <Link
+              to="/scan"
+              search={{ token: inputTokenAddress, burn: undefined, tx: undefined }}
+              className="text-primary hover:underline"
+              title="Run the hub's free safety scan on this contract — taxes, owner powers, liquidity, in plain English"
+            >
+              Scan this contract
+            </Link>
           </p>
         )}
       </div>
@@ -1244,7 +1252,7 @@ export function SwapBox() {
           )}
         </div>
         {usdReceive && <p className="mt-1 text-[11px] text-muted-foreground">{usdReceive}</p>}
-        {isSell && outputAddress && (
+        {outputAddress && (
           <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-muted-foreground">
             <span>Verified output:</span>
             <a
@@ -1256,6 +1264,14 @@ export function SwapBox() {
               {outputAddress}
             </a>
             <CopyButton value={outputAddress} label={`${outputSymbol} contract address`} />
+            <Link
+              to="/scan"
+              search={{ token: outputAddress, burn: undefined, tx: undefined }}
+              className="text-primary hover:underline"
+              title="Run the hub's free safety scan on this contract — taxes, owner powers, liquidity, in plain English"
+            >
+              Scan this contract
+            </Link>
           </p>
         )}
         {parsedIn !== null && quotedOut !== null && taxIn !== null && (

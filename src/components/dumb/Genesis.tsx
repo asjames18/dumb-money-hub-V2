@@ -12,8 +12,8 @@ import { DUMB_TOKEN_URL } from "@/data/dump";
 const SLICES = [
   {
     icon: Flame,
-    title: "~56.5% burned",
-    value: "~15.83B of 28B",
+    title: "~56.6% burned",
+    value: "~15.84B of 28B",
     desc: "Burned to the dead address — gone, verifiable on-chain. The 14B launch-day burn is most of it; the 1% protocol burn on every taxed transfer keeps adding.",
   },
   {

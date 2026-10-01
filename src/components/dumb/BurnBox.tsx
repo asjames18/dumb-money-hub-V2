@@ -34,6 +34,8 @@ import {
 } from "@/lib/token-scan";
 import { ConnectButton } from "./ConnectButton";
 import { trackEvent } from "@/lib/analytics";
+import { fmtUsd } from "@/lib/pls-price";
+import { useTokenPrices } from "@/lib/token-prices";
 import { CopyButton } from "./CopyButton";
 import { BurnBragCard } from "./BurnBragCard";
 import { NativeShareButton } from "./NativeShareButton";
@@ -130,6 +132,7 @@ export function BurnBox() {
   const { address, chainId } = useAccount();
   const onPulse = chainId === pulsechain.id;
   const cfg = BURN[tokenKey];
+  const prices = useTokenPrices();
 
   const { data: bal, refetch: refetchBal } = useReadContract({
     address: cfg.address,
@@ -251,6 +254,15 @@ export function BurnBox() {
     parsed = null;
   }
   const insufficient = parsed !== null && bal !== undefined && parsed > bal;
+  const tokenPrice = prices[tokenKey];
+  const amountUsd =
+    parsed !== null && parsed > 0n && tokenPrice !== null
+      ? Number(formatUnits(parsed, 18)) * tokenPrice
+      : null;
+  const amountUsdLabel =
+    amountUsd !== null && Number.isFinite(amountUsd) && amountUsd > 0
+      ? `~${fmtUsd(amountUsd)} est.`
+      : null;
 
   // Show the PLS fallback when the wallet holds less DUMB than the entered
   // burn amount (DUMB only — the fallback buys DUMB through the WPLS pair).
@@ -525,6 +537,12 @@ export function BurnBox() {
               <strong>
                 {fmtTok(parsed)} {tokenKey}
               </strong>
+              {amountUsdLabel && (
+                <span className="text-muted-foreground">
+                  {" "}
+                  ({amountUsdLabel} at the current pair price — indicative only)
+                </span>
+              )}
             </li>
             <li>
               The dead address balance grows by{" "}
@@ -601,7 +619,10 @@ export function BurnBox() {
                     You are about to burn{" "}
                     <strong className="text-foreground">
                       {parsed !== null && parsed > 0n ? fmtTok(parsed) : "—"} {tokenKey}
-                    </strong>{" "}
+                    </strong>
+                    {amountUsdLabel && (
+                      <> ({amountUsdLabel} at the current pair price — indicative only)</>
+                    )}{" "}
                     to the dead address. The tokens leave your wallet permanently. This is the last
                     step before your wallet asks you to sign.
                   </AlertDialogDescription>

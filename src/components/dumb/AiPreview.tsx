@@ -474,7 +474,11 @@ function ProPanel({
         fail(data.reason ?? "Activation failed — try again.");
         return;
       }
-      trackEvent("burn_voluntary");
+      // Pro-pass purchase burn leg: a real burn, but NOT a voluntary /burn-page
+      // burn — it must never be counted as one in analytics (that conflation
+      // once hid a Pro test purchase as an unverified burn event). Separate
+      // event name so /stats reports it honestly on its own line.
+      trackEvent("pro_pass_burn");
       onActivated();
       setFlow("done");
       persistLegs(address, paySymbol, {}, null);

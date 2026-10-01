@@ -9,7 +9,9 @@ import { fmtCompactTok, timeAgo } from "@/lib/burns";
  * Backlog #16 (Antonio 2026-09-28) — live proof strip on the hero.
  *
  * Trust comes from verifiable facts placed BEFORE the action: the first thing
- * a newcomer sees is total destroyed, fixed supply, and the per-transfer tax
+ * a newcomer sees is the total that can never move (burned to the dead
+ * address + locked inside the token contract), fixed supply, and the
+ * per-transfer tax
  * legs — every figure read live from PulseChain, each with block number, age,
  * and an explorer link. No invented numbers, no new data sources, read-only.
  *
@@ -41,6 +43,16 @@ export function ProofStrip() {
     chainId: pulsechain.id,
     query,
   } as const;
+  // The token contract's OWN balance = the buy-back + liquidity buckets of
+  // every taxed transfer, entombed forever (engine dead, owner renounced).
+  // This is the locked figure Antonio wants counted with the burned total
+  // (2026-10-01): dead + contract = ~69% of DUMB that can never move.
+  const contractBal = {
+    abi: erc20Abi,
+    functionName: "balanceOf",
+    chainId: pulsechain.id,
+    query,
+  } as const;
   const feesCall = { abi: taxAbi, functionName: "fees", chainId: pulsechain.id, query } as const;
   const distCall = {
     abi: taxAbi,
@@ -51,6 +63,8 @@ export function ProofStrip() {
 
   const d1 = useReadContract({ ...deadBal, address: DUMB });
   const d2 = useReadContract({ ...deadBal, address: DAMP });
+  const c1 = useReadContract({ ...contractBal, address: DUMB, args: [DUMB] });
+  const c2 = useReadContract({ ...contractBal, address: DAMP, args: [DAMP] });
   const s1 = useReadContract({ ...supply, address: DUMB });
   const f1 = useReadContract({ ...feesCall, address: DUMB });
   const g1 = useReadContract({ ...distCall, address: DUMB });
@@ -61,6 +75,8 @@ export function ProofStrip() {
   const ready =
     typeof d1.data === "bigint" &&
     typeof d2.data === "bigint" &&
+    typeof c1.data === "bigint" &&
+    typeof c2.data === "bigint" &&
     typeof s1.data === "bigint" &&
     typeof f1.data === "bigint" &&
     Array.isArray(g1.data) &&
@@ -69,7 +85,15 @@ export function ProofStrip() {
     Array.isArray(g2.data) &&
     g2.data.length === 4;
   const failed =
-    d1.isError || d2.isError || s1.isError || f1.isError || g1.isError || f2.isError || g2.isError;
+    d1.isError ||
+    d2.isError ||
+    c1.isError ||
+    c2.isError ||
+    s1.isError ||
+    f1.isError ||
+    g1.isError ||
+    f2.isError ||
+    g2.isError;
   const loading = !ready && !failed;
 
   // "Updated Xs ago" — stamp the moment all figures resolve, re-tick every 10s.
@@ -77,7 +101,7 @@ export function ProofStrip() {
   const [, setTick] = useState(0);
   useEffect(() => {
     if (ready) setSeenAt(Date.now());
-  }, [ready, d1.data, d2.data, s1.data, f1.data, g1.data, f2.data, g2.data]);
+  }, [ready, d1.data, d2.data, c1.data, c2.data, s1.data, f1.data, g1.data, f2.data, g2.data]);
   useEffect(() => {
     const t = setInterval(() => setTick((x) => x + 1), 10_000);
     return () => clearInterval(t);
@@ -86,6 +110,8 @@ export function ProofStrip() {
   const retry = () => {
     void d1.refetch();
     void d2.refetch();
+    void c1.refetch();
+    void c2.refetch();
     void s1.refetch();
     void f1.refetch();
     void g1.refetch();
@@ -115,6 +141,10 @@ export function ProofStrip() {
     if (!ready) return [];
     const dumbBurned = d1.data as bigint;
     const dampBurned = d2.data as bigint;
+    const dumbLocked = c1.data as bigint;
+    const dampLocked = c2.data as bigint;
+    const dumbGone = dumbBurned + dumbLocked;
+    const dampGone = dampBurned + dampLocked;
     const dumbSupply = s1.data as bigint;
     const dist = (d: unknown): [bigint, bigint, bigint, bigint] =>
       d as [bigint, bigint, bigint, bigint];
@@ -122,11 +152,11 @@ export function ProofStrip() {
     const dampLegs = taxLegs(f2.data as bigint, dist(g2.data));
     return [
       {
-        key: "burned",
-        label: "DUMB destroyed",
-        value: fmtCompactTok(dumbBurned),
-        sub: shareOfSupply(dumbBurned, dumbSupply),
-        extra: `DAMP: ${fmtCompactTok(dampBurned)} destroyed`,
+        key: "gone",
+        label: "DUMB gone for good",
+        value: fmtCompactTok(dumbGone),
+        sub: `${shareOfSupply(dumbGone, dumbSupply)} of supply — burned or locked, it can never move`,
+        extra: `${fmtCompactTok(dumbBurned)} burned · ${fmtCompactTok(dumbLocked)} locked in the contract · DAMP: ${fmtCompactTok(dampGone)} gone too`,
         href: explorerAddress(DEAD),
         linkLabel: "Dead address on the explorer",
       },
@@ -219,8 +249,11 @@ export function ProofStrip() {
         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
           Every figure above is read from PulseChain at the block shown — the tax numbers come
           straight from the token contracts&apos; <code>fees()</code> and{" "}
-          <code>feesDistribution()</code>. The dead address isn&apos;t fee-excluded, so destroyed
-          balances are what actually landed. Burns shrink supply; they never promise price.
+          <code>feesDistribution()</code>. &ldquo;Locked&rdquo; is the token contract&apos;s own
+          balance: the buy-back and liquidity buckets of every taxed transfer pile up there, and
+          with ownership renounced and the fee-processing engine dead, they can never move. The dead
+          address isn&apos;t fee-excluded, so destroyed balances are what actually landed. Burns
+          shrink supply; they never promise price.
         </p>
       </div>
     </section>

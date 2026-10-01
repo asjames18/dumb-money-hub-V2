@@ -18,7 +18,7 @@ export const KNOWLEDGE: KnowledgeChunk[] = [
     id: "tokens",
     title: "DUMB token",
     tags: ["dumb", "token", "contract", "address", "pulsechain", "live"],
-    body: `DUMB (${TOKENS[0].address}) is the live, already-launched Dumb Money token on PulseChain mainnet — trading on PulseX. Safemoon-fork: 6% transfer tax, immutable/renounced, 28B fixed supply, ~69% immobilized (~56.5% historically burned, ~12.5% entombed in the contract). Per taxed transfer: 5% burned (1% protocol burn to the dead address + 2% buy-back bucket + 2% liquidity bucket, both entombed forever) and 1% reflected to holders. The per-transfer split is live; the auto-processing engine is permanently dead (buckets entombed). Always verify the address yourself on a block explorer before interacting. Listing an address is not a recommendation to buy.`,
+    body: `DUMB (${TOKENS[0].address}) is the live, already-launched Dumb Money token on PulseChain mainnet — trading on PulseX. Safemoon-fork: 6% transfer tax, immutable/renounced, 28B fixed supply, ~69% immobilized (~56.6% historically burned, ~12.5% entombed in the contract). Per taxed transfer: 5% burned (1% protocol burn to the dead address + 2% buy-back bucket + 2% liquidity bucket, both entombed forever) and 1% reflected to holders. The per-transfer split is live; the auto-processing engine is permanently dead (buckets entombed). Always verify the address yourself on a block explorer before interacting. Listing an address is not a recommendation to buy.`,
   },
   {
     id: "buy",
@@ -91,7 +91,7 @@ export const KNOWLEDGE: KnowledgeChunk[] = [
     id: "proof",
     title: "Proof Hub and receipts",
     tags: ["proof", "receipts", "explorer", "verify", "owner", "lp", "homepage", "strip", "hero"],
-    body: "Contract Receipts lists public addresses and explorer links. Proof Hub reads public feeds for owner status, liquidity totals, burn wallet balances, supply, holders and recent burns. The homepage leads with a live proof strip — 'Live from the chain': total DUMB destroyed (dead-address balance, share of supply), fixed 28B supply, and the 6% DUMB / 3% DAMP transfer-tax legs derived live from the contracts' own fees() and feesDistribution() calls. Every figure carries its block number, read age, and an explorer link; nothing is pinned copy. Liquidity USD is not an LP lock proof. Unavailable tiles stay labeled unavailable — never fabricate verification.",
+    body: "Contract Receipts lists public addresses and explorer links. Proof Hub reads public feeds for owner status, liquidity totals, burn wallet balances, supply, holders and recent burns. The homepage leads with a live proof strip — 'Live from the chain': total DUMB gone for good (dead-address balance + balance locked in the token contract, share of supply), fixed 28B supply, and the 6% DUMB / 3% DAMP transfer-tax legs derived live from the contracts' own fees() and feesDistribution() calls. Every figure carries its block number, read age, and an explorer link; nothing is pinned copy. Liquidity USD is not an LP lock proof. Unavailable tiles stay labeled unavailable — never fabricate verification.",
   },
   {
     id: "arcade",

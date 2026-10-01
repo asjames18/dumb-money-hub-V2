@@ -206,6 +206,37 @@ function RootComponent() {
     return () => unsubscribe();
   }, [router]);
 
+  // Owner shortcut: Alt+S jumps to the private /stats page on any route.
+  // Hidden by design — /stats stays unlisted (no nav link, no sitemap,
+  // robots-disallowed); this just saves Antonio having to remember the URL.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      try {
+        if (e.altKey && !e.ctrlKey && !e.metaKey && e.key.toLowerCase() === "s") {
+          // Never yank someone out of a form field (scan box, AI chat, burn
+          // amount, etc.) — the shortcut can be re-pressed from outside it.
+          const t = e.target as HTMLElement | null;
+          if (
+            t &&
+            (t.tagName === "INPUT" ||
+              t.tagName === "TEXTAREA" ||
+              t.tagName === "SELECT" ||
+              t.isContentEditable)
+          )
+            return;
+          if (!window.location.pathname.startsWith("/stats")) {
+            e.preventDefault();
+            router.navigate({ to: "/stats" });
+          }
+        }
+      } catch {
+        /* owner shortcut must never break the app */
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [router]);
+
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
