@@ -1,5 +1,55 @@
 # PulseChain DUMB/DAMP — Build Loop State
 
+- 2026-10-01 16:23 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — nothing earned a ship.
+  NEW demand angle considered and PARKED (logged in BULLISH-RESEARCH.md):
+  a public "red-flag wall" — a community-nominated gallery of tokens the
+  scanner flagged red, pitched as share material and a repeat-visit
+  destination. PARKED on (1) legal exposure: a curated wall of tokens labeled
+  scams is the hub's own publication (a user-run scan is a private inquiry);
+  verdicts are probes, not rulings — publishing them as an editorial gallery
+  collapses the distinction the /terms guardrail exists to protect;
+  (2) the absence-is-endorsement inversion: tokens NOT on the wall read as
+  "safe," the most dangerous misreading the safest hub could ship — a
+  per-inquiry scan stays point-in-time, a wall freezes a verdict into a
+  standing list; (3) brigading: nominations are a sybil surface (competitors
+  nominate each other, scammers nominate DUMB/DAMP), plus a moderation/appeal/
+  re-scan pipeline under "more code = more problems"; (4) zero measured
+  demand (scan-stats flat {deep_scans:3, pass_burns:1}, share_tap never fired,
+  single unredeemed pledge); (5) burns nothing, converts nobody. Freshness:
+  no prior entry evaluates a red-verdict gallery — distinct from the rejected
+  bulk scanner (08:03), the parked discovery feed (15:03), and the shipped
+  shareable report card (11:03). Checked-first, not re-parked: AddToWalletButton
+  (EIP-747) and the shipped browser-local ScanWatchlist (live re-scan) already
+  cover post-scan convenience. Revisit scan: nothing ripened (PDF export,
+  jargon definitions, pre-sign decoder, guided wizard, DexScreener info
+  update, liquidity sizer, TTS, free window, reflections tracker, weekly
+  snapshot, discovery feed, starter-kit checklist parks all still blocked on
+  zero measured demand; gift-a-pass remains Antonio's promo call).
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 16:03/16:13 reads, no on-chain movement this
+  interval. (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade
+  /wallet all 200; /api/market 200 FRESH real DexScreener data (dumb
+  $0.00000357 liq $3,651.57; damp $0.00001918 liq $2,033.40; correct
+  pairAddresses 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186 /
+  0xB256769d6B9d53E0E66a395C17135F8855A8633A); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓; brag-image malformed → 400. Security
+  headers live (nosniff + strict-origin-when-cross-origin). (3) Drift:
+  "never promise" ×14 files, "5% instant burn" ×8, "95,000 lands" ×2,
+  zero Robinhood refs in dump.ts (the 2 knowledge.ts hits are the
+  2026-09-29 AI guardrail lines themselves — intentional), no stale
+  56.5%/15.83B, ROADMAP 9 done:true / 3 done:false — no drift.
+  (4) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD 53cff84); this run commits only
+  BUILD_LOOP.md + BULLISH-RESEARCH.md. Zero wallet/signing/data-source/
+  mascot touch. #8 stays open as recurring; #5 on Antonio's idea-only
+  hold; #6 ON HOLD per Antonio 2026-09-29; #9/#10/#13 stay open as
+  recurring.
+
 - 2026-10-01 16:13 ET run: backlog #10 DONE (roadmap hygiene, recurring)
   → audit-only, NO code changes, no build/deploy — nothing earned a ship.
   (1) Roadmap-vs-shipped diff: ONE new commit since the 15:33 #10 run —

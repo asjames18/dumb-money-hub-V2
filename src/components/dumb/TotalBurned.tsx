@@ -103,6 +103,11 @@ export function TotalBurned() {
     ? (Number(dumbBurned) / 1e18) * (dumbUsd as number) +
       (Number(dampBurned) / 1e18) * (dampUsd as number)
     : null;
+  // Per-token USD parts, hoisted so the headline can show the composition
+  // (totalUsd is the sum of these two — the card used to show the total with
+  // no breakdown, which read as contradicting the per-token rows).
+  const dumbUsdPart = both && dumbUsd !== null ? (Number(dumbBurned) / 1e18) * dumbUsd : null;
+  const dampUsdPart = both && dampUsd !== null ? (Number(dampBurned) / 1e18) * dampUsd : null;
 
   const retry = () => {
     void refetchDumb();
@@ -162,6 +167,12 @@ export function TotalBurned() {
               <span className="text-lg text-muted-foreground">est.</span>
             </p>
           )}
+          {totalUsd !== null && dumbUsdPart !== null && dampUsdPart !== null && (
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              DUMB + DAMP combined — ~{fmtUsdCompact(dumbUsdPart)} DUMB + ~
+              {fmtUsdCompact(dampUsdPart)} DAMP at on-chain prices.
+            </p>
+          )}
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-lg border border-foreground/15 bg-card p-4">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -176,10 +187,8 @@ export function TotalBurned() {
                   {shareOfSupply(dumbBurned, dumbSupply)}
                 </p>
               )}
-              {dumbUsd !== null && (
-                <p className="text-xs text-muted-foreground">
-                  ~{fmtUsdCompact((Number(dumbBurned) / 1e18) * dumbUsd)} est.
-                </p>
+              {dumbUsdPart !== null && (
+                <p className="text-xs text-muted-foreground">~{fmtUsdCompact(dumbUsdPart)} est.</p>
               )}
             </div>
             <div className="rounded-lg border border-foreground/15 bg-card p-4">
@@ -195,10 +204,8 @@ export function TotalBurned() {
                   {shareOfSupply(dampBurned, dampSupply)}
                 </p>
               )}
-              {dampUsd !== null && (
-                <p className="text-xs text-muted-foreground">
-                  ~{fmtUsdCompact((Number(dampBurned) / 1e18) * dampUsd)} est.
-                </p>
+              {dampUsdPart !== null && (
+                <p className="text-xs text-muted-foreground">~{fmtUsdCompact(dampUsdPart)} est.</p>
               )}
             </div>
           </div>
