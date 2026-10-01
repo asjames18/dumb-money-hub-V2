@@ -1,4 +1,418 @@
+- 2026-10-01 19:43 ET run: backlog #9 DONE (security/safety hardening, recurring)
+  → audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,182,497 (36.4%) —
+  byte-identical to the 19:33 read, no on-chain movement this interval.
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet /stats
+  all 200 on the custom domain; /api/market 200 FRESH real DexScreener data
+  (dumb $0.00000357 liq $3,651.57 vol $14 0b/4s -2.44%; correct pairAddresses
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186 /
+  0xB256769d6B9d53E0E66a395C17135F8855A8633A); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓; brag-image malformed → 400. Security
+  headers live.
+  (3) ADVERSARIAL SPOT-CHECK — fresh angle this pass: the 30-day deep-scan
+  pass ledger (src/lib/token-scan.ts + TokenScanner.tsx). Verified: pass
+  ISSUANCE is strictly on-chain-gated — saveScanPass runs only after
+  verifyScanBurn/verifyPlsScanBurn/verifyDeepScanBurn returns ok (pinned
+  tx.to = DUMB contract, transfer-selector + dead-recipient + ≥100k checks
+  on calldata, Transfer-log dead-arrival match, receipt success); the
+  paste path additionally requires the burn's tx.from to match the
+  connected wallet (stranger-burn claim blocked) and marks hashes one-time
+  (USED_BURNS_KEY). CONSUMPTION: runDeep trusts the localStorage pass
+  (shape-validated by isScanPass + expiry) without re-verifying — a
+  hand-minted pass (any real hex txHash, any expiry) would unlock deep
+  scans in that browser. Threat model assessed nil: the deep scan is 100%
+  client-side read-only RPC probes (the probe code ships in the client
+  bundle — callable from devtools regardless); no server-side resource,
+  no paid service, and no per-scan hub cost is gated behind the pass, so
+  self-minting buys nothing that isn't already public. The burn remains a
+  voluntary demand mechanic, not an access paywall. Share-link honesty
+  holds: onDeepComplete carries the pass's hash, but every shared ?burn=
+  link re-verifies on-chain at view time (TokenScanner.tsx:746 path), so a
+  fabricated hash renders an honest verification failure, never a claimed
+  burn. The pass is explicitly documented as "only remembers a burn this
+  browser already paid for." No hole, no fix earned — documented design.
+  Nit carried (not shipped — no security impact, ride-along candidate for
+  the next real ship): malformed JSON POSTs to /api/pledge and
+  /api/username still hit the outer catch → 500 instead of 400 (observed
+  19:03 run).
+  (4) Drift: "never promise" ×23 ci-union (16 files — the 2 capitalized-only
+  in share-card.ts + brag-card.server.ts are pre-existing/intentional), "5%
+  instant burn" ×8, "95,000 lands" ×2 (TokenScanner.tsx, 1 file), the one
+  "robinhood|floor" hit in dump.ts is the standing-rule comment itself
+  (no user-facing ref), no stale 56.5%/15.83B, "gone for good" ×5 in 4
+  files, ROADMAP 9 done:true / 3 done:false — no drift. Secrets-shape sweep
+  over src: zero hits.
+  (5) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD 583c56c); this run commits only
+  BUILD_LOOP.md (pathspec). Zero wallet/signing/data-source/mascot touch,
+  no new data sources. #9 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open
+  as recurring.
+
+- 2026-10-01 19:33 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — nothing earned a ship.
+  NEW demand angle considered and PARKED (logged in BULLISH-RESEARCH.md):
+  a mechanics-only "now what?" exit explainer on flagged scan reports —
+  plain-English "can I even sell?" answered with the measured sell tax,
+  simulated-sell outcome, and slippage/impact mechanics ("I got rugged,
+  what do I do now?" is the cycle's most urgent repeated question). Fresh
+  (no exit-guidance entry in the file; distinct from TxExplainer, the
+  simulated-sell probe, burn-brag cards, wallet detective). PARKED on five
+  grounds: (1) the no-advice boundary is binding — even disclaimed
+  mechanics on a flagged token get read as a sell/hold verdict, walking
+  toward the verdict-rot family the /terms "probes, not rulings" guardrail
+  blocks, while keeping the liability optics; (2) zero measured demand
+  (scan-stats flat {deep_scans:3, pass_burns:1}); (3) thin increment —
+  the deep scan already reports measured tax + simulated round-trip;
+  (4) scam-state copy problem ("sell path available" reads as permission);
+  (5) distribution, not acquisition — rugged-inbound arrives via
+  Telegram/DMs, not the scanner funnel. Revisit only on double-digit deep
+  scans + a real user asking "can I sell this?" after a flagged scan.
+  Revisit scan: nothing ripened — all parks still blocked on the same
+  zero-measured-demand signal; gift-a-pass remains Antonio's promo call.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,182,497 (36.4%) —
+  DAMP dead +1 vs the 19:23 read (1% protocol-burn legs of ordinary taxed
+  transfers — expected movement, no claim deviation).
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet /stats
+  all 200 on the custom domain; /api/market 200 FRESH real DexScreener
+  data (dumb $0.00000357 liq $3,651.57 vol $14 0b/4s -2.44%; damp
+  $0.00001918 liq $2,033.40 vol $11.94 -7.69%; correct pairAddresses
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186 /
+  0xB256769d6B9d53E0E66a395C17135F8855A8633A); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓. Security headers live.
+  (3) Drift: "never promise" ×23 ci-union (21 lowercase + 2
+  capitalized-only, pre-existing/intentional), "5% instant burn" ×8,
+  "95,000 lands" ×2 (TokenScanner.tsx), zero Robinhood refs in dump.ts,
+  no stale 56.5%/15.83B, "gone for good" ×5 occurrences in 4 files,
+  ROADMAP 9 done:true / 3 done:false — no drift.
+  (4) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD 6734318); this run commits only
+  BUILD_LOOP.md + BULLISH-RESEARCH.md (pathspec). Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #8 stays open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
+
+- 2026-10-01 19:23 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — nothing earned a ship.
+  NEW utility angle considered and PARKED (logged in BULLISH-RESEARCH.md):
+  "bytecode-template family matching" on scan reports — keccak256(eth_getCode)
+  per scanned token, cluster table keyed on the code hash, surfacing
+  "this contract's bytecode matches N other contracts scanned on PulseChain"
+  (the copy-pasta rug-family signal). Freshness verified: every prior
+  bytecode/keccak hit in the file is topic/selector hashes — this signal
+  unevaluated; the scanner doesn't use getCode today. PARKED on five grounds:
+  (1) the editorial problem is binding — a labeled cluster is verdict-by-proxy
+  (red-flag-wall 16:23 + certified-launch-scan 17:53 families), and the
+  unlabeled count leaks the same inference; a third-party template feed hits
+  doctrine (c) (Antonio's approval); (2) signal mostly duplicates shipped
+  behavioral probes (mint/blacklist/pause, measured tax, simulated round-trip
+  already answer "is THIS contract dangerous"; the family label answers the
+  weaker "is this shape familiar"); (3) zero measured demand (scan-stats flat
+  {deep_scans:3, pass_burns:1} — family-level multiplier on a base of 3);
+  (4) scanner-sized machinery (code-hash index + new KV schema + cluster
+  invalidation) for community color; (5) burns nothing, no outsider funnel.
+  Checked-first, not re-parked: fee-recipient labeling folded into the
+  wallet-detective park (same no-labels discipline); client-side RPC failover
+  noted-not-evaluated (flakiness is loop-observed, never user-reported; a
+  misconfigured RPC is a safer-lens regression). Revisit only if a credible
+  third-party template feed exists + Antonio approves the data source +
+  double-digit deep scans + a real user asks — unlabeled counts only.
+  Revisit scan: nothing ripened — all parks still blocked on the same
+  zero-measured-demand signal; gift-a-pass remains Antonio's promo call.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,182,496 (36.4%) —
+  DAMP dead +1,590 vs the 19:13 read (1% protocol-burn legs of ordinary
+  taxed transfers — expected movement, no claim deviation).
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200
+  on the custom domain; /api/market 200 via honest stale-cache (labeled
+  stale:true) with real DexScreener figures (dumb $0.00000357 liq $3,651.57
+  vol $14 0b/4s; damp $0.00001918 liq $2,033.40; correct pairAddresses
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186 /
+  0xB256769d6B9d53E0E66a395C17135F8855A8633A); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓. Security headers live.
+  (3) Drift: "never promise" ×16 ci-union (14 lowercase + 2 capitalized-only,
+  pre-existing/intentional), "5% instant burn" ×8, "95,000 lands" ×2
+  (TokenScanner.tsx), zero Robinhood refs in dump.ts, no stale 56.5%/15.83B,
+  "gone for good" 4 files, ROADMAP 9 done:true / 3 done:false — no drift.
+  (4) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD b92ff0c); this run commits only
+  BUILD_LOOP.md + BULLISH-RESEARCH.md (pathspec). Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #13 stays open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #8/#9/#10 stay open as recurring.
+
+- 2026-10-01 19:13 ET run: backlog #10 DONE (roadmap hygiene, recurring)
+  → audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  (1) Roadmap-vs-shipped diff: THREE commits since the 18:33 #10 run —
+  68f25ea (#9), d76620d (#8), 8938999 (#13) — all loop-log/research
+  commits (BUILD_LOOP.md / BULLISH-RESEARCH.md), ZERO src changes
+  (`git diff --stat 24ecf7b HEAD -- src/ scripts/` empty). No new surface
+  shipped, no status flip earned, no addition earned (the three new parked
+  ideas — side-by-side compare 18:53, wallet detective 18:43, top-scanners
+  rejection 18:23 — already live in BULLISH-RESEARCH.md with revisit
+  triggers; per convention the rejected one never touches the roadmap and
+  the parked ones earn thinking items only when demand evidence ripens —
+  nothing ripened, scan-stats flat). ROADMAP still 9 done:true /
+  3 done:false ("Community engine" Soon, "DUMB Burn Engine" Planned,
+  "Vetted Token Directory" Planned) — all genuinely pending. Live /plan
+  200 confirmed.
+  (2) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 19:03 read, no on-chain movement this interval
+  (46s, RPC behaving this interval).
+  (3) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet /stats
+  all 200 on the custom domain; /api/market 200 FRESH real DexScreener data
+  (dumb $0.00000357 liq $3,651.57 vol $14 0b/4s; correct DUMB pairAddress
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/analytics 401 no-auth ✓.
+  (4) Drift: "never promise" ×23 case-insensitive = 21 lowercase in
+  14 files + 2 capitalized-only (share-card.ts, brag-card.server.ts,
+  pre-existing/intentional — matches the 18:53 union note), "5% instant
+  burn" ×8, "95,000 lands" ×2 (TokenScanner.tsx, 1 file), zero Robinhood
+  refs in dump.ts, no stale 56.5%/15.83B, "gone for good" 5 occurrences
+  in 4 files — CORRECTION: the 19:03 "3 files/4 occurrences" was a miscount;
+  `git grep -ci` at both HEAD and 9a9a4b0 shows ProofStrip 1 + TotalBurned
+  1 + dump.ts 2 + knowledge.ts 1 = 5 in 4 files, byte-identical — zero
+  drift. ROADMAP 9 done:true / 3 done:false — no drift.
+  (5) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD 68f25ea); this run commits only
+  BUILD_LOOP.md (pathspec). Zero wallet/signing/data-source/mascot touch,
+  no new data sources. #10 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#9/#13 stay open
+  as recurring.
+
+- 2026-10-01 19:03 ET run: backlog #9 DONE (security/safety hardening, recurring)
+  → audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 18:53 read, no on-chain movement this interval
+  (script finished slow — 88s — RPC was sluggish this interval).
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200 on
+  the custom domain; /api/market 200 FRESH real DexScreener data (3 probes,
+  correct DUMB pairAddress 0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186);
+  /api/scan-stats flat ({deep_scans:3, pass_burns:1, dumb_destroyed_min:
+  100000}); /api/pledges single real pledge (too_dumb, 1000 DUMB,
+  unredeemed); /api/analytics 401 no-auth ✓. Security headers live.
+  (3) ADVERSARIAL SPOT-CHECK — fresh angle this pass: the burn-pledge board
+  (src/server/pledges.ts + PledgeCard.tsx + src/lib/pledges.ts) and the
+  adjacent username-claim API (src/server/username.ts). Verified: POST
+  requires a wallet signature over the exact message (address+token+amount+
+  timestamp, 10-min freshness window) — no one can pledge or rename for
+  someone else's address; amounts are safe-integer strings (1k–10B), tokens
+  allowlisted; names validated ^[a-zA-Z0-9_-]+$ (3–20) on BOTH write and
+  read paths and render via React text interpolation (no dangerouslySetInnerHTML
+  — no XSS path even from a hostile stored name); 10/day per-IP rate limit
+  (FNV-hashed, raw IP never logged); pledges expire at 30d and prune on read;
+  one-pledge-per-wallet replace semantics; "pledge" is never presented as a
+  burn — redemption state derives client-side from verified on-chain sums.
+  Nit (observed, not shipped — no security impact, not worth a deploy on its
+  own): malformed JSON POSTs to /api/pledge and /api/username hit the outer
+  catch → 500 "unavailable" instead of 400; same 3-line shape as the
+  /api/ping silent-204 convention elsewhere. Ride-along candidate for the
+  next real ship.
+  (4) Drift: "gone for good" 3 files/4 occurrences — matches 9a9a4b0
+  baseline (the "×4" in recent logs was occurrences, this run counted
+  files; zero change), "5% instant burn" ×8, "95,000 lands" ×1 file
+  (TokenScanner.tsx), zero Robinhood refs in dump.ts, no stale 56.5%/
+  15.83B, ROADMAP 9 done:true / 3 done:false — no drift.
+  (5) tsc --noEmit exit 0; eslint 0 errors (0 quiet warnings).
+  Tree clean at run start (HEAD d76620d); this run commits only BUILD_LOOP.md
+  (pathspec). Zero wallet/signing/data-source/mascot touch, no new data
+  sources. #9 stays open as recurring; #5 on Antonio's idea-only hold;
+  #6 ON HOLD per Antonio 2026-09-29; #8/#10/#13 stay open as recurring.
+
 # PulseChain DUMB/DAMP — Build Loop State
+
+- 2026-10-01 18:53 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — nothing earned a ship.
+  NEW demand angle considered and PARKED (logged in BULLISH-RESEARCH.md):
+  a two-token side-by-side safety comparison ("X vs Y — which is safer?") —
+  two quick scans in one diff table (real vs claimed tax, owner powers,
+  liquidity locks), burn-gated deep tier on the 30-day scan pass, shareable
+  ?compare= links re-running both scans live. The highest-engagement question
+  format in crypto, hard-boundary-clean (no new data source, no custody),
+  freshness verified (zero token-vs-token entries in the file). PARKED on
+  five grounds: (1) zero measured demand for the single-scan product first
+  (multiplier on a base of {deep_scans:3}); (2) comparison hardcodes a verdict
+  the hub must never give — the verdict-rot / endorsement-inversion family,
+  and the honest shape (two independent report cards, no "safer than" copy)
+  erases most of the value-add; (3) doubled RPC load against the batch-flaky
+  public RPC; (4) deep-compare pricing is Antonio's #14 territory; (5)
+  distribution, not acquisition — the first compare still arrives only
+  through Antonio's pipeline. Not a veto. Revisit only if deep scans hit
+  double digits AND a real user asks for comparison.
+  Revisit scan: nothing ripened — all parks still blocked on the same
+  zero-measured-demand signal; gift-a-pass remains Antonio's promo call.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 18:43 read, no on-chain movement this interval.
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200
+  on the custom domain; /api/market 200 FRESH real DexScreener data
+  (dumb $0.00000357 liq $3,651.57; correct pairAddress
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓; brag-image malformed → 400. Security
+  headers live.
+  (3) Drift: "never promise" ×21 lowercase (14 files; +2 capitalized-only in
+  share-card.ts + brag-card.server.ts, pre-existing/intentional — the 16-file
+  case-insensitive grep count this run is the union of the same set, zero
+  change), "5% instant burn" ×8, "95,000 lands" ×2 (TokenScanner.tsx), zero
+  Robinhood refs in dump.ts, no stale 56.5%/15.83B, "gone for good" ×4,
+  ROADMAP 9 done:true / 3 done:false — no drift.
+  (4) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD 8938999); this run commits only
+  BUILD_LOOP.md + BULLISH-RESEARCH.md (pathspec). Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #8 stays open as recurring;
+  #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio 2026-09-29;
+  #9/#10/#13 stay open as recurring.
+
+- 2026-10-01 18:43 ET run: backlog #13 DONE (real-utility research, recurring)
+  → research-only, NO code changes, no build/deploy — nothing earned a ship.
+  NEW utility angle considered and PARKED (logged in BULLISH-RESEARCH.md):
+  a "wallet detective" — paste any wallet address, get a plain-English read
+  of what that WALLET has been doing (age, tokens touched, per-token
+  buy/sell direction, transfers to dead, LP add/remove events, router
+  interactions). The demand logic: "is the dev selling?" / "someone DM'd me
+  this address" is the Telegram-native question of every cycle, newcomers
+  can't read explorers, and the audience (DM-vetters, drama-followers,
+  post-rug investigators) is genuinely different from the token-researcher
+  crowd; two-tier mirrors the scanner (free quick read + burn-gated deep
+  read on the 30-day scan pass, every deep read burns DUMB). Freshness
+  verified: zero wallet-activity-read hits in the research file — distinct
+  from the parked fee-exclusion wallet check, the shipped "Scan my bags"
+  token scans, and the shipped TxExplainer. PARKED on five grounds: (1)
+  zero measured demand (scan-stats flat — the investigative audience hasn't
+  arrived); (2) window-bounded honesty is the safer-lens failure — "no sells
+  in window" read as "never sold" is exactly the false assurance the hub
+  prevents; (3) no-labels discipline (never "dev wallet"/"whale" from
+  heuristics — the /story 0xf046…0618 precedent); (4) doxx-adjacent optics
+  against the no-tracking posture; (5) scanner-sized machinery for a cousin
+  of "Scan my bags," not a gap. Revisit scan: nothing ripened — all parks
+  still blocked on the same zero-measured-demand signal; gift-a-pass remains
+  Antonio's promo call.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 18:33 read, no on-chain movement this interval.
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200
+  on the custom domain; /api/market 200 FRESH real DexScreener data
+  (dumb $0.00000357 liq $3,651.57; correct pairAddress
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓. Security headers live.
+  (3) Drift: "never promise" ×23 lowercase (14 files; +2 capitalized-only in
+  share-card.ts + brag-card.server.ts, pre-existing/intentional),
+  "5% instant burn" ×8, "95,000 lands" ×2 (TokenScanner.tsx), zero
+  Robinhood refs in dump.ts, no stale 56.5%/15.83B, "gone for good" ×4,
+  ROADMAP 9 done:true / 3 done:false — no drift.
+  (4) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD 24ecf7b); this run commits only
+  BUILD_LOOP.md + BULLISH-RESEARCH.md (pathspec). Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #13 stays open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #8/#9/#10 stay open as recurring.
+
+- 2026-10-01 18:33 ET run: backlog #10 DONE (roadmap hygiene, recurring)
+  → audit-only, NO code changes, no build/deploy — nothing earned a ship.
+  (1) Roadmap-vs-shipped diff: FOUR commits since the 17:43 #10 run —
+  303638f (#13), 8666361 (#8), bc23c7d (#9), beda662 (#8) — all
+  loop-log/research commits (BUILD_LOOP.md / BULLISH-RESEARCH.md), ZERO
+  src changes. No new surface shipped, no status flip earned. Additions:
+  the two newest parked ideas (public verification ledger 18:03,
+  rejected top-scanners leaderboard 18:23) both already live in
+  BULLISH-RESEARCH.md with revisit triggers — the rejected one never
+  touches the roadmap; the parked one earns a thinking item only when
+  demand evidence ripens, per convention. ROADMAP still 9 done:true /
+  3 done:false ("Community engine" Soon, "DUMB Burn Engine" Planned,
+  "Vetted Token Directory" Planned) — all genuinely pending, copy still
+  accurate (nothing newly shipped to backdate).
+  (2) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 18:23 read, no on-chain movement this interval.
+  (3) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200
+  on the custom domain; /api/market 200 FRESH real DexScreener data
+  (dumb $0.00000357 liq $3,651.57); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓.
+  (4) Drift: "never promise" ×21 lowercase (14 files; +2 capitalized-only
+  in share-card.ts + brag-card.server.ts, pre-existing/intentional),
+  "5% instant burn" ×8, "95,000 lands" ×2 (TokenScanner.tsx), zero
+  Robinhood refs in dump.ts, no stale 56.5%/15.83B, "gone for good" ×4 —
+  no drift.
+  (5) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD beda662); this run commits only
+  BUILD_LOOP.md (pathspec). Zero wallet/signing/data-source/mascot touch,
+  no new data sources. #10 stays open as recurring; #5 on Antonio's
+  idea-only hold; #6 ON HOLD per Antonio 2026-09-29; #8/#9/#13 stay open
+  as recurring.
+
+- 2026-10-01 18:23 ET run: backlog #8 DONE (bullish-demand research, recurring)
+  → research-only, NO code changes, no build/deploy — nothing earned a ship.
+  NEW demand angle considered and REJECTED (logged in BULLISH-RESEARCH.md):
+  a "top scanners" count leaderboard (rank most-active scanner users). REJECTED
+  on mechanism, not timing: (1) quick scans are free, so a count board is a
+  zero-cost farm — meaningless as a community signal and embarrassing as a
+  public surface; (2) it rewards the wrong behavior — spamming free scans burns
+  nothing and routes attention away from the burn-gated deep scan (the one
+  scan primitive that actually burns DUMB); (3) the real counts are a monument
+  ({deep_scans:3} — an absence exhibit, the burn-to-vote failure state); (4) it
+  needs stable per-scanner identity, which contradicts the anonymous-by-design
+  scan + "no cookies, no tracking" privacy posture. Under the four-question
+  lens: worse on safer (manufactures false expertise signals), worse on more
+  secure (new identity surface), no fun or better gain. No revisit trigger —
+  if deep-scan volume ever reaches triple digits, recognition-only burn-weighted
+  honor-roll (the #5 contest shape) could re-enter; never a count race.
+  Revisit scan: nothing ripened — all parks (verification ledger 18:03,
+  certified launch scan 17:53 (veto), burn-to-vote 17:23, second-opinion 17:13,
+  burn-gated API 16:33, red-flag wall 16:23, discovery feed 15:03, PDF export
+  14:53, jargon defs 14:23, pre-sign decoder 14:18, DexScreener info 13:46
+  (Antonio's call), guided wizard 13:33, liquidity sizer 12:43, TTS 12:53,
+  free window 12:20, reflections tracker 12:03, starter-kit checklist 15:47,
+  DAMP-denominated pass 15:53 (Antonio's #14 pricing call)) still blocked on
+  the same zero-measured-demand signal.
+  (1) TOKEN INTEGRITY: exit 0, ALL CLAIMS MATCH — DUMB fees()=600
+  dist=(3333,3333,1667,1667) owner=0x0 dead 15,838,762,051 (56.6%); DAMP
+  fees()=300 dist=(3333,0,3333,3334) owner=0x0 dead 364,180,906 (36.4%) —
+  byte-identical to the 18:13 read, no on-chain movement this interval.
+  (2) LIVE HEALTH: / /scan /burn /ai /plan /roots /trade /wallet all 200
+  on the custom domain; /api/market 200 FRESH real DexScreener data
+  (dumb $0.00000357 liq $3,651.57 vol $14 txns 0b/4s; correct pairAddresses
+  0x221f63Fb54f3fBC6C60B3D22bc9BcB5Fd1d0d186 /
+  0xB256769d6B9d53E0E66a395C17135F8855A8633A); /api/scan-stats flat
+  ({deep_scans:3, pass_burns:1, dumb_destroyed_min:100000});
+  /api/pledges single real pledge (too_dumb, 1000 DUMB, unredeemed);
+  /api/analytics 401 no-auth ✓; brag-image malformed → 400. Security
+  headers live (nosniff + strict-origin-when-cross-origin).
+  (3) Drift: "never promise" ×21 lowercase (14 files; +2 capitalized-only
+  in share-card.ts + brag-card.server.ts, pre-existing/intentional),
+  "5% instant burn" ×8, "95,000 lands" ×2 (TokenScanner.tsx), zero
+  Robinhood refs in dump.ts, no stale 56.5%/15.83B, "gone for good" ×4,
+  ROADMAP 9 done:true / 3 done:false — no drift.
+  (4) tsc --noEmit exit 0; eslint 0 errors (6 pre-existing warnings).
+  Tree clean at run start (HEAD bc23c7d); this run commits only
+  BUILD_LOOP.md + BULLISH-RESEARCH.md (pathspec). Zero wallet/signing/
+  data-source/mascot touch, no new data sources. #8 stays open as
+  recurring; #5 on Antonio's idea-only hold; #6 ON HOLD per Antonio
+  2026-09-29; #9/#10/#13 stay open as recurring.
 
 - 2026-10-01 18:13 ET run: backlog #9 DONE (security/safety hardening, recurring)
   → audit-only, NO code changes, no build/deploy — nothing earned a ship.
