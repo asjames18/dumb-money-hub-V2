@@ -525,6 +525,21 @@ function DeepScanPanel({
   const [pass, setPass] = useState<DeepScanPass | null>(() => loadScanPass());
   const autoRan = useRef(false);
   const passScanned = useRef<string | null>(null);
+  /**
+   * True while this component is mounted; cleared only on real unmount.
+   *
+   * This must be a ref, not a per-effect closure variable. The autoBurn effect
+   * depends on `busy` and sets `busy` itself, so it re-runs on the next render
+   * — and a closure guard is reset by that cleanup, which silently cancelled
+   * the scan it was supposed to protect. See the effect's `finally` block.
+   */
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   // Fresh token → fresh deep-scan state (the pass is per-user, results are per-token).
   useEffect(() => {
@@ -721,13 +736,12 @@ function DeepScanPanel({
     if (autoRan.current || deep || busy) return;
     if (!autoBurn || !/^0x[0-9a-fA-F]{64}$/.test(autoBurn.trim())) return;
     autoRan.current = true;
-    let alive = true;
     void (async () => {
       setBusy(true);
       setError(null);
       try {
         const verified = await verifyDeepScanBurn(autoBurn.trim().toLowerCase());
-        if (!alive) return;
+        if (!mountedRef.current) return;
         if (!verified.ok) {
           setError(`That shared report's burn no longer verifies: ${verified.reason}`);
           return;
@@ -736,22 +750,29 @@ function DeepScanPanel({
           symbol: result.symbol,
           decimals: result.decimals,
         });
-        if (!alive) return;
+        if (!mountedRef.current) return;
         setDeep(r);
       } catch {
-        if (!alive) return;
+        if (!mountedRef.current) return;
         setError("The deep scan hit an error — try again in a moment.");
       } finally {
-        if (alive) setBusy(false);
+        // Unconditional on purpose. This effect sets `busy` itself, and `busy`
+        // is a dependency, so the effect re-runs on the very next render. A
+        // guard that could read false here left `busy` stuck true forever,
+        // which permanently disabled the whole deep-scan panel and never
+        // rendered the report. React no-ops setState after unmount, so calling
+        // it unconditionally is safe and cannot strand the flag.
+        setBusy(false);
       }
     })();
-    return () => {
-      alive = false;
-    };
     // `busy` is deliberately a dependency. Without it, an `autoBurn` that
     // arrives while another scan is in flight returned early WITHOUT setting
     // autoRan, so nothing re-ran it when the scan finished and the shared
     // report link silently rendered with no deep scan and no error.
+    //
+    // The unmount guard is the `mountedRef` above, NOT a per-run closure: a
+    // closure variable is reset whenever these deps change, and since this
+    // effect sets `busy`, a closure guard invalidated its own in-flight scan.
     //
     // `deep` and the `result.*` fields are deliberately NOT dependencies:
     // autoRan already latches this to run at most once per burn hash, and
