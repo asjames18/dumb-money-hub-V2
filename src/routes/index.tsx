@@ -190,7 +190,7 @@ function Index() {
             <div className="rounded-xl border-2 border-foreground/20 bg-card p-5">
               <h3 className="font-display text-lg uppercase tracking-wide">69% immobilized</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                28B fixed supply. ~56.5% was historically burned, ~12.5% sits stuck in the contract
+                28B fixed supply. ~56.6% was historically burned, ~12.5% sits stuck in the contract
                 — roughly 69% of every DUMB ever created can never move again.
               </p>
             </div>

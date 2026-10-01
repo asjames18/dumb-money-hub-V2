@@ -28,6 +28,7 @@ const EVENT_LABELS: Record<string, string> = {
   burn_started: "Burns started",
   burn_voluntary: "Voluntary burns (DUMB)",
   burn_voluntary_pls: "Voluntary burns (PLS)",
+  pro_pass_burn: "Pro pass burns",
   swap_quote: "Swap quotes",
   swap_attempt: "Swap attempts",
   swap_confirmed: "Swaps confirmed",
@@ -183,7 +184,8 @@ function Dashboard({ data }: { data: Aggregates }) {
     (data.byEvent["pass_burn_dumb"] ?? 0) +
     (data.byEvent["pass_burn_pls"] ?? 0) +
     (data.byEvent["burn_voluntary"] ?? 0) +
-    (data.byEvent["burn_voluntary_pls"] ?? 0);
+    (data.byEvent["burn_voluntary_pls"] ?? 0) +
+    (data.byEvent["pro_pass_burn"] ?? 0);
   const connects = data.byEvent["wallet_connect"] ?? 0;
 
   const kpis: [string, number][] = [
@@ -219,6 +221,7 @@ function Dashboard({ data }: { data: Aggregates }) {
   const burnFunnel: [string, number][] = [
     ["Burns started", ev("burn_started")],
     ["Voluntary burns", ev("burn_voluntary") + ev("burn_voluntary_pls")],
+    ["Pro pass burns", ev("pro_pass_burn")],
   ];
   const issues: [string, number][] = [
     ["Quote errors", ev("err_quote")],

@@ -70,6 +70,27 @@ export function TotalBurned() {
     ...totalSupply,
     address: DAMP,
   });
+  // The token contracts' own balances = the buy-back/liquidity fee buckets,
+  // entombed forever (engine dead, owner renounced). Antonio 2026-10-01:
+  // count them with the destroyed numbers — burned + locked is the total
+  // that can never move.
+  const { data: dumbLocked } = useReadContract({
+    ...balanceOfDead,
+    address: DUMB,
+    args: [DUMB],
+  });
+  const { data: dampLocked } = useReadContract({
+    ...balanceOfDead,
+    address: DAMP,
+    args: [DAMP],
+  });
+  const goneReady =
+    typeof dumbBurned === "bigint" &&
+    typeof dampBurned === "bigint" &&
+    typeof dumbLocked === "bigint" &&
+    typeof dampLocked === "bigint";
+  const dumbGone = goneReady ? (dumbBurned as bigint) + (dumbLocked as bigint) : null;
+  const dampGone = goneReady ? (dampBurned as bigint) + (dampLocked as bigint) : null;
 
   const loading = dumbLoading || dampLoading;
   const failed = dumbError || dampError;
@@ -181,6 +202,45 @@ export function TotalBurned() {
               )}
             </div>
           </div>
+
+          {goneReady && dumbGone !== null && dampGone !== null && (
+            <div className="mt-3 rounded-lg border-2 border-gold/50 bg-card p-4">
+              <p className="font-display text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                Gone for good — can never move
+              </p>
+              <p className="mt-1 font-display text-2xl leading-tight">
+                {fmtCompactTok(dumbGone)}{" "}
+                <span className="text-sm text-muted-foreground">DUMB</span>
+                <span className="mx-2 text-muted-foreground">·</span>
+                {fmtCompactTok(dampGone)}{" "}
+                <span className="text-sm text-muted-foreground">DAMP</span>
+              </p>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                That&apos;s the dead address <em>plus</em> the unspendable tax buckets sitting in
+                the token contracts themselves ({fmtCompactTok(dumbLocked as bigint)} DUMB ·{" "}
+                {fmtCompactTok(dampLocked as bigint)} DAMP) —{" "}
+                {shareOfSupply(dumbGone, dumbSupply) ?? ""} of DUMB and{" "}
+                {shareOfSupply(dampGone, dampSupply) ?? ""} of DAMP can never move again.{" "}
+                <a
+                  href={explorerAddress(DUMB)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline decoration-pink underline-offset-2 hover:text-pink"
+                >
+                  DUMB contract
+                </a>{" "}
+                ·{" "}
+                <a
+                  href={explorerAddress(DAMP)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline decoration-pink underline-offset-2 hover:text-pink"
+                >
+                  DAMP contract
+                </a>
+              </p>
+            </div>
+          )}
         </div>
       )}
 

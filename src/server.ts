@@ -55,6 +55,21 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// Baseline hardening on page responses (scoped in the 2026-10-01 09:33 #9
+// pass, deferred to ride along with the next real ship): nosniff blocks MIME
+// confusion on this share-heavy SPA; the referrer policy keeps full URLs for
+// same-origin requests and sends origin-only to outbound links.
+function withSecurityHeaders(response: Response): Response {
+  const r = new Response(response.body, response);
+  if (!r.headers.has("x-content-type-options")) {
+    r.headers.set("x-content-type-options", "nosniff");
+  }
+  if (!r.headers.has("referrer-policy")) {
+    r.headers.set("referrer-policy", "strict-origin-when-cross-origin");
+  }
+  return r;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
@@ -128,13 +143,15 @@ export default {
       }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      return withSecurityHeaders(await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      return withSecurityHeaders(
+        new Response(renderErrorPage(), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };

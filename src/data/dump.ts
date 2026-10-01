@@ -148,6 +148,8 @@ export const ROADMAP = [
       '"Which Dumb Money?" guardrail verifies the contract address before you interact, with one-tap add-to-wallet',
       "Swap box: curated verified tokens only (PLS, HEX, TEDDY, SOLIDX, PCOCK, HELGO, INC, PLSX, PRVX, pTGC, WBTC) — every pair verified on-chain, paste-any-address rejected, every buy has a sell path back",
       "After-tax quotes up front — you see exactly what you'll receive before you sign",
+      '"Scan this contract" links beside the verified addresses in the swap box — one tap re-runs the live safety report on the exact contract before you sign',
+      '"Trade on the hub" link when you scan DUMB or DAMP itself — a clean report on the hub\'s own token goes straight to the after-tax swap quote',
       "First-swap walkthrough, get-gas guide, and low-gas warning on /trade",
       "Token approvals dashboard — see what the router can still move and revoke it in one click",
     ],
@@ -340,11 +342,11 @@ export const AI_QA = [
   },
   {
     q: "Explain burns and reflections.",
-    a: "A burn sends tokens to an address nobody can spend from, reducing circulating supply. Reflections redistribute a slice of transfers to holders. Neither one guarantees anything about price. DUMB's story: 56.5% of supply was burned (gone, verifiable on-chain — most of it the 14B launch-day burn), and on every taxed transfer 5% is burned (1% protocol burn to the dead address + 4% entombed in the contract's dead buckets) and 1% reflected to holders. Full breakdown on /roots.",
+    a: "A burn sends tokens to an address nobody can spend from, reducing circulating supply. Reflections redistribute a slice of transfers to holders. Neither one guarantees anything about price. DUMB's story: 56.6% of supply was burned (gone, verifiable on-chain — most of it the 14B launch-day burn), and on every taxed transfer 5% is burned (1% protocol burn to the dead address + 4% entombed in the contract's dead buckets) and 1% reflected to holders. Full breakdown on /roots.",
   },
   {
     q: "What are the numbers at the top of the homepage?",
-    a: "That is the proof strip — the first thing on the homepage is verifiable fact, not the pitch. 'Live from the chain' shows total DUMB destroyed (the dead-address balance, with its share of supply), the fixed 28B DUMB supply, and the transfer-tax legs — 6% DUMB (5% instant burn + 1% reflections) and 3% DAMP (2% instant burn + 1% reflections). The tax numbers are read live from the token contracts' own fees() and feesDistribution() calls, not pinned copy. Every figure carries the block number it was read at, how old the read is, and an explorer link, and they refresh every minute. Nothing is estimated or invented.",
+    a: "That is the proof strip — the first thing on the homepage is verifiable fact, not the pitch. 'Live from the chain' shows total DUMB gone for good — burned to the dead address plus the balance locked inside the token contract, with its share of supply — the fixed 28B DUMB supply, and the transfer-tax legs — 6% DUMB (5% instant burn + 1% reflections) and 3% DAMP (2% instant burn + 1% reflections). The tax numbers are read live from the token contracts' own fees() and feesDistribution() calls, not pinned copy. Every figure carries the block number it was read at, how old the read is, and an explorer link, and they refresh every minute. Nothing is estimated or invented.",
   },
   {
     q: "Where can I see the live price?",
