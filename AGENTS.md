@@ -20,6 +20,15 @@ agents Antonio talks to from his own machine). Read [COLLAB.md](./COLLAB.md)
 before editing or pushing — it covers the push/pull discipline, which files the
 build loop owns (BUILD_LOOP.md, BULLISH-RESEARCH.md), and the production traps.
 
+**GitHub pushes are owned by the Mosheh sync turn, not by loop runs.**
+The build loop commits locally only and never pushes — the sync turn runs the
+five-step verification (loop idle check, fetch + reconcile, remote-only file
+inspection, no-history-rewrite push, file-by-file tree verify). A loop run that
+pushes on its own risks clobbering another session's work mid-flight; on
+2026-10-01 a run did exactly that and then "restored" the wrong baseline,
+dropping six parked BULLISH-RESEARCH.md entries from the worktree (recovered
+from local history, no data lost).
+
 ## Project notes
 
 - PulseChain-only. This site IS the live Dumb Money (DUMB) token on PulseChain:
