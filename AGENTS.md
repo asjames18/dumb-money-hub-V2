@@ -13,6 +13,13 @@
 > npm package is still the build pipeline (TanStack Start + Cloudflare target);
 > it is infrastructure, not the editor sync, so leave it in place.
 
+## Working with other agents
+
+More than one agent works this repo (a build loop on Antonio's main setup plus
+agents Antonio talks to from his own machine). Read [COLLAB.md](./COLLAB.md)
+before editing or pushing — it covers the push/pull discipline, which files the
+build loop owns (BUILD_LOOP.md, BULLISH-RESEARCH.md), and the production traps.
+
 ## Project notes
 
 - PulseChain-only. This site IS the live Dumb Money (DUMB) token on PulseChain:
