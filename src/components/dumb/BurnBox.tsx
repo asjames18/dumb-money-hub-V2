@@ -181,6 +181,18 @@ export function BurnBox() {
   const swapReverted = swapReceiptFetched && swapReceipt?.status === "reverted";
   const [plsQuote, setPlsQuote] = useState<PlsBurnQuote | null>(null);
   const [plsQuoteStale, setPlsQuoteStale] = useState(false);
+  /**
+   * The pre-tax target the currently-held quote was actually computed for.
+   *
+   * Without this, editing the amount leaves the PREVIOUS amount's quote in
+   * place while the new one is still being fetched (the fetch is up to 9
+   * sequential RPC calls, so the window is seconds), and the button — which
+   * only tested `!plsQuote` — stayed armed. Clicking in that window submitted
+   * the old amount's `plsIn`/`amountOutMin`: type 5,000,000, wait for the
+   * quote, retype 100,000, click, and you spend PLS at the 5M rate for a
+   * 100k burn. Silent. Matching the quote to its target closes it.
+   */
+  const [plsQuoteFor, setPlsQuoteFor] = useState<string | null>(null);
   const [swapBusy, setSwapBusy] = useState(false);
   const [swapError, setSwapError] = useState<string | null>(null);
 
@@ -268,25 +280,31 @@ export function BurnBox() {
   // burn amount (DUMB only — the fallback buys DUMB through the WPLS pair).
   const showPls = tokenKey === "DUMB" && insufficient && !!address && onPulse;
 
+  // Pre-tax DUMB the swap must buy so `parsed` still lands at dead after the
+  // 6% arrival tax AND the full 8% slippage allowance. A flat ×1.1 buffer is
+  // not enough: 95% × 92% = 87.4%, so ×1.1 only reaches ~96% of the entered
+  // amount and the burn settles short of what the user typed.
+  const plsTarget = parsed !== null && parsed > 0n ? preTaxForArrival(parsed) : null;
+  const plsTargetKey = plsTarget?.toString() ?? null;
+
   // Live PLS quote for the entered amount, refreshed every 60s while the
   // wallet is short — the quote the swap button uses.
   useEffect(() => {
-    if (!showPls || parsed === null || parsed <= 0n) {
+    if (!showPls || plsTarget === null) {
       setPlsQuote(null);
       setPlsQuoteStale(false);
+      setPlsQuoteFor(null);
       return;
     }
-    // Target the PRE-TAX amount that still lands `parsed` at dead after the
-    // 6% arrival tax AND the full 8% slippage allowance. A flat ×1.1 buffer
-    // is not enough: 95% × 92% = 87.4%, so ×1.1 only reaches ~96% of the
-    // entered amount and the burn settles short of what the user typed.
-    const target = preTaxForArrival(parsed);
     let alive = true;
     const fetchQuote = async () => {
-      const q = await quotePlsBurnFor(target);
+      const q = await quotePlsBurnFor(plsTarget);
       if (!alive) return;
       setPlsQuote(q);
       setPlsQuoteStale(q === null);
+      // Tag the quote with the target it was fetched for, so a quote left over
+      // from a previous amount can never arm the button.
+      setPlsQuoteFor(q === null ? null : plsTarget.toString());
     };
     void fetchQuote();
     const id = setInterval(fetchQuote, 60_000);
@@ -295,11 +313,15 @@ export function BurnBox() {
       clearInterval(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showPls, parsed?.toString()]);
+  }, [showPls, plsTargetKey]);
+
+  /** The held quote was fetched for exactly the amount currently entered. */
+  const quoteMatchesAmount = plsQuote !== null && plsQuoteFor === plsTargetKey;
 
   const plsInsufficient = plsBal != null && plsQuote != null && plsBal.value < plsQuote.plsIn;
   const plsDisabled =
     !plsQuote ||
+    !quoteMatchesAmount ||
     plsQuoteStale ||
     plsInsufficient ||
     swapPending ||
@@ -308,7 +330,7 @@ export function BurnBox() {
     !acknowledged;
 
   const startPlsBurn = () => {
-    if (!plsQuote || !acknowledged) return;
+    if (!plsQuote || !quoteMatchesAmount || !acknowledged) return;
     // Belt-and-suspenders chain guard, like doBurn: pin the wallet client to
     // PulseChain so the swap can never be signed on another chain.
     if (chainId !== pulsechain.id) return;

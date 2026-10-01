@@ -5,6 +5,7 @@ import { useAccount, usePublicClient } from "wagmi";
 import { ExternalLink, Flame, Trophy } from "lucide-react";
 
 import { DRIP_VAULT, explorerAddress, pulsechain } from "@/lib/pulsechain";
+import { SITE_URL } from "@/lib/page-meta";
 import { fetchEpochBurns, fmtCompactTok, type EpochBurnRow } from "@/lib/burns";
 import { useUsernames } from "@/lib/use-usernames";
 import { Button } from "@/components/ui/button";
@@ -20,8 +21,7 @@ const KNOWN_LABELS: Record<string, string> = {
 // Share helpers for the "That's you" banner — copy is the site's own words
 // plus the connected wallet's own verified rank and amounts (real on-chain
 // data, never invented). Same intent-button pattern as the /scan share rows.
-const youShareUrl = (): string =>
-  `${typeof window !== "undefined" ? window.location.origin : ""}/burn`;
+const youShareUrl = (): string => `${SITE_URL}/burn`;
 
 const youShareText = (rank: number, token: "DUMB" | "DAMP", burnedWei: bigint): string =>
   `I burned ${fmtCompactTok(burnedWei)} ${token} — rank #${rank} on the Dumb Money voluntary burn leaderboard (since Sept 21). All burns verified on-chain.`;

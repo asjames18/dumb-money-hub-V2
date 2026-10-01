@@ -13,6 +13,7 @@ import { useAccount } from "wagmi";
 import { isAddress } from "viem";
 
 import { discoverWalletTokens, quickScan, type QuickScanResult } from "@/lib/token-scan";
+import { SITE_URL } from "@/lib/page-meta";
 import { pulsechain } from "@/lib/pulsechain";
 import { requestRescan } from "@/lib/scan-watchlist";
 import { trackEvent } from "@/lib/analytics";
@@ -80,7 +81,7 @@ function VerdictChip({ result }: { result: QuickScanResult | null }) {
  *  one-tap-by-you pattern as the burn surfaces: nothing posts automatically.
  *  Wording differs when the user scanned someone else's wallet (a pasted
  *  address) rather than their own connected one. */
-const bagShareUrl = (): string => `${window.location.origin}/scan`;
+const bagShareUrl = (): string => `${SITE_URL}/scan`;
 
 const bagShareText = (rows: BagRow[], ownWallet: boolean): string => {
   const checked = rows.filter((r) => r.result).length;

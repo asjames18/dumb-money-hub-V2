@@ -4,6 +4,7 @@ import { useAccount, usePublicClient, useSignMessage } from "wagmi";
 import { BadgeCheck, HandCoins, Loader2 } from "lucide-react";
 
 import { pulsechain } from "@/lib/pulsechain";
+import { SITE_URL } from "@/lib/page-meta";
 import { fetchEpochBurns, fmtCompactTok } from "@/lib/burns";
 import {
   buildPledgeMessage,
@@ -23,7 +24,7 @@ const short = (a: string): string => `${a.slice(0, 6)}…${a.slice(-4)}`;
 // Share helpers for the connected wallet's own pledge — the site's words
 // plus the pledger's own amount/token (real signed data, never invented).
 // Copy carries numbers only, never the address or opt-in username.
-const pledgeShareUrl = (): string => `${window.location.origin}/burn`;
+const pledgeShareUrl = (): string => `${SITE_URL}/burn`;
 
 const pledgeShareText = (p: Pledge, redeemed: boolean): string =>
   redeemed

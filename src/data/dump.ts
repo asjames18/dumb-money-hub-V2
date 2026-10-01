@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/page-meta";
+
 // DUMB Money — PulseChain mainnet (369). The live, already-launched Dumb Money
 // (DUMB) token on PulseChain. Safemoon-fork: 6% transfer tax, immutable/
 // renounced, 28B fixed supply — 69% of it immobilized. Real and trading.
@@ -46,9 +48,12 @@ export const RECEIPT_BADGES = ["Explorer Live", "Source Code", "Proof Hub Live"]
 export const SITE = {
   name: "Dumb Money Hub",
   tagline: "The Home of Retail Crypto",
-  // Leave empty until a production URL is chosen. Share intents use the
-  // current origin in the browser when this is blank.
-  url: "",
+  // Share intents (X, Telegram, iMessage) must post the CANONICAL domain, not
+  // whatever origin the visitor happens to be on — otherwise anyone loading the
+  // `dump-money-hub-preview` worker shares preview URLs to the public. Was left
+  // empty "until a production URL is chosen"; the custom domain is live, so it
+  // is chosen. Single source of truth with page-meta's SITE_URL.
+  url: SITE_URL,
 } as const;
 
 // Official community links. Chart and buy live on PulseX: the hub links out

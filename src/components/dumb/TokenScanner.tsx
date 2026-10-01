@@ -721,11 +721,13 @@ function DeepScanPanel({
     if (autoRan.current || deep || busy) return;
     if (!autoBurn || !/^0x[0-9a-fA-F]{64}$/.test(autoBurn.trim())) return;
     autoRan.current = true;
+    let alive = true;
     void (async () => {
       setBusy(true);
       setError(null);
       try {
         const verified = await verifyDeepScanBurn(autoBurn.trim().toLowerCase());
+        if (!alive) return;
         if (!verified.ok) {
           setError(`That shared report's burn no longer verifies: ${verified.reason}`);
           return;
@@ -734,15 +736,28 @@ function DeepScanPanel({
           symbol: result.symbol,
           decimals: result.decimals,
         });
+        if (!alive) return;
         setDeep(r);
       } catch {
+        if (!alive) return;
         setError("The deep scan hit an error — try again in a moment.");
       } finally {
-        setBusy(false);
+        if (alive) setBusy(false);
       }
     })();
+    return () => {
+      alive = false;
+    };
+    // `busy` is deliberately a dependency. Without it, an `autoBurn` that
+    // arrives while another scan is in flight returned early WITHOUT setting
+    // autoRan, so nothing re-ran it when the scan finished and the shared
+    // report link silently rendered with no deep scan and no error.
+    //
+    // `deep` and the `result.*` fields are deliberately NOT dependencies:
+    // autoRan already latches this to run at most once per burn hash, and
+    // re-running on a fresh quick-scan result would re-run a paid deep scan.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoBurn]);
+  }, [autoBurn, busy]);
 
   const knownShort = dumbBalance != null && dumbBalance < DEEP_SCAN_BURN_COST;
   const oneClickDisabled =
@@ -777,6 +792,10 @@ function DeepScanPanel({
 
   const startPlsBurn = () => {
     if (!plsQuote || !wallet) return;
+    // Explicit chain guard, matching BurnBox's PLS path. The `chainId` pin
+    // below makes a wrong-chain write fail closed, but relying on the wagmi/viem
+    // version's ChainMismatchError alone is a weaker guarantee than saying it.
+    if (!onPulse) return;
     setError(null);
     resetSwap();
     const deadline = BigInt(Math.floor(Date.now() / 1000) + SCAN_BURN_DEADLINE_SECONDS);

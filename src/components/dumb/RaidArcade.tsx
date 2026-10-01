@@ -19,7 +19,7 @@ import {
   type XpStats,
 } from "@/lib/xp";
 
-const shareUrl = () => SITE.url || (typeof window !== "undefined" ? window.location.origin : "");
+const shareUrl = () => SITE.url;
 
 export type PackSeed = { type: MissionType; vibe: Vibe; nonce: number };
 

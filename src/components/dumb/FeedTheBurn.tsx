@@ -11,6 +11,7 @@ import {
 import { formatUnits, parseAbiItem, parseUnits } from "viem";
 
 import { Button } from "@/components/ui/button";
+import { SITE_URL } from "@/lib/page-meta";
 import { ConnectButton } from "@/components/dumb/ConnectButton";
 import { CopyButton } from "@/components/dumb/CopyButton";
 import { NativeShareButton } from "@/components/dumb/NativeShareButton";
@@ -336,8 +337,7 @@ const TRANSFER_EVENT = parseAbiItem(
 // data, never invented). Same intent-button pattern as the burn leaderboard:
 // nothing ever posts automatically, and the shared link re-renders the same
 // live board for the viewer.
-const donorShareUrl = (): string =>
-  `${typeof window !== "undefined" ? window.location.origin : ""}/burn`;
+const donorShareUrl = (): string => `${SITE_URL}/burn`;
 
 const donorShareText = (rank: number, usd: number): string =>
   `I donated ${fmtUsdCompact(usd)} to the Feed-the-Burn vault — rank #${rank} on the Dumb Money all-time donor board. Every donation verified on-chain.`;

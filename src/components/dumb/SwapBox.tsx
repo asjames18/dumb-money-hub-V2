@@ -413,7 +413,7 @@ function fmt(bi: bigint | null | undefined, decimals = 18): string {
 
 /** Share URL for intents: the configured site URL, else the live origin. */
 function siteShareUrl(): string {
-  return SITE.url || (typeof window !== "undefined" ? window.location.origin : "");
+  return SITE.url;
 }
 
 function errMsg(e: unknown): string {

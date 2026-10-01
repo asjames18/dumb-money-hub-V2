@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, FileText, List } from "lucide-react";
 
 import { CopyButton } from "@/components/dumb/CopyButton";
-import { pageMeta } from "@/lib/page-meta";
+import { SITE_URL, pageMeta } from "@/lib/page-meta";
 
 const TITLE = "Dumb Money — Whitepaper";
 const DESCRIPTION =
@@ -296,9 +296,7 @@ function Whitepaper() {
           </span>
           <div className="ml-auto inline-flex items-center gap-2">
             <CopyButton
-              value={`${
-                typeof window !== "undefined" ? window.location.origin : ""
-              }/whitepaper#${slug}`}
+              value={`${SITE_URL}/whitepaper#${slug}`}
               label={`link to chapter "${chapter.title}"`}
             />
             <button

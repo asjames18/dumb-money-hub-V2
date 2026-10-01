@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Flame } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { SITE_URL } from "@/lib/page-meta";
 import { fetchRootEngines } from "@/lib/proof/fetch-roots";
 import { NativeShareButton } from "./NativeShareButton";
 
@@ -15,8 +16,7 @@ const fmtB = (n: number) =>
 /** The next unhit milestone, or null once all three are crushed. */
 const nextMilestone = (burned: number): number | null => MILESTONES.find((m) => burned < m) ?? null;
 
-const milestoneShareUrl = (): string =>
-  `${typeof window !== "undefined" ? window.location.origin : ""}/burn`;
+const milestoneShareUrl = (): string => `${SITE_URL}/burn`;
 
 const milestoneShareText = (burned: number, next: number | null): string =>
   next === null

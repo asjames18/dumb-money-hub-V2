@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+
+import { SITE_URL } from "@/lib/page-meta";
 import { Link } from "@tanstack/react-router";
 import {
   Check,
@@ -31,8 +33,7 @@ const explorerAddress = (addr: string): string => `https://scan.pulsechain.com/a
 
 // Shared /scan?tx= links carry only the hash — the explanation re-runs live
 // on-chain at view time, so a shared link can never show a stale story.
-const shareUrl = (hash: string): string =>
-  `${typeof window !== "undefined" ? window.location.origin : ""}/scan?tx=${hash}`;
+const shareUrl = (hash: string): string => `${SITE_URL}/scan?tx=${hash}`;
 
 // Honest pre-filled copy: our own words about what the tool does, never the
 // tx's own (possibly attacker-controlled) token symbols or amounts.
