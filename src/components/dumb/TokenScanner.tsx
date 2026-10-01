@@ -215,7 +215,10 @@ export function TokenScanner({
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && scan()}
+          onKeyDown={(e) => {
+            if (e.key !== "Enter" || scanning) return;
+            scan();
+          }}
           aria-label="Token contract address to scan"
           placeholder="0x… paste the token contract address"
           spellCheck={false}
@@ -1096,7 +1099,10 @@ function DeepScanPanel({
             <input
               value={burnTx}
               onChange={(e) => setBurnTx(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && run()}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter" || busy) return;
+                run();
+              }}
               aria-label="DUMB burn transaction hash"
               placeholder="0x… paste your DUMB burn tx hash"
               spellCheck={false}
