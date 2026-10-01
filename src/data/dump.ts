@@ -159,7 +159,7 @@ export const ROADMAP = [
     done: true,
     title: "Proof-first homepage",
     items: [
-      "Live proof strip under the hero — total DUMB destroyed, fixed supply, and the live tax split read straight from the contracts, each figure with block number, age, and explorer link",
+      "Live proof strip under the hero — total DUMB gone for good (burned plus locked in the contract), fixed supply, and the live tax split read straight from the contracts, each figure with block number, age, and explorer link",
     ],
   },
   {
