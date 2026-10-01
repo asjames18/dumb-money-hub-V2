@@ -657,9 +657,9 @@ export function BurnBox() {
             </p>
           ) : plsQuoteStale ? (
             <p className="mt-3 text-sm text-muted-foreground">
-              No live PLS quote right now — either the RPC didn't answer, or the pool is too thin
-              to buy enough DUMB for that amount. The button stays off until a real quote comes
-              back; nothing is ever estimated or invented.
+              No live PLS quote right now — either the RPC didn't answer, or the pool is too thin to
+              buy enough DUMB for that amount. The button stays off until a real quote comes back;
+              nothing is ever estimated or invented.
             </p>
           ) : (
             <p className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground">

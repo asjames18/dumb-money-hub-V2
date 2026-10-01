@@ -2762,7 +2762,7 @@ const PLS_BURN_SLIPPAGE_BPS = 800n;
 
 /**
  * The share of a pre-tax router output that is guaranteed to reach `dead`,
- * in bps: 95% arrival × 92% (100% − 8% slippage) = 874.
+ * in bps: 95% arrival × 92% (100% − 8% slippage) = 8740 (87.4%).
  *
  * `plsBurnMinOut` sets amountOutMin to exactly this fraction, so the router
  * REVERTS rather than settling below it. That is what protects the user: the
@@ -2770,7 +2770,8 @@ const PLS_BURN_SLIPPAGE_BPS = 800n;
  * "the swap succeeds, the PLS is gone, and the burn lands under the
  * threshold they were promised".
  */
-const PLS_BURN_FLOOR_BPS = (DEAD_ARRIVAL_NUM * (10_000n - PLS_BURN_SLIPPAGE_BPS)) / DEAD_ARRIVAL_DEN;
+const PLS_BURN_FLOOR_BPS =
+  (DEAD_ARRIVAL_NUM * (10_000n - PLS_BURN_SLIPPAGE_BPS)) / DEAD_ARRIVAL_DEN;
 
 /**
  * Smallest PRE-TAX router output that still lands `arrivalDumb` at dead even
@@ -2784,7 +2785,7 @@ export function preTaxForArrival(arrivalDumb: bigint): bigint {
 /** Pre-tax DUMB output the PLS fallback targets.
  *
  *  Derived, not guessed: it must be `preTaxForArrival(100k)` so that the
- *  amountOutMin floor (874 bps) still clears the 100k pass threshold. A plain
+ *  amountOutMin floor (8740 bps) still clears the 100k pass threshold. A plain
  *  round "110k buffer" is NOT enough — 110k × 0.874 = 96,140, which sits
  *  BELOW the threshold, so the swap would settle successfully and the pass
  *  would then be refused on-chain after the user's PLS was already spent. */
