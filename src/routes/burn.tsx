@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ListOrdered, ShieldCheck, TriangleAlert } from "lucide-react";
 
 import { BurnBox } from "@/components/dumb/BurnBox";
+import { BurnCanvas } from "@/components/dumb/BurnCanvas";
 import { BurnLeaderboard } from "@/components/dumb/BurnLeaderboard";
 import { BurnMilestones } from "@/components/dumb/BurnMilestones";
 import { BurnTicker } from "@/components/dumb/BurnTicker";
@@ -63,6 +64,10 @@ function BurnPage() {
 
         <div className="mt-8">
           <BurnLeaderboard />
+        </div>
+
+        <div className="mt-8">
+          <BurnCanvas />
         </div>
 
         <div className="mt-8">
