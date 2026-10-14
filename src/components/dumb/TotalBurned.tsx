@@ -6,14 +6,15 @@ import { fmtCompactTok } from "@/lib/burns";
 import { fmtUsdCompact, useTokenPrices } from "@/lib/token-prices";
 
 /**
- * Lifetime total-burned card on /burn: the live DUMB + DAMP balances of the
- * dead address — everything sitting there is permanently destroyed (it gets
- * there via 1% protocol burn legs and voluntary burns; see the reflection
- * caveat below).
+ * Lifetime total-burned card on /burn: the "gone for good" total — the live
+ * DUMB + DAMP balances of the dead address PLUS the unspendable tax buckets
+ * locked in the token contracts themselves. Antonio 2026-10-02: this combined
+ * number (~19.35B DUMB) is the true total-burned-all-time figure; the
+ * burned/locked split is shown beneath each row, never hidden.
  *
  * Honest math, exact thanks to the verified direct-to-dead tax accounting
  * (backlog #1): the dead address is NOT fee-excluded, so a straight-to-dead
- * transfer of A arrives as 0.95A (DUMB) / 0.98A (DAMP) — the balance shown
+ * transfer of A arrives as 0.95A (DUMB) / 0.98A (DAMP) — the burned leg shown
  * here is what actually landed, not a naive 1:1 of amounts sent. USD is an
  * estimate from on-chain WPLS pair reserves x PLS/USD, indicative only.
  * Burns shrink supply; they never promise price.
@@ -24,13 +25,13 @@ import { fmtUsdCompact, useTokenPrices } from "@/lib/token-prices";
  * private mapping the constructor never sets for dead, and the owner is
  * renounced, so whether dead also accretes its share of the ~1% holder
  * reflection is unknowable from outside. Either way every token here is
- * permanently destroyed; the rows say "destroyed", not "burned", for exactly
- * this reason. Do NOT derive a "burn rate" from dead-balance deltas — deltas
- * may include reflection accretion, not just burn legs.
+ * permanently destroyed; the rows say "gone for good", not "burned", for
+ * exactly this reason. Do NOT derive a "burn rate" from dead-balance deltas —
+ * deltas may include reflection accretion, not just burn legs.
  *
- * Read-only against the public RPC: two balanceOf calls + two totalSupply()
- * calls (the % of supply is computed from live chain state — never a pinned
- * constant), no wallet needed, no new data sources.
+ * Read-only against the public RPC: dead balances + contract balances +
+ * totalSupply() calls (the % of supply is computed from live chain state —
+ * never a pinned constant), no wallet needed, no new data sources.
  */
 export function TotalBurned() {
   const prices = useTokenPrices();
@@ -73,13 +74,24 @@ export function TotalBurned() {
   // The token contracts' own balances = the buy-back/liquidity fee buckets,
   // entombed forever (engine dead, owner renounced). Antonio 2026-10-01:
   // count them with the destroyed numbers — burned + locked is the total
-  // that can never move.
-  const { data: dumbLocked } = useReadContract({
+  // that can never move. Antonio 2026-10-02: this combined figure IS the
+  // headline total-burned-all-time number.
+  const {
+    data: dumbLocked,
+    isLoading: dumbLockedLoading,
+    isError: dumbLockedError,
+    refetch: refetchDumbLocked,
+  } = useReadContract({
     ...balanceOfDead,
     address: DUMB,
     args: [DUMB],
   });
-  const { data: dampLocked } = useReadContract({
+  const {
+    data: dampLocked,
+    isLoading: dampLockedLoading,
+    isError: dampLockedError,
+    refetch: refetchDampLocked,
+  } = useReadContract({
     ...balanceOfDead,
     address: DAMP,
     args: [DAMP],
@@ -92,28 +104,31 @@ export function TotalBurned() {
   const dumbGone = goneReady ? (dumbBurned as bigint) + (dumbLocked as bigint) : null;
   const dampGone = goneReady ? (dampBurned as bigint) + (dampLocked as bigint) : null;
 
-  const loading = dumbLoading || dampLoading;
-  const failed = dumbError || dampError;
-  const both = typeof dumbBurned === "bigint" && typeof dampBurned === "bigint";
+  const loading = dumbLoading || dampLoading || dumbLockedLoading || dampLockedLoading;
+  const failed = dumbError || dampError || dumbLockedError || dampLockedError;
 
   const dumbUsd = prices.DUMB;
   const dampUsd = prices.DAMP;
-  const priced = both && dumbUsd !== null && dampUsd !== null;
+  const priced = goneReady && dumbUsd !== null && dampUsd !== null;
   const totalUsd = priced
-    ? (Number(dumbBurned) / 1e18) * (dumbUsd as number) +
-      (Number(dampBurned) / 1e18) * (dampUsd as number)
+    ? (Number(dumbGone as bigint) / 1e18) * (dumbUsd as number) +
+      (Number(dampGone as bigint) / 1e18) * (dampUsd as number)
     : null;
   // Per-token USD parts, hoisted so the headline can show the composition
   // (totalUsd is the sum of these two — the card used to show the total with
   // no breakdown, which read as contradicting the per-token rows).
-  const dumbUsdPart = both && dumbUsd !== null ? (Number(dumbBurned) / 1e18) * dumbUsd : null;
-  const dampUsdPart = both && dampUsd !== null ? (Number(dampBurned) / 1e18) * dampUsd : null;
+  const dumbUsdPart =
+    goneReady && dumbUsd !== null ? (Number(dumbGone as bigint) / 1e18) * dumbUsd : null;
+  const dampUsdPart =
+    goneReady && dampUsd !== null ? (Number(dampGone as bigint) / 1e18) * dampUsd : null;
 
   const retry = () => {
     void refetchDumb();
     void refetchDamp();
     void refetchDumbSupply();
     void refetchDampSupply();
+    void refetchDumbLocked();
+    void refetchDampLocked();
   };
 
   /** Burned share of total supply, formatted honestly — null when supply is unread. */
@@ -138,11 +153,11 @@ export function TotalBurned() {
 
       {loading && (
         <p className="mt-4 text-sm text-muted-foreground" role="status">
-          Reading the dead address…
+          Reading the burn totals from the chain…
         </p>
       )}
 
-      {failed && !both && (
+      {failed && !goneReady && (
         <div className="mt-4 rounded-lg border border-foreground/20 bg-card p-4" role="alert">
           <p className="text-sm text-muted-foreground">
             Couldn&apos;t read the burn totals from the chain right now. Nothing is broken — the
@@ -159,7 +174,7 @@ export function TotalBurned() {
         </div>
       )}
 
-      {both && (
+      {goneReady && (
         <div className="mt-4">
           {totalUsd !== null && (
             <p className="font-display text-4xl uppercase leading-none sm:text-5xl">
@@ -176,86 +191,57 @@ export function TotalBurned() {
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-lg border border-foreground/15 bg-card p-4">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                DUMB destroyed
+                DUMB gone for good
               </p>
               <p className="mt-1 font-display text-2xl">
-                {fmtCompactTok(dumbBurned)}{" "}
+                {fmtCompactTok(dumbGone as bigint)}{" "}
                 <span className="text-sm text-muted-foreground">DUMB</span>
               </p>
-              {shareOfSupply(dumbBurned, dumbSupply) && (
+              {shareOfSupply(dumbGone as bigint, dumbSupply) && (
                 <p className="text-xs text-muted-foreground">
-                  {shareOfSupply(dumbBurned, dumbSupply)}
+                  {shareOfSupply(dumbGone as bigint, dumbSupply)}
                 </p>
               )}
+              <p className="text-xs text-muted-foreground">
+                {fmtCompactTok(dumbBurned as bigint)} burned · {fmtCompactTok(dumbLocked as bigint)}{" "}
+                locked in the contract
+              </p>
               {dumbUsdPart !== null && (
                 <p className="text-xs text-muted-foreground">~{fmtUsdCompact(dumbUsdPart)} est.</p>
               )}
             </div>
             <div className="rounded-lg border border-foreground/15 bg-card p-4">
               <p className="font-display text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                DAMP destroyed
+                DAMP gone for good
               </p>
               <p className="mt-1 font-display text-2xl">
-                {fmtCompactTok(dampBurned)}{" "}
+                {fmtCompactTok(dampGone as bigint)}{" "}
                 <span className="text-sm text-muted-foreground">DAMP</span>
               </p>
-              {shareOfSupply(dampBurned, dampSupply) && (
+              {shareOfSupply(dampGone as bigint, dampSupply) && (
                 <p className="text-xs text-muted-foreground">
-                  {shareOfSupply(dampBurned, dampSupply)}
+                  {shareOfSupply(dampGone as bigint, dampSupply)}
                 </p>
               )}
+              <p className="text-xs text-muted-foreground">
+                {fmtCompactTok(dampBurned as bigint)} burned · {fmtCompactTok(dampLocked as bigint)}{" "}
+                locked in the contract
+              </p>
               {dampUsdPart !== null && (
                 <p className="text-xs text-muted-foreground">~{fmtUsdCompact(dampUsdPart)} est.</p>
               )}
             </div>
           </div>
-
-          {goneReady && dumbGone !== null && dampGone !== null && (
-            <div className="mt-3 rounded-lg border-2 border-gold/50 bg-card p-4">
-              <p className="font-display text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Gone for good — can never move
-              </p>
-              <p className="mt-1 font-display text-2xl leading-tight">
-                {fmtCompactTok(dumbGone)}{" "}
-                <span className="text-sm text-muted-foreground">DUMB</span>
-                <span className="mx-2 text-muted-foreground">·</span>
-                {fmtCompactTok(dampGone)}{" "}
-                <span className="text-sm text-muted-foreground">DAMP</span>
-              </p>
-              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                That&apos;s the dead address <em>plus</em> the unspendable tax buckets sitting in
-                the token contracts themselves ({fmtCompactTok(dumbLocked as bigint)} DUMB ·{" "}
-                {fmtCompactTok(dampLocked as bigint)} DAMP) —{" "}
-                {shareOfSupply(dumbGone, dumbSupply) ?? ""} of DUMB and{" "}
-                {shareOfSupply(dampGone, dampSupply) ?? ""} of DAMP can never move again.{" "}
-                <a
-                  href={explorerAddress(DUMB)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline decoration-pink underline-offset-2 hover:text-pink"
-                >
-                  DUMB contract
-                </a>{" "}
-                ·{" "}
-                <a
-                  href={explorerAddress(DAMP)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline decoration-pink underline-offset-2 hover:text-pink"
-                >
-                  DAMP contract
-                </a>
-              </p>
-            </div>
-          )}
         </div>
       )}
 
       <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-        Lifetime DUMB + DAMP sitting at the dead address — permanently destroyed. The dead address
-        is <em>not</em> fee-excluded: a direct-to-dead transfer is taxed, so only ~95% of DUMB /
-        ~98% of DAMP sent actually arrives (the balance above is what really landed, never a naive
-        1:1).{" "}
+        Lifetime DUMB + DAMP gone for good — burned to the dead address <em>plus</em> the
+        unspendable tax buckets locked in the token contracts themselves (the buy-back and liquidity
+        legs of every taxed transfer pile up there; with ownership renounced and the fee-processing
+        engine dead, they can never move). The dead address is <em>not</em> fee-excluded: a
+        direct-to-dead transfer is taxed, so only ~95% of DUMB / ~98% of DAMP sent actually arrives
+        there (the burned leg above is what really landed, never a naive 1:1).{" "}
         <a
           href={explorerAddress(DEAD)}
           target="_blank"

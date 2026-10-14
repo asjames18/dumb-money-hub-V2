@@ -3,6 +3,7 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { handleAnalytics, handleFeedback, handlePing, handleScanStats } from "./server/analytics";
+import { handleBurnersGet } from "./server/burners";
 import { handleAiChatGet, handleAiChatPost } from "./server/ai-chat";
 import {
   handleAiProActivate,
@@ -140,6 +141,11 @@ export default {
       }
       if (pathname === "/api/pledge" && request.method === "POST") {
         return handlePledgePost(request);
+      }
+      // Burners wall — public newest-first feed of voluntary DUMB
+      // burns (scan script writes the KV; this is the read side).
+      if (pathname === "/api/burners" && request.method === "GET") {
+        return handleBurnersGet(request);
       }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

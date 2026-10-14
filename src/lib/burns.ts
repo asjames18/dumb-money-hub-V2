@@ -1,5 +1,6 @@
-import { decodeEventLog, formatUnits, parseAbiItem } from "viem";
-import { usePublicClient } from "wagmi";
+import { formatUnits, numberToHex } from "viem";
+import type { TransactionReceipt } from "viem";
+import type { usePublicClient } from "wagmi";
 
 import {
   DAMP,
@@ -12,9 +13,110 @@ import {
 
 export type PulsePublicClient = NonNullable<ReturnType<typeof usePublicClient>>;
 
-const TRANSFER_EVENT = parseAbiItem(
-  "event Transfer(address indexed from, address indexed to, uint256 value)",
-);
+/**
+ * Topic0 for ERC-20 Transfer logs.
+ *
+ * `...523b3ef` IS the textbook keccak256("Transfer(address,address,uint256)")
+ * — verified computationally 2026-10-10 (test-vector-validated keccak, two
+ * independent implementations) and against live PulseChain receipts: every
+ * Transfer log on DUMB, DAMP, HEX, INC, PRVX and PLSX carries it. The old
+ * `...288b6e9` value was a misrecorded hash that never appears on-chain;
+ * filtering on it silently matched ZERO rows — that is exactly how the burn
+ * leaderboard went empty (fixed 2026-10-05). Both values are accepted on
+ * decode (defensive); filtering uses the verified textbook one. Never
+ * hand-type this constant: compute it with keccak256 at runtime (see
+ * src/routes/api/brag-image.ts) or import it from here.
+ */
+export const TRANSFER_TOPIC0 = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+const CLASSIC_TRANSFER_TOPIC0 =
+  // Misrecorded value from before the 2026-10-05 fix: it never appears in any
+  // on-chain log. Kept only so decode stays liberal; filtering never uses it.
+  "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df288b6e9";
+
+/** Zero-pad an address into a log topic. */
+export function addrTopic(addr: string): `0x${string}` {
+  return `0x${"0".repeat(24)}${addr.toLowerCase().replace(/^0x/, "")}` as `0x${string}`;
+}
+
+export type RawLogFilter = {
+  address?: `0x${string}` | `0x${string}`[];
+  topics?: (`0x${string}` | null)[];
+  fromBlock?: `0x${string}`;
+  toBlock?: `0x${string}`;
+};
+
+export type RawRpcLog = {
+  transactionHash: `0x${string}`;
+  blockNumber: `0x${string}`;
+  topics: `0x${string}`[];
+  data: `0x${string}`;
+};
+
+/**
+ * Raw eth_getLogs with explicit topics. viem's typed getLogs derives topic0
+ * from an ABI event hash, but the contracts on this chain emit Transfer logs
+ * with a different topic0 (see TRANSFER_TOPIC0) — so the raw method is the
+ * only honest path. Drops logs missing a tx hash or block number; every
+ * caller below needs both.
+ */
+export async function rpcGetLogs(
+  client: PulsePublicClient,
+  filter: RawLogFilter,
+): Promise<RawRpcLog[]> {
+  const arg = {
+    method: "eth_getLogs",
+    params: [filter],
+    // The client's RpcSchema types don't model raw topic filters (null
+    // entries); the wire shape is exactly what the node expects.
+  } as never;
+  const logs = (await client.request(arg)) as (Partial<RawRpcLog> & {
+    topics?: string[];
+    data?: string;
+  })[];
+  return logs
+    .filter(
+      (l): l is RawRpcLog =>
+        !!l.transactionHash &&
+        !!l.blockNumber &&
+        Array.isArray(l.topics) &&
+        typeof l.data === "string",
+    )
+    .map((l) => ({
+      transactionHash: l.transactionHash,
+      blockNumber: l.blockNumber,
+      topics: l.topics as `0x${string}`[],
+      data: l.data as `0x${string}`,
+    }));
+}
+export type DecodedTransfer = { from: string; to: string; value: bigint };
+
+/**
+ * Manually decode a Transfer-shaped log (indexed from/to, value in data).
+ * decodeEventLog can't be used here: the on-chain topic0 doesn't match the
+ * ABI hash, so it throws on every real log. Never invents a row.
+ */
+export function decodeTransferLog(log: {
+  topics: readonly string[] | string[];
+  data: `0x${string}` | string;
+}): DecodedTransfer | null {
+  const topics = log.topics as string[];
+  if (topics.length !== 3) return null;
+  const t0 = topics[0];
+  const t1 = topics[1];
+  const t2 = topics[2];
+  if (!t0 || !t1 || !t2) return null;
+  const sig = t0.toLowerCase();
+  if (sig !== TRANSFER_TOPIC0 && sig !== CLASSIC_TRANSFER_TOPIC0) return null;
+  try {
+    return {
+      from: `0x${t1.slice(-40)}`.toLowerCase(),
+      to: `0x${t2.slice(-40)}`.toLowerCase(),
+      value: BigInt(log.data),
+    };
+  } catch {
+    return null;
+  }
+}
 const ZERO = "0x0000000000000000000000000000000000000000";
 const DEAD_LC = DEAD.toLowerCase();
 /** Last N blocks scanned for burn legs (~10s blocks: ~2.3 days). */
@@ -86,17 +188,22 @@ export async function fetchRecentBurns(client: PulsePublicClient): Promise<BurnE
     const results = await Promise.all(
       chunks.map(([from, to]) =>
         withRetry(() =>
-          client.getLogs({
+          // Raw eth_getLogs: viem's typed getLogs derives topics from an ABI
+          // event, and the on-chain topic0 doesn't match the ABI hash.
+          rpcGetLogs(client, {
             address,
-            event: TRANSFER_EVENT,
-            args: { to: DEAD },
-            fromBlock: from,
-            toBlock: to,
+            topics: [TRANSFER_TOPIC0, null, addrTopic(DEAD)],
+            fromBlock: numberToHex(from),
+            toBlock: numberToHex(to),
           }),
         ),
       ),
     );
-    return results.flat();
+    // Only the tx hash + block are used downstream (receipts re-derive legs).
+    return results.flat().map((l) => ({
+      transactionHash: l.transactionHash,
+      blockNumber: BigInt(l.blockNumber),
+    }));
   };
   const [dumbLogs, dampLogs] = await Promise.all([scanToken(DUMB), scanToken(DAMP)]);
   const tagged = [
@@ -139,22 +246,9 @@ export async function fetchRecentBurns(client: PulsePublicClient): Promise<BurnE
     const bySender = new Map<string, { toDead: bigint; hasNonDead: boolean }>();
     for (const log of receipt.logs) {
       if (log.address.toLowerCase() !== tokenLc) continue;
-      let from = "";
-      let to = "";
-      let value = 0n;
-      try {
-        const d = decodeEventLog({
-          abi: [TRANSFER_EVENT],
-          data: log.data,
-          topics: log.topics,
-        });
-        if (d.eventName !== "Transfer" || !d.args) continue;
-        from = d.args.from.toLowerCase();
-        to = d.args.to.toLowerCase();
-        value = d.args.value;
-      } catch {
-        continue;
-      }
+      const d = decodeTransferLog(log);
+      if (!d) continue;
+      const { from, to, value } = d;
       if (from === tokenLc || from === ZERO) continue; // entombed contract legs never burn
       const e = bySender.get(from) ?? { toDead: 0n, hasNonDead: false };
       if (to === DEAD_LC) e.toDead += value;
@@ -202,6 +296,18 @@ export type EpochBurnRow = {
   /** Earliest block with a voluntary burn — tie-break: first to burn keeps
    *  the higher rank, so nobody is bumped without burning more. */
   firstBlock: bigint;
+  /** Per-tx voluntary legs (block-scoped) — lets time-aware consumers
+   *  (e.g. pledges) count only burns that landed after a given block. */
+  legs: EpochBurnLeg[];
+};
+
+/** One voluntary burn leg inside an EpochBurnRow. */
+export type EpochBurnLeg = {
+  /** Block the burn landed in. */
+  blockNumber: bigint;
+  token: "DUMB" | "DAMP";
+  /** Dead-leg wei (arrival accounting). */
+  wei: bigint;
 };
 
 /**
@@ -238,19 +344,20 @@ export async function fetchEpochBurns(client: PulsePublicClient): Promise<EpochB
       const batch = await Promise.all(
         chunks.slice(i, i + RECEIPT_BATCH).map(([from, to]) =>
           withRetry(() =>
-            client.getLogs({
+            // Raw eth_getLogs: viem's typed getLogs derives topics from an
+            // ABI event, and the on-chain topic0 doesn't match the ABI hash.
+            rpcGetLogs(client, {
               address,
-              event: TRANSFER_EVENT,
-              args: { to: DEAD },
-              fromBlock: from,
-              toBlock: to,
+              topics: [TRANSFER_TOPIC0, null, addrTopic(DEAD)],
+              fromBlock: numberToHex(from),
+              toBlock: numberToHex(to),
             }),
           ),
         ),
       );
       for (const logs of batch)
         for (const l of logs)
-          out.push({ hash: l.transactionHash, blockNumber: l.blockNumber, token });
+          out.push({ hash: l.transactionHash, blockNumber: BigInt(l.blockNumber), token });
     }
     return out;
   };
@@ -278,26 +385,23 @@ export async function fetchEpochBurns(client: PulsePublicClient): Promise<EpochB
     const batch = await Promise.all(
       entries.slice(i, i + RECEIPT_BATCH).map(({ blockNumber, token }) =>
         withRetry(() =>
-          client.getLogs({
+          // Raw eth_getLogs — same topic0 reason as above.
+          rpcGetLogs(client, {
             address: token === "DUMB" ? DUMB : DAMP,
-            event: TRANSFER_EVENT,
-            fromBlock: blockNumber,
-            toBlock: blockNumber,
+            topics: [TRANSFER_TOPIC0],
+            fromBlock: numberToHex(blockNumber),
+            toBlock: numberToHex(blockNumber),
           }),
         ).then((logs) => ({ token, logs })),
       ),
     );
     for (const { token, logs } of batch) {
       for (const l of logs) {
-        const d = decodeEventLog({ abi: [TRANSFER_EVENT], data: l.data, topics: l.topics });
-        if (d.eventName !== "Transfer" || !d.args) continue;
+        const d = decodeTransferLog(l);
+        if (!d) continue;
         const k: TxKey = `${l.transactionHash}:${token}`;
         const arr = txLogs.get(k) ?? [];
-        arr.push({
-          from: d.args.from.toLowerCase(),
-          to: d.args.to.toLowerCase(),
-          value: d.args.value,
-        });
+        arr.push(d);
         txLogs.set(k, arr);
       }
     }
@@ -368,14 +472,49 @@ export async function fetchEpochBurns(client: PulsePublicClient): Promise<EpochB
         voluntaryDampWei: 0n,
         txs: 0,
         firstBlock: v.blockNumber,
+        legs: [],
       } as EpochBurnRow);
     if (v.token === "DUMB") r.voluntaryDumbWei += v.toDead;
     else r.voluntaryDampWei += v.toDead;
+    r.legs.push({ blockNumber: v.blockNumber, token: v.token, wei: v.toDead });
     r.txs += 1;
     if (v.blockNumber < r.firstBlock) r.firstBlock = v.blockNumber;
     agg.set(v.sender, r);
   }
   return [...agg.values()];
+}
+
+/**
+ * Decode the tax legs of a direct wallet→dead burn from its receipt logs.
+ * Pure and local: no RPC, no new data source — it reads the receipt the
+ * wallet already returned. Sums the Transfer legs into the dead address
+ * (the plain transfer leg + the 1% protocol burn leg, both land on dead)
+ * and into the token contract itself (the entombed buckets). Mints are
+ * skipped. Returns null when no dead-bound leg decodes — never invents legs.
+ */
+export type BurnReceiptLegs = {
+  deadWei: bigint;
+  bucketWei: bigint;
+};
+
+export function burnReceiptLegs(
+  logs: TransactionReceipt["logs"],
+  tokenAddress: string,
+): BurnReceiptLegs | null {
+  const tokenLc = tokenAddress.toLowerCase();
+  let deadWei = 0n;
+  let bucketWei = 0n;
+  for (const log of logs) {
+    if (log.address.toLowerCase() !== tokenLc) continue;
+    const d = decodeTransferLog(log);
+    if (!d) continue;
+    const { from, to, value } = d;
+    if (from === ZERO) continue; // mints never burn
+    if (to === DEAD_LC) deadWei += value;
+    else if (to === tokenLc) bucketWei += value;
+  }
+  if (deadWei === 0n) return null;
+  return { deadWei, bucketWei };
 }
 
 export function fmtCompactTok(wei: bigint): string {

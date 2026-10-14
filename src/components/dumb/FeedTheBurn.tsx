@@ -8,7 +8,8 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-import { formatUnits, parseAbiItem, parseUnits } from "viem";
+import { formatUnits, numberToHex, parseAbiItem, parseUnits } from "viem";
+import { Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { SITE_URL } from "@/lib/page-meta";
@@ -16,7 +17,13 @@ import { ConnectButton } from "@/components/dumb/ConnectButton";
 import { CopyButton } from "@/components/dumb/CopyButton";
 import { NativeShareButton } from "@/components/dumb/NativeShareButton";
 import { Input } from "@/components/ui/input";
-import { fmtCompactTok } from "@/lib/burns";
+import {
+  addrTopic,
+  decodeTransferLog,
+  fmtCompactTok,
+  rpcGetLogs,
+  TRANSFER_TOPIC0,
+} from "@/lib/burns";
 import { useUsernames } from "@/lib/use-usernames";
 import {
   DRIP_COOLDOWN_S,
@@ -321,16 +328,49 @@ function DonateCard() {
         )}
       </div>
       {writeError && <p className="mt-2 text-xs text-pink">Couldn&apos;t submit: {writeError}</p>}
+      {/* On-chain failure only (never wallet-level errors): the hash is the
+          user's own broadcast — the evidence-backed diagnosis instead of a
+          dismissable toast, same pattern as the SwapBox/BurnBox/scanner and
+          Pro-purchase failure panels. */}
+      {txReverted && hash && (
+        <p className="mt-2 text-xs">
+          <Link
+            to="/scan"
+            search={{ token: undefined, burn: undefined, tx: hash }}
+            className="underline decoration-pink underline-offset-2 hover:text-pink"
+            title="The hub reads the failed transaction on-chain and names the cause in plain English — out of gas, an expired deadline, or the contract's own revert reason. Never a guess, never a retry nudge."
+          >
+            Why did it fail?
+          </Link>
+        </p>
+      )}
+      {/* Success-side: a confirmed donation is a plain transfer to the vault
+          contract, NOT a burn — so "Explain this burn" copy would be dishonest
+          here. This is the 13:43 park's "own copy design": "Explain this
+          donation", with the title handling the contract-recipient nuance
+          (the explainer decodes the transfer leg-by-leg and shows the vault
+          address; the title names what the vault is and when the burn
+          actually happens). hash is the user's own donation broadcast;
+          reset() at donate entry clears stale state; renders only on
+          confirmed receipt status success — same guards as the drip card. */}
+      {txSucceeded && hash && (
+        <p className="mt-2 text-xs">
+          <Link
+            to="/scan"
+            search={{ token: undefined, burn: undefined, tx: hash }}
+            className="underline decoration-pink underline-offset-2 hover:text-pink"
+            title="Plain-English breakdown of your donation: what you sent, and where it landed — the Feed-the-Burn vault. The tokens sit there until the next drip burns them. Never a guess."
+          >
+            Explain this donation
+          </Link>
+        </p>
+      )}
       {address && (
         <p className="mt-3 text-xs text-muted-foreground">Connected as {shortAddr(address)}</p>
       )}
     </div>
   );
 }
-
-const TRANSFER_EVENT = parseAbiItem(
-  "event Transfer(address indexed from, address indexed to, uint256 value)",
-);
 
 // Share helpers for a donor's own rank — copy is the site's own words plus
 // the connected wallet's own verified rank and donated value (real on-chain
@@ -384,14 +424,14 @@ function DonorLeaderboard() {
     let cancelled = false;
     Promise.all(
       DRIP_VAULT_TOKENS.map((t) =>
-        publicClient
-          .getLogs({
-            address: t.address,
-            event: TRANSFER_EVENT,
-            args: { to: DRIP_VAULT },
-            fromBlock: DRIP_VAULT_DEPLOY_BLOCK,
-          })
-          .catch(() => null),
+        // Raw eth_getLogs: Transfer logs on this chain carry a non-textbook
+        // topic0 (see TRANSFER_TOPIC0 in @/lib/burns), which viem's typed
+        // getLogs can't filter on.
+        rpcGetLogs(publicClient, {
+          address: t.address,
+          topics: [TRANSFER_TOPIC0, null, addrTopic(DRIP_VAULT)],
+          fromBlock: numberToHex(DRIP_VAULT_DEPLOY_BLOCK),
+        }).catch(() => null),
       ),
     )
       .then((perToken) => {
@@ -407,12 +447,12 @@ function DonorLeaderboard() {
         perToken.forEach((logs, i) => {
           if (logs === null) return;
           for (const l of logs) {
-            const from = l.args.from;
-            const value = l.args.value;
-            if (!from || value == null || value === 0n) continue;
-            if (from.toLowerCase() === DRIP_VAULT.toLowerCase()) continue;
+            const d = decodeTransferLog(l);
+            if (!d || d.value === 0n) continue;
+            const from = d.from;
+            if (from === DRIP_VAULT.toLowerCase()) continue;
             const amounts = map.get(from) ?? Array<bigint>(DRIP_VAULT_TOKENS.length).fill(0n);
-            amounts[i] = (amounts[i] ?? 0n) + value;
+            amounts[i] = (amounts[i] ?? 0n) + d.value;
             map.set(from, amounts);
           }
         });
@@ -774,6 +814,45 @@ export function FeedTheBurn() {
           </div>
           {dripError && (
             <p className="mt-3 text-xs text-pink">Couldn&apos;t submit the drip: {dripError}</p>
+          )}
+          {/* On-chain failure only (never wallet-level errors): the hash is the
+              user's own broadcast — the evidence-backed diagnosis instead of a
+              dismissable toast, same pattern as the other money-surface failure
+              panels. */}
+          {txReverted && hash && (
+            <p className="mt-3 text-xs">
+              <Link
+                to="/scan"
+                search={{ token: undefined, burn: undefined, tx: hash }}
+                className="underline decoration-pink underline-offset-2 hover:text-pink"
+                title="The hub reads the failed transaction on-chain and names the cause in plain English — out of gas, an expired deadline, or the contract's own revert reason. Never a guess, never a retry nudge."
+              >
+                Why did it fail?
+              </Link>
+            </p>
+          )}
+          {/* Success-side counterpart of the BurnBox "Explain this burn"
+              (10:43): a confirmed drip burns DUMB (vault token → WPLS → DUMB →
+              dead), and the only feedback is a dismissable toast — no path to
+              the evidence-backed decode. The 08:33 tx-explainer breaks the
+              drip tx into plain English leg-by-leg (it can't name the drip
+              shape, so it degrades to the honest "complex transaction"
+              headline with the burn legs and flags — the 12:23 precedent for
+              degrades). Completes the success-side pattern on the last
+              burn-flow money surface; the hash is the user's own drip
+              broadcast. (The donation card stays parked: a donation is not a
+              burn, so this copy doesn't fit — needs its own design.) */}
+          {txSucceeded && hash && (
+            <p className="mt-3 text-xs">
+              <Link
+                to="/scan"
+                search={{ token: undefined, burn: undefined, tx: hash }}
+                className="underline decoration-pink underline-offset-2 hover:text-pink"
+                title="Plain-English breakdown of your drip: what tokens the vault moved, what the transfer tax cost, and what actually landed at the dead address. Never a guess."
+              >
+                Explain this burn
+              </Link>
+            </p>
           )}
         </div>
       </div>

@@ -34,6 +34,7 @@ import {
 } from "@/lib/token-scan";
 import { ConnectButton } from "./ConnectButton";
 import { trackEvent } from "@/lib/analytics";
+import { burnReceiptLegs, fmtCompactTok } from "@/lib/burns";
 import { fmtUsd } from "@/lib/pls-price";
 import { useTokenPrices } from "@/lib/token-prices";
 import { CopyButton } from "./CopyButton";
@@ -122,6 +123,36 @@ export function BurnBox() {
   const [amount, setAmount] = useState("");
   const [acknowledged, setAcknowledged] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  /** True when ?amount=/?token= in the URL prefilled the box — a shared
+      "burn with me" rally link, not the user's own typing. */
+  const [rallyShared, setRallyShared] = useState(false);
+  const rallyPrefillDone = useRef(false);
+
+  /** Burn-rally deep links: /burn?token=DUMB&amount=500000 lands the opener
+      with the amount already typed in — one step from the burn action, which
+      is how a community rallies around voluntary burns without a contest
+      (contests are on Antonio's idea-only hold). Prefill is intent only:
+      the token must be DUMB|DAMP and the amount a plain positive decimal, and
+      nothing burns without the wallet's own acknowledgment + signature. */
+  useEffect(() => {
+    if (rallyPrefillDone.current || typeof window === "undefined") return;
+    rallyPrefillDone.current = true;
+    const q = new URLSearchParams(window.location.search);
+    const tk = q.get("token");
+    const amt = q.get("amount");
+    if (tk === "DUMB" || tk === "DAMP") setTokenKey(tk);
+    if (amt !== null && /^\d+(\.\d{1,18})?$/.test(amt.trim())) {
+      const n = Number(amt.trim());
+      if (Number.isFinite(n) && n > 0) {
+        setAmount(amt.trim());
+        setRallyShared(true);
+        // A rally link was opened (?token=/?amount= prefilled the box) —
+        // anonymous count only (path + event, same as every beacon), so the
+        // loop can tell rally arrivals apart from direct /burn visits.
+        trackEvent("rally_open");
+      }
+    }
+  }, []);
   /** Snapshot of the last burn attempt — so the share text always reflects the
       real burned amount, even if the input is edited after confirmation. */
   const [burned, setBurned] = useState<{
@@ -227,8 +258,13 @@ export function BurnBox() {
     if (doneSucceeded && doneHash && trackedBurnFor.current !== doneHash) {
       trackedBurnFor.current = doneHash;
       trackEvent(swapSucceeded ? "burn_voluntary_pls" : "burn_voluntary");
+      // Rally-funnel conversion: this burn started from a shared rally link
+      // (rallyShared is true only when the prefilled amount/token is still
+      // untouched). Anonymous, same as every beacon — pairs with rally_open
+      // so the loop can measure rally arrival → burn conversion.
+      if (rallyShared) trackEvent("rally_burn");
     }
-  }, [doneSucceeded, doneHash, swapSucceeded]);
+  }, [doneSucceeded, doneHash, swapSucceeded, rallyShared]);
 
   /** Pre-filled, honest share copy for a CONFIRMED burn only — nothing is
       ever posted automatically; the user clicks through and posts themselves.
@@ -255,6 +291,25 @@ export function BurnBox() {
     };
   }, [burned, doneHash]);
 
+  /**
+   * Receipt-decoded tax legs, direct-burn path only. The pre-burn panel
+   * predicts the legs; this verifies them against the receipt the wallet
+   * returned — zero RPC, pure local decode. If the chain ever deviated from
+   * the pinned math, the user sees reality, not the prediction. The PLS-swap
+   * path celebrates its own verified arrival instead. Nothing renders when
+   * no dead-bound leg decodes — the panel simply falls back to the headline.
+   */
+  const receiptLegs = useMemo(() => {
+    if (!txSucceeded || !receipt || !burned) return null;
+    const legs = burnReceiptLegs(receipt.logs, cfg.address);
+    if (!legs) return null;
+    return {
+      ...legs,
+      reflectedWei: burned.amount - legs.deadWei - legs.bucketWei,
+      token: burned.token,
+    };
+  }, [txSucceeded, receipt, burned, cfg.address]);
+
   /** The brag card image is rendered server-side from the verified tx
       (/api/brag-image) — no upload needed. The shared /brag URL unfurls it
       on X/Telegram/Discord; the explorer link stays one click away there. */
@@ -265,6 +320,28 @@ export function BurnBox() {
   } catch {
     parsed = null;
   }
+
+  /** Shareable burn-rally link: carries the current token + amount so a
+      "burn with me" post lands the reader on a prefilled box. The link
+      carries intent only — the burn still requires the opener's own
+      acknowledgment checkbox and wallet signature. */
+  const rallyUrl =
+    parsed !== null && parsed > 0n
+      ? `${SITE_URL}/burn?token=${tokenKey}&amount=${encodeURIComponent(amount.trim())}`
+      : null;
+
+  /** Post-burn rally link: prefilled from the VERIFIED burned snapshot, not
+      the editable amount field (which the user may have changed since).
+      Renders on the success panel at peak motivation — the "Brag about it"
+      row celebrates the burner's own burn; this recruits the next burner.
+      Same intent-only contract: the opener still confirms and signs. */
+  const rallyAfterBurnUrl = useMemo(() => {
+    if (!burned || burned.amount <= 0n) return null;
+    const raw = formatUnits(burned.amount, 18);
+    const amtStr = raw.includes(".") ? raw.replace(/0+$/, "").replace(/\.$/, "") : raw;
+    if (!/^\d+(\.\d{1,18})?$/.test(amtStr)) return null;
+    return `${SITE_URL}/burn?token=${burned.token}&amount=${encodeURIComponent(amtStr)}`;
+  }, [burned]);
   const insufficient = parsed !== null && bal !== undefined && parsed > bal;
   const tokenPrice = prices[tokenKey];
   const amountUsd =
@@ -327,10 +404,19 @@ export function BurnBox() {
     swapPending ||
     swapConfirming ||
     swapBusy ||
+    // A direct wallet burn may be pending signature or awaiting its receipt
+    // (mined transfers drop the balance, which can flip `insufficient` and
+    // reveal this panel mid-confirmation). Never arm a second burn path while
+    // the first is in flight — the stuck-note tells users the same.
+    isPending ||
+    isConfirming ||
     !acknowledged;
 
   const startPlsBurn = () => {
     if (!plsQuote || !quoteMatchesAmount || !acknowledged) return;
+    // Never fire a second burn path while a direct burn is pending or
+    // confirming — mirrors the plsDisabled guard, belt and suspenders.
+    if (isPending || isConfirming) return;
     // Belt-and-suspenders chain guard, like doBurn: pin the wallet client to
     // PulseChain so the swap can never be signed on another chain.
     if (chainId !== pulsechain.id) return;
@@ -370,6 +456,11 @@ export function BurnBox() {
         if (!alive) return;
         if (v.ok) {
           setBurned({ amount: v.amount, token: "DUMB" });
+          // Drop any stale direct-burn receipt: receiptLegs decodes the
+          // DIRECT receipt, and without this a swap burn run after a direct
+          // burn would show the OLD burn's legs under the NEW burn's
+          // celebration (doneHash/explorer link point at the swap tx).
+          reset();
           refetchBal();
         } else {
           setSwapError(v.reason);
@@ -394,6 +485,14 @@ export function BurnBox() {
     if (chainId !== pulsechain.id) return;
     setConfirmOpen(false);
     reset();
+    // Clear any settled SWAP-burn state too: doneHash = swapHash ?? hash, so
+    // without this a direct burn fired after a swap burn (success or failure)
+    // would celebrate the NEW burn's amount under the OLD swap's explorer
+    // link / brag URL / share text. Mirror of the 03:23 #9 fix, which clears
+    // the stale DIRECT receipt on swap-burn success. Safe: canBurn requires
+    // !swapPending && !swapConfirming && !swapBusy, so no swap can be
+    // mid-flight when this runs.
+    resetSwap();
     trackEvent("burn_started");
     setBurned({ amount: parsed, token: tokenKey });
     writeContract({
@@ -420,6 +519,7 @@ export function BurnBox() {
     if (k === tokenKey) return;
     setTokenKey(k);
     setAmount("");
+    setRallyShared(false);
     setAcknowledged(false);
     setBurned(null);
     reset();
@@ -516,7 +616,10 @@ export function BurnBox() {
             autoComplete="off"
             placeholder="0.0"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => {
+              setAmount(e.target.value);
+              setRallyShared(false);
+            }}
             disabled={isPending || isConfirming || swapPending || swapConfirming || swapBusy}
             className="min-w-0 flex-1 rounded-lg border-2 border-foreground/20 bg-background px-4 py-3 text-xl font-bold tabular-nums outline-none focus:border-pink disabled:opacity-60"
           />
@@ -535,6 +638,18 @@ export function BurnBox() {
         <p className="mt-1.5 text-xs text-muted-foreground">
           Balance: {bal === undefined ? "—" : `${fmtTok(bal)} ${tokenKey}`} · gas is paid in PLS
         </p>
+        {rallyShared && (
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            A burn-rally link prefilled this amount — it&apos;s just a suggestion. Nothing burns
+            until you confirm below and sign it yourself.
+          </p>
+        )}
+        {rallyUrl && (
+          <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <span>Rallying others to burn with you?</span>
+            <CopyButton value={rallyUrl} label="Burn rally link" />
+          </p>
+        )}
         {insufficient && (
           <p className="mt-1.5 text-sm font-bold text-destructive">
             Insufficient {tokenKey} balance.{" "}
@@ -754,7 +869,10 @@ export function BurnBox() {
         swapWriteError ||
         swapError ||
         swapHash) && (
-        <div className="mt-4 rounded-lg border border-foreground/20 bg-secondary/40 p-4 text-sm">
+        <div
+          role="status"
+          className="mt-4 rounded-lg border border-foreground/20 bg-secondary/40 p-4 text-sm"
+        >
           {isPending && <p>Waiting for your wallet signature…</p>}
           {swapPending && <p>Waiting for your wallet signature…</p>}
           {isConfirming && (
@@ -798,6 +916,24 @@ export function BurnBox() {
               <p className="flex items-center gap-2 font-bold text-primary">
                 <Flame className="size-4" /> Burned — respect. The supply shrank a little.
               </p>
+              {receiptLegs && (
+                <p className="text-xs text-muted-foreground">
+                  Your receipt, decoded:{" "}
+                  <strong>
+                    {fmtCompactTok(receiptLegs.deadWei)} {receiptLegs.token}
+                  </strong>{" "}
+                  landed at the dead address · {fmtCompactTok(receiptLegs.bucketWei)}{" "}
+                  {receiptLegs.token} entombed in the contract&apos;s buckets forever
+                  {receiptLegs.reflectedWei > 0n && (
+                    <>
+                      {" "}
+                      · ~{fmtCompactTok(receiptLegs.reflectedWei)} {receiptLegs.token} reflected to
+                      holders
+                    </>
+                  )}
+                  .
+                </p>
+              )}
               <p>
                 <a
                   href={explorerTx(doneHash)}
@@ -806,7 +942,20 @@ export function BurnBox() {
                   className="underline decoration-pink underline-offset-2 hover:text-pink"
                 >
                   View the burn on the explorer
-                </a>
+                </a>{" "}
+                ·{" "}
+                {/* Success-side counterpart of the SwapBox "Explain this swap":
+                    the 08:33 tx-explainer already breaks any tx into plain
+                    English, and the Burn-with-PLS path is a router swap whose
+                    PLS-paid leg the inline receipt decode doesn't show. */}
+                <Link
+                  to="/scan"
+                  search={{ token: undefined, burn: undefined, tx: doneHash }}
+                  className="font-bold text-primary hover:underline"
+                  title="Plain-English breakdown: what you paid, what the transfer tax cost, and what actually landed at the dead address. Never a guess."
+                >
+                  Explain this burn
+                </Link>
               </p>
               <p className="text-xs text-muted-foreground">
                 Real burners only — the leaderboard will list on-chain burns, never invented ones.
@@ -858,6 +1007,21 @@ export function BurnBox() {
                   </p>
                 </div>
               )}
+              {rallyAfterBurnUrl && burned && (
+                <div className="pt-1">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                    Or rally others
+                  </p>
+                  <div className="mt-2">
+                    <CopyButton value={rallyAfterBurnUrl} label="Copy burn-with-me link" />
+                  </div>
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    Opens the burn box with your {fmtBragAmt(burned.amount)} {burned.token}{" "}
+                    prefilled for whoever taps it — it&apos;s just a suggestion. Nothing burns until
+                    they confirm and sign it themselves.
+                  </p>
+                </div>
+              )}
               <Button
                 type="button"
                 variant="outline"
@@ -891,6 +1055,21 @@ export function BurnBox() {
                   >
                     View the transaction
                   </a>
+                </p>
+              )}
+              {/* On-chain failure only (never for wallet-level errors): point at the
+                  /scan tx-tab diagnosis the 08:33 ship added — the evidence-backed
+                  "why it reverted" instead of hammering Try again blind. */}
+              {doneHash && (isFailed || txReverted || swapReverted) && (
+                <p>
+                  <Link
+                    to="/scan"
+                    search={{ token: undefined, burn: undefined, tx: doneHash }}
+                    className="underline decoration-pink underline-offset-2 hover:text-pink"
+                    title="The hub replays the failed transaction on-chain and names the cause in plain English — out of gas, an expired deadline, or the contract's own revert reason. Never a guess, never a retry nudge."
+                  >
+                    Why did it fail?
+                  </Link>
                 </p>
               )}
               <Button

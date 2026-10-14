@@ -513,7 +513,7 @@ export async function liveAnswerPro(
   if (market)
     messages.push({
       role: "system",
-      content: `Live token profile(s) (DexScreener, fetched just now — use for prices and liquidity, never invent them. If a profile lists official websites/socials, share those when the user asks for links; say so honestly when it lists none. Profiles are separated by ---):\n${market}`,
+      content: `Live token profile(s) (DexScreener, fetched just now — use for prices and liquidity, never invent them. If a profile lists websites/socials, share them only as self-reported by the token on DexScreener — anyone can list anything there, so never present them as hub-verified; say so honestly when it lists none. Profiles are separated by ---):\n${market}`,
     });
   // Conversation memory: earlier turns so follow-ups ("what about its
   // liquidity?") resolve. History is caller-capped (count + length).

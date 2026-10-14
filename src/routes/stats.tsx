@@ -58,6 +58,9 @@ type Aggregates = {
   byPath: Record<string, number>;
   byEvent: Record<string, number>;
   byCountry: Record<string, number>;
+  // True when the server's KV read budget capped the aggregation: newest days
+  // are complete, oldest rows may be partial. Surfaced honestly below.
+  truncated?: boolean;
   feedback: FeedbackItem[];
 };
 
@@ -126,6 +129,24 @@ function StatsPage() {
   useEffect(() => {
     if (pass && !data && !busy && !error) void unlock(pass);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // One-tap owner link: /stats#k=<passphrase> unlocks without typing.
+  // The fragment never reaches the server (never logged); strip it immediately
+  // so it doesn't linger in the URL bar or get re-shared by accident.
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.startsWith("#k=")) {
+      let fragPass = "";
+      try {
+        fragPass = decodeURIComponent(hash.slice(3));
+      } catch {
+        // Malformed percent-encoding — don't crash the page; fall through to
+        // the typed passphrase form with the fragment already stripped.
+      }
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      if (fragPass) void unlock(fragPass);
+    }
   }, []);
 
   return (
@@ -239,6 +260,11 @@ function Dashboard({ data }: { data: Aggregates }) {
         Anonymous counts only — no cookies, no tracking, no wallet data. Numbers are directional: ad
         blockers hide some visitors.
       </p>
+      {data.truncated && (
+        <p className="mt-1 text-xs text-amber-400">
+          Read budget hit — newest days are complete; the oldest rows may be partial, not missing.
+        </p>
+      )}
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {kpis.map(([label, value]) => (

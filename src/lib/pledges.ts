@@ -20,6 +20,10 @@ export interface Pledge {
   amount: string;
   /** ms epoch when the pledge was signed. */
   pledgedAt: number;
+  /** Chain head block when the pledge was recorded — redemption counts only
+   *  voluntary burns landing in LATER blocks. null = recorded before the
+   *  block gate existed; redemption then counts the all-time aggregate. */
+  block: number | null;
 }
 
 /** Anti-dust floor and absurdity ceiling, in whole tokens. */
@@ -68,4 +72,33 @@ export function pledgeRedeemed(
   const { num, den } = pledgeArrivalFactor(pledge.token);
   const pledgedWei = BigInt(pledge.amount) * 10n ** 18n;
   return burnedWei * den >= pledgedWei * num;
+}
+
+/**
+ * Voluntary-burn wei that counts toward a pledge: only legs that landed
+ * AFTER the pledge was recorded (block-gated). A wallet's older burns —
+ * including ones that predate the promise — never redeem it. Rows written
+ * before the block gate existed (block: null) fall back to the all-time
+ * aggregate; honest and documented, never invented.
+ */
+export function pledgeBurnWei(
+  row:
+    | {
+        voluntaryDumbWei: bigint;
+        voluntaryDampWei: bigint;
+        legs: { blockNumber: bigint; token: PledgeToken; wei: bigint }[];
+      }
+    | undefined,
+  pledge: Pick<Pledge, "token" | "block">,
+): bigint {
+  if (!row) return 0n;
+  if (pledge.block == null) {
+    return pledge.token === "DUMB" ? row.voluntaryDumbWei : row.voluntaryDampWei;
+  }
+  const cutoff = BigInt(pledge.block);
+  let sum = 0n;
+  for (const leg of row.legs) {
+    if (leg.token === pledge.token && leg.blockNumber > cutoff) sum += leg.wei;
+  }
+  return sum;
 }

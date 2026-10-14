@@ -3,6 +3,7 @@ import { ListOrdered, ShieldCheck, TriangleAlert } from "lucide-react";
 
 import { BurnBox } from "@/components/dumb/BurnBox";
 import { BurnCanvas } from "@/components/dumb/BurnCanvas";
+import { BurnersWall } from "@/components/dumb/BurnersWall";
 import { BurnLeaderboard } from "@/components/dumb/BurnLeaderboard";
 import { BurnMilestones } from "@/components/dumb/BurnMilestones";
 import { BurnTicker } from "@/components/dumb/BurnTicker";
@@ -42,7 +43,7 @@ function BurnPage() {
           PulseChain · mainnet · 369
         </p>
 
-        <div className="mt-8">
+        <div id="burn-box" className="mt-8 scroll-mt-24">
           <BurnBox />
         </div>
 
@@ -60,6 +61,10 @@ function BurnPage() {
 
         <div className="mt-8">
           <BurnTicker />
+        </div>
+
+        <div className="mt-8">
+          <BurnersWall />
         </div>
 
         <div className="mt-8">

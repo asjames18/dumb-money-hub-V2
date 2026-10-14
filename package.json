@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:money-math": "node --import ./scripts/test-alias-hook.mjs --test scripts/money-math.test.ts",
+    "test:tx-autopsy": "node --import ./scripts/test-alias-hook.mjs --test scripts/tx-autopsy.test.ts",
     "verify": "npm run typecheck && npm run lint",
     "format": "prettier --write ."
   },

@@ -16,10 +16,13 @@ import { Route as BurnRouteImport } from './routes/burn'
 import { Route as ChainsRouteImport } from './routes/chains'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as CultureRouteImport } from './routes/culture'
+import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as GenesisRouteImport } from './routes/genesis'
+import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as PlanRouteImport } from './routes/plan'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProofRouteImport } from './routes/proof'
 import { Route as RaidRouteImport } from './routes/raid'
@@ -68,6 +71,11 @@ const CultureRoute = CultureRouteImport.update({
   path: '/culture',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DirectoryRoute = DirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FeedbackRoute = FeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
@@ -78,6 +86,11 @@ const GenesisRoute = GenesisRouteImport.update({
   path: '/genesis',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JoinRoute = JoinRouteImport.update({
   id: '/join',
   path: '/join',
@@ -86,6 +99,11 @@ const JoinRoute = JoinRouteImport.update({
 const PlanRoute = PlanRouteImport.update({
   id: '/plan',
   path: '/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -157,10 +175,13 @@ export interface FileRoutesByFullPath {
   '/chains': typeof ChainsRoute
   '/compare': typeof CompareRoute
   '/culture': typeof CultureRoute
+  '/directory': typeof DirectoryRoute
   '/feedback': typeof FeedbackRoute
   '/genesis': typeof GenesisRoute
+  '/glossary': typeof GlossaryRoute
   '/join': typeof JoinRoute
   '/plan': typeof PlanRoute
+  '/portfolio': typeof PortfolioRoute
   '/privacy': typeof PrivacyRoute
   '/proof': typeof ProofRoute
   '/raid': typeof RaidRoute
@@ -182,10 +203,13 @@ export interface FileRoutesByTo {
   '/chains': typeof ChainsRoute
   '/compare': typeof CompareRoute
   '/culture': typeof CultureRoute
+  '/directory': typeof DirectoryRoute
   '/feedback': typeof FeedbackRoute
   '/genesis': typeof GenesisRoute
+  '/glossary': typeof GlossaryRoute
   '/join': typeof JoinRoute
   '/plan': typeof PlanRoute
+  '/portfolio': typeof PortfolioRoute
   '/privacy': typeof PrivacyRoute
   '/proof': typeof ProofRoute
   '/raid': typeof RaidRoute
@@ -208,10 +232,13 @@ export interface FileRoutesById {
   '/chains': typeof ChainsRoute
   '/compare': typeof CompareRoute
   '/culture': typeof CultureRoute
+  '/directory': typeof DirectoryRoute
   '/feedback': typeof FeedbackRoute
   '/genesis': typeof GenesisRoute
+  '/glossary': typeof GlossaryRoute
   '/join': typeof JoinRoute
   '/plan': typeof PlanRoute
+  '/portfolio': typeof PortfolioRoute
   '/privacy': typeof PrivacyRoute
   '/proof': typeof ProofRoute
   '/raid': typeof RaidRoute
@@ -235,10 +262,13 @@ export interface FileRouteTypes {
     | '/chains'
     | '/compare'
     | '/culture'
+    | '/directory'
     | '/feedback'
     | '/genesis'
+    | '/glossary'
     | '/join'
     | '/plan'
+    | '/portfolio'
     | '/privacy'
     | '/proof'
     | '/raid'
@@ -260,10 +290,13 @@ export interface FileRouteTypes {
     | '/chains'
     | '/compare'
     | '/culture'
+    | '/directory'
     | '/feedback'
     | '/genesis'
+    | '/glossary'
     | '/join'
     | '/plan'
+    | '/portfolio'
     | '/privacy'
     | '/proof'
     | '/raid'
@@ -285,10 +318,13 @@ export interface FileRouteTypes {
     | '/chains'
     | '/compare'
     | '/culture'
+    | '/directory'
     | '/feedback'
     | '/genesis'
+    | '/glossary'
     | '/join'
     | '/plan'
+    | '/portfolio'
     | '/privacy'
     | '/proof'
     | '/raid'
@@ -311,10 +347,13 @@ export interface RootRouteChildren {
   ChainsRoute: typeof ChainsRoute
   CompareRoute: typeof CompareRoute
   CultureRoute: typeof CultureRoute
+  DirectoryRoute: typeof DirectoryRoute
   FeedbackRoute: typeof FeedbackRoute
   GenesisRoute: typeof GenesisRoute
+  GlossaryRoute: typeof GlossaryRoute
   JoinRoute: typeof JoinRoute
   PlanRoute: typeof PlanRoute
+  PortfolioRoute: typeof PortfolioRoute
   PrivacyRoute: typeof PrivacyRoute
   ProofRoute: typeof ProofRoute
   RaidRoute: typeof RaidRoute
@@ -380,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CultureRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/directory': {
+      id: '/directory'
+      path: '/directory'
+      fullPath: '/directory'
+      preLoaderRoute: typeof DirectoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/feedback': {
       id: '/feedback'
       path: '/feedback'
@@ -394,6 +440,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GenesisRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/join': {
       id: '/join'
       path: '/join'
@@ -406,6 +459,13 @@ declare module '@tanstack/react-router' {
       path: '/plan'
       fullPath: '/plan'
       preLoaderRoute: typeof PlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -503,10 +563,13 @@ const rootRouteChildren: RootRouteChildren = {
   ChainsRoute: ChainsRoute,
   CompareRoute: CompareRoute,
   CultureRoute: CultureRoute,
+  DirectoryRoute: DirectoryRoute,
   FeedbackRoute: FeedbackRoute,
   GenesisRoute: GenesisRoute,
+  GlossaryRoute: GlossaryRoute,
   JoinRoute: JoinRoute,
   PlanRoute: PlanRoute,
+  PortfolioRoute: PortfolioRoute,
   PrivacyRoute: PrivacyRoute,
   ProofRoute: ProofRoute,
   RaidRoute: RaidRoute,

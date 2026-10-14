@@ -139,7 +139,12 @@ export async function handleUsernamePost(request: Request): Promise<Response> {
     if (!text || text.length > MAX_BODY_BYTES) {
       return json({ error: "bad request" }, 400);
     }
-    const body = JSON.parse(text) as UsernamePostBody;
+    let body: UsernamePostBody;
+    try {
+      body = JSON.parse(text) as UsernamePostBody;
+    } catch {
+      return json({ error: "invalid JSON" }, 400);
+    }
     const address = typeof body.address === "string" ? body.address : "";
     const signature = typeof body.signature === "string" ? body.signature : "";
     const timestamp = typeof body.timestamp === "number" ? body.timestamp : NaN;

@@ -5,12 +5,13 @@ import { BadgeCheck, HandCoins, Loader2 } from "lucide-react";
 
 import { pulsechain } from "@/lib/pulsechain";
 import { SITE_URL } from "@/lib/page-meta";
-import { fetchEpochBurns, fmtCompactTok } from "@/lib/burns";
+import { fetchEpochBurns, fmtCompactTok, type EpochBurnRow } from "@/lib/burns";
 import {
   buildPledgeMessage,
   isValidPledgeAmount,
   PLEDGE_MAX_TOKENS,
   PLEDGE_MIN_TOKENS,
+  pledgeBurnWei,
   pledgeRedeemed,
   type Pledge,
   type PledgeToken,
@@ -37,10 +38,8 @@ const pledgeShareXUrl = (p: Pledge, redeemed: boolean): string =>
 const pledgeShareTelegramUrl = (p: Pledge, redeemed: boolean): string =>
   `https://t.me/share/url?url=${encodeURIComponent(pledgeShareUrl())}&text=${encodeURIComponent(pledgeShareText(p, redeemed))}`;
 
-const burnedOf = (
-  row: { voluntaryDumbWei: bigint; voluntaryDampWei: bigint } | undefined,
-  token: PledgeToken,
-): bigint => (row ? (token === "DUMB" ? row.voluntaryDumbWei : row.voluntaryDampWei) : 0n);
+const burnedOf = (row: EpochBurnRow | undefined, pledge: Pick<Pledge, "token" | "block">): bigint =>
+  pledgeBurnWei(row, pledge);
 
 function pledgeDate(ts: number): string {
   return new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric" });
@@ -146,7 +145,7 @@ export function PledgeCard() {
   const myAddr = address?.toLowerCase();
   const myPledge = myAddr ? pledges.find((p) => p.address === myAddr) : undefined;
   const myRedeemed = myPledge
-    ? pledgeRedeemed(myPledge, burnedOf(burnsByAddr.get(myPledge.address), myPledge.token))
+    ? pledgeRedeemed(myPledge, burnedOf(burnsByAddr.get(myPledge.address), myPledge))
     : false;
 
   return (
@@ -164,9 +163,9 @@ export function PledgeCard() {
       <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
         Pledge publicly to burn DUMB or DAMP within 30 days — sign one message, no gas, nothing
         moves. Your row turns <span className="font-semibold text-foreground">burned ✓</span> only
-        when your verified on-chain voluntary burns cover the pledge. A pledge is a promise, not a
-        burn — pledges expire after 30 days, and only real burns count. Burning shrinks supply; it
-        never promises price.
+        when your verified on-chain voluntary burns made after your pledge cover it — burns from
+        before the pledge don&apos;t count. A pledge is a promise, not a burn — pledges expire after
+        30 days, and only real burns count. Burning shrinks supply; it never promises price.
       </p>
 
       {address ? (
@@ -294,8 +293,8 @@ export function PledgeCard() {
           <ul className="mt-3 space-y-2">
             {pledges.map((p) => {
               const row = burnsByAddr.get(p.address);
-              const redeemed = pledgeRedeemed(p, burnedOf(row, p.token));
-              const burnedWei = burnedOf(row, p.token);
+              const burnedWei = burnedOf(row, p);
+              const redeemed = pledgeRedeemed(p, burnedWei);
               return (
                 <li
                   key={`${p.address}-${p.pledgedAt}`}
@@ -317,7 +316,8 @@ export function PledgeCard() {
                   {redeemed ? (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-sm font-semibold text-primary">
                       <BadgeCheck className="size-4" />
-                      burned ✓ — {fmtCompactTok(burnedWei)} {p.token} verified on-chain
+                      burned ✓ — {fmtCompactTok(burnedWei)} {p.token}{" "}
+                      {p.block == null ? "burned" : "burned since pledge"}, verified on-chain
                     </span>
                   ) : (
                     <span className="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground">

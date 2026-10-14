@@ -29,6 +29,19 @@ pushes on its own risks clobbering another session's work mid-flight; on
 dropping six parked BULLISH-RESEARCH.md entries from the worktree (recovered
 from local history, no data lost).
 
+**BUILD_LOOP.md run-log appends (lesson 2026-10-05):** the live run log is the
+newest-first list at the very top of the file — new entries are PREPENDED at
+line 1. The `## Run log` headers deeper in the file are legacy sections; never
+target them with a text-edit anchor — a 06:03 run matched one inside old
+narrative text and embedded its entry mid-file (same misfire class the 09:33
+2026-10-04 run repaired). Always use an assertion-guarded line-based insert and
+verify with `git diff` that the change is exactly the intended addition before
+committing. Sharpener (2026-10-08 23:56 run — caught and reverted pre-commit):
+GNU sed `1r file` inserts the file AFTER line 1, not before it — using it splits
+the previous entry (header stays at line 1, its continuation drops below the
+new entry). For a line-1 prepend, `cat entryfile BUILD_LOOP.md > tmp && mv tmp BUILD_LOOP.md`
+instead, then assert line 1 is the new entry AND the previous entry's header line is intact.
+
 ## Project notes
 
 - PulseChain-only. This site IS the live Dumb Money (DUMB) token on PulseChain:
@@ -69,6 +82,15 @@ from local history, no data lost).
   badge added above the swap box and the wallet holdings. Swap box net-of-tax quotes (0.94/0.97)
   verified present — no change needed. No external "Trade on PulseX" deep link exists in the
   codebase (only DEXScreener pair links, which are correct) — audit P1 already moot.
+- Transfer-log topic0 on PulseChain is the TEXTBOOK keccak256("Transfer(address,address,uint256)")
+  = `...523b3ef` (verified computationally 2026-10-10 with test-vector-validated keccak across two
+  independent implementations, and against live receipts on DUMB, DAMP, HEX, INC, PRVX, PLSX).
+  The old `...288b6e9` value was a MISRECORDED hash that never appears on-chain — filtering on it
+  silently matched ZERO rows, which is how the burn leaderboard went empty (fixed 2026-10-05; only
+  the "non-textbook" framing was wrong, the fix itself was real). `src/lib/burns.ts` exports the
+  verified `TRANSFER_TOPIC0`, `addrTopic()`, `decodeTransferLog()` and `rpcGetLogs()`;
+  `src/routes/api/brag-image.ts` computes the topic at runtime via keccak256 (never hand-typed).
+  Any new Transfer-log reader must use these — never hand-type a topic0 constant.
 - Custom domain LIVE: dumbmoneypulse.melanatedintech.com (attached 2026-09-26).
 - /trade points at the LIVE pairs (DEXScreener links), never an in-hub market
   maker. After-tax warning: DEX quotes show pre-tax prices.

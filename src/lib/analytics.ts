@@ -25,6 +25,8 @@ export type AnalyticsEvent =
   | "raid_play"
   | "rating_submitted"
   | "brag_share"
+  | "rally_open"
+  | "rally_burn"
   | "err_quote"
   | "err_tx"
   | "err_scan";

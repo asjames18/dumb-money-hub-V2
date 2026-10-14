@@ -18,6 +18,7 @@ const PRIMARY_NAV = [
   { to: "/trade", label: "Trade" },
   { to: "/burn", label: "Burn" },
   { to: "/scan", label: "Scan" },
+  { to: "/portfolio", label: "Portfolio" },
   { to: "/wallet", label: "Wallet" },
 ];
 
@@ -25,6 +26,7 @@ const PRIMARY_NAV = [
 const MORE_NAV = [
   { to: "/story", label: "Story" },
   { to: "/proof", label: "Proof" },
+  { to: "/directory", label: "Directory" },
   { to: "/genesis", label: "Genesis" },
   { to: "/roots", label: "Dashboard" },
   { to: "/raid", label: "Raid" },
@@ -144,6 +146,12 @@ export function PageShell({ children }: { children: React.ReactNode }) {
               Read the whitepaper
             </Link>
             <Link
+              to="/glossary"
+              className="font-display uppercase tracking-wide text-foreground hover:text-pink"
+            >
+              Safety glossary
+            </Link>
+            <Link
               to="/feedback"
               className="font-display uppercase tracking-wide text-foreground hover:text-pink"
             >
@@ -164,6 +172,17 @@ export function PageShell({ children }: { children: React.ReactNode }) {
           </p>
           <p className="mt-3">
             Anonymous visit counts only — no cookies, no tracking, no wallet data.
+          </p>
+          <p className="mt-4 text-center">
+            Built by{" "}
+            <a
+              href="https://melanatedintech.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-gold underline underline-offset-2"
+            >
+              Melanated in Tech
+            </a>
           </p>
         </div>
       </footer>

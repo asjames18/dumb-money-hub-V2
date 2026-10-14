@@ -6,6 +6,7 @@ import { Disclaimer } from "@/components/dumb/Disclaimer";
 import { PageShell } from "@/components/dumb/PageShell";
 import { TokenScanner } from "@/components/dumb/TokenScanner";
 import { BagScan } from "@/components/dumb/BagScan";
+import { ScamDmDecoder } from "@/components/dumb/ScamDmDecoder";
 import { ScanWatchlist } from "@/components/dumb/ScanWatchlist";
 import { ScanActivity } from "@/components/dumb/ScanActivity";
 import { TxExplainer } from "@/components/dumb/TxExplainer";
@@ -13,7 +14,7 @@ import { pageMeta, shareSymbolFor, SITE_URL } from "@/lib/page-meta";
 
 const TITLE = "Token Safety Scanner — Dumb Money Hub";
 const DESCRIPTION =
-  "Paste any PulseChain token address for a free read-only safety scan: taxes, owner powers, pause switches, and liquidity lock state — in plain English. Or paste any transaction hash to see what actually happened. No wallet needed.";
+  "Paste any PulseChain token address for a free read-only safety scan: taxes, owner powers, pause switches, and liquidity lock state — in plain English. Or paste any transaction hash to see what actually happened. Or paste a suspicious DM and get a plain-English red-flag breakdown. No wallet needed.";
 
 export const Route = createFileRoute("/scan")({
   // Shareable report links: /scan?token=0x… re-runs the quick scan live on-chain
@@ -58,14 +59,23 @@ export const Route = createFileRoute("/scan")({
 
 function ScanPage() {
   const { token, burn, tx } = Route.useSearch();
-  const [tab, setTab] = useState<"token" | "tx">(() => (tx ? "tx" : "token"));
+  const navigate = Route.useNavigate();
+  const [tab, setTab] = useState<"token" | "tx" | "decoder">(() => (tx ? "tx" : "token"));
   // Shared report links (?tx=, ?token=/&burn=) followed while already on /scan
   // change search params without remounting — retarget the tab so the linked
   // tool actually opens and re-runs. (Fresh page loads initialize the tab above.)
+  // Entering the decoder tab clears search params so a stale ?token= can't yank
+  // the tab back; decoder deep-links (?token=) then retarget to "token" cleanly.
   useEffect(() => {
     if (tx && tab !== "tx") setTab("tx");
     else if ((token || burn) && tab !== "token") setTab("token");
   }, [token, burn, tx, tab]);
+
+  const selectTab = (id: "token" | "tx" | "decoder") => {
+    if (id === "decoder")
+      void navigate({ search: { token: undefined, burn: undefined, tx: undefined } });
+    setTab(id);
+  };
   return (
     <PageShell>
       <main className="mx-auto max-w-4xl px-4 py-12 sm:py-16">
@@ -91,11 +101,12 @@ function ScanPage() {
               [
                 { id: "token", label: "Scan a token" },
                 { id: "tx", label: "Explain a transaction" },
+                { id: "decoder", label: "Decode a scam DM" },
               ] as const
             ).map((t) => (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => selectTab(t.id)}
                 className={`rounded px-4 py-1.5 font-display text-xs uppercase tracking-[0.2em] ${
                   tab === t.id
                     ? "bg-primary text-primary-foreground"
@@ -106,7 +117,9 @@ function ScanPage() {
               </button>
             ))}
           </div>
-          {tab === "token" ? (
+          {tab === "decoder" ? (
+            <ScamDmDecoder />
+          ) : tab === "token" ? (
             <TokenScanner shareToken={token} shareBurn={burn} />
           ) : (
             <TxExplainer shareTx={tx} />

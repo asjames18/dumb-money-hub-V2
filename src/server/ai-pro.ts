@@ -119,6 +119,37 @@ export function isAddress(v: string): boolean {
   return HEX40.test(v.trim());
 }
 
+/** FNV-1a — just a rate-limit bucket key, not security. Never log the raw IP. */
+function hashIp(ip: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < ip.length; i++) {
+    h ^= ip.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
+
+function dayKey(d = new Date()): string {
+  return d.toISOString().slice(0, 10);
+}
+
+// Activation is the heaviest endpoint in the worker (signature verify, RPC
+// tx+receipt fetches with retries, two price feeds, a block-anchored
+// eth_call). Cap attempts per IP per day BEFORE the signature check —
+// same 10/day shape as the username registry and the pledge board — so
+// generated wallets can't flood it with garbage hashes and burn worker
+// subrequests/CPU for everyone else.
+const PRO_ACTIVATE_DAILY_CAP_PER_IP = 10;
+
+async function checkRateLimit(kv: AiKV, request: Request): Promise<boolean> {
+  const ip = request.headers.get("cf-connecting-ip") ?? "unknown";
+  const key = `aipro:rl:${dayKey()}:${hashIp(ip)}`;
+  const count = (Number.parseInt((await kv.get(key)) ?? "0", 10) || 0) + 1;
+  if (count > PRO_ACTIVATE_DAILY_CAP_PER_IP) return false;
+  await kv.put(key, String(count), { expirationTtl: 2 * 24 * 3600 });
+  return true;
+}
+
 /** The configured model wallet, or null when Antonio hasn't set it yet. */
 export function getModelWallet(env: AiProEnv): string | null {
   const w = env.AI_MODEL_WALLET?.trim() ?? "";
@@ -579,6 +610,22 @@ export async function handleAiProActivate(request: Request): Promise<Response> {
 
   // The signature must name this address AND both tx hashes — otherwise
   // anyone could replay someone else's transfers for their own Pro.
+  // The grant store (KV) is fetched BEFORE the signature check so the
+  // rate-limit bucket below runs first, matching the username registry
+  // and pledge board ordering.
+  const env = getEnv(request);
+  const kv = env.ANALYTICS_KV;
+  if (!kv) return json({ ok: false, reason: "Pro activation is unavailable right now." }, 503);
+  let allowed = false;
+  try {
+    allowed = await checkRateLimit(kv, request);
+  } catch {
+    return json({ ok: false, reason: "Pro activation is unavailable right now." }, 503);
+  }
+  if (!allowed) {
+    return json({ ok: false, reason: "Too many activation attempts — try again tomorrow." }, 429);
+  }
+
   let sigOk = false;
   try {
     sigOk = await verifyMessage({
@@ -599,9 +646,6 @@ export async function handleAiProActivate(request: Request): Promise<Response> {
     );
   }
 
-  const env = getEnv(request);
-  const kv = env.ANALYTICS_KV;
-  if (!kv) return json({ ok: false, reason: "Pro activation is unavailable right now." }, 503);
   const modelWallet = getModelWallet(env);
   if (!modelWallet) {
     return json(
@@ -690,8 +734,13 @@ export async function handleAiProActivate(request: Request): Promise<Response> {
       }),
       { expirationTtl: ttl },
     );
-    await kv.put(burnKey, address.toLowerCase(), { expirationTtl: ttl });
-    await kv.put(modelKey, address.toLowerCase(), { expirationTtl: ttl });
+    // Replay markers NEVER expire (no expirationTtl): each tx hash
+    // activates Pro exactly once, ever. The grant above carries the
+    // 30-day expiry; the markers must outlive it, otherwise the same
+    // burn+model pair could re-activate for free once the markers aged
+    // out. Markers are tiny and write-once — safe to keep forever.
+    await kv.put(burnKey, address.toLowerCase());
+    await kv.put(modelKey, address.toLowerCase());
   } catch {
     return json({ ok: false, reason: "Couldn't write the Pro grant — try again." }, 503);
   }

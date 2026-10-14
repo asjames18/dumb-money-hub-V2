@@ -308,6 +308,17 @@ export function TokenScanner({
             double-check the contract on the explorer yourself before you ape.
           </p>
 
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            Don't recognize a term in the report?{" "}
+            <Link
+              to="/glossary"
+              className="font-bold text-primary underline decoration-dotted underline-offset-2"
+            >
+              Read the safety glossary
+            </Link>{" "}
+            — every term above, defined in plain English.
+          </p>
+
           {(result.address.toLowerCase() === DUMB.toLowerCase() ||
             result.address.toLowerCase() === DAMP.toLowerCase()) &&
             redFlags === 0 && (
@@ -1125,12 +1136,36 @@ function DeepScanPanel({
               {error}
             </p>
           )}
+          {/* On-chain failure only (never for wallet-level errors): point at the
+              /scan tx-tab diagnosis the 08:33 ship added — the evidence-backed
+              "why it reverted" instead of hammering "Try again" blind. Completes
+              the 09:13 pattern (SwapBox + BurnBox got this; the deep-scan
+              pass-burn failure panel is the third money surface). */}
+          {((burnReverted && burnHash) || (swapReverted && swapHash)) && (
+            <p className="mt-2 text-sm">
+              <Link
+                to="/scan"
+                search={{
+                  token: undefined,
+                  burn: undefined,
+                  tx: burnReverted ? burnHash : swapHash,
+                }}
+                className="underline decoration-pink underline-offset-2 hover:text-pink"
+                title="The hub replays the failed transaction on-chain and names the cause in plain English — out of gas, an expired deadline, or the contract's own revert reason. Never a guess, never a retry nudge."
+              >
+                Why did it fail?
+              </Link>
+            </p>
+          )}
         </>
       )}
 
       {deep && (
         <div className="mt-3">
-          <p className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 font-display text-xs uppercase tracking-[0.2em] text-primary">
+          <p
+            role="status"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 font-display text-xs uppercase tracking-[0.2em] text-primary"
+          >
             <ShieldCheck className="size-4" aria-hidden /> Deep scan complete — burn verified
           </p>
           <CheckRows checks={deep.checks} />
@@ -1171,6 +1206,23 @@ function DeepScanPanel({
                 txHash={verifiedBurn.hash}
                 shareText={bragText}
               />
+              {/* Success-side counterpart of the BurnBox "Explain this burn"
+                  (10:43): the deep-scan pass burn — direct 100k DUMB or the PLS
+                  router-swap fallback — lands here with no decode. The 08:33
+                  tx-explainer already breaks any tx into plain English,
+                  including the PLS-paid leg the inline receipt decode doesn't
+                  show. Completes the success-side pattern on the third money
+                  surface; the hash is the user's own verified burn. */}
+              <p className="mt-2 text-xs">
+                <Link
+                  to="/scan"
+                  search={{ token: undefined, burn: undefined, tx: verifiedBurn.hash }}
+                  className="font-bold text-primary hover:underline"
+                  title="Plain-English breakdown: what you paid, what the transfer tax cost, and what actually landed at the dead address. Never a guess."
+                >
+                  Explain this burn
+                </Link>
+              </p>
               <p className="mt-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
                 Or text-only
               </p>
@@ -1207,6 +1259,17 @@ function DeepScanPanel({
             Honest limits: the simulation applies the tax the contract <em>claims</em>. If the
             contract takes more than it claims — or blocks sells for fresh wallets — real trades
             cost more than this says. A clean deep scan is a good sign, not a safety certificate.
+          </p>
+
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            Don't recognize a term in the report?{" "}
+            <Link
+              to="/glossary"
+              className="font-bold text-primary underline decoration-dotted underline-offset-2"
+            >
+              Read the safety glossary
+            </Link>{" "}
+            — every term above, defined in plain English.
           </p>
         </div>
       )}

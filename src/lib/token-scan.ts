@@ -221,42 +221,100 @@ function slotToAddress(slot: string | null | undefined): string | null {
  * that launches clean, then the team upgrades the implementation behind it
  * into a honeypot. Read-only storage reads — no wallet, no signing.
  */
-async function checkUpgradeability(address: `0x${string}`): Promise<ScanCheck> {
-  const mk = (status: ScanStatus, detail: string) =>
-    check("proxy", "Upgradeability", status, detail);
+/**
+ * Find the block a contract was deployed in: binary search on eth_getCode
+ * (read-only — the chain answers when code first appeared at the address).
+ * ~25 sequential reads on a 29M-block chain; each goes through tryRead so RPC
+ * flakes degrade to "unknown" instead of a wrong answer. Returns null when the
+ * RPC won't give a clean answer.
+ */
+async function findDeployBlock(address: `0x${string}`): Promise<bigint | null> {
+  const latest = await tryRead(() => scanClient.getBlockNumber());
+  if (latest === null) return null;
+  // Check 1 already verified code exists at the latest block — search for the
+  // first block where it appears.
+  let lo = 0n;
+  let hi = latest;
+  while (lo < hi) {
+    const mid = (lo + hi) / 2n;
+    const code = await tryRead(() => scanClient.getBytecode({ address, blockNumber: mid }));
+    if (code === null) return null;
+    if (code === "0x" || code === undefined) lo = mid + 1n;
+    else hi = mid;
+  }
+  return lo;
+}
+
+/** Human "how long ago" for a unix-seconds timestamp — coarse on purpose, so
+ *  shared links that re-run live never show a falsely precise number. */
+function relAge(tsSeconds: bigint): string {
+  const days = Math.floor(Math.max(0, Date.now() / 1000 - Number(tsSeconds)) / 86400);
+  if (days < 1) {
+    const hours = Math.floor((Date.now() / 1000 - Number(tsSeconds)) / 3600);
+    return hours <= 1 ? "about an hour" : `about ${hours} hours`;
+  }
+  if (days < 60) return days === 1 ? "about a day" : `about ${days} days`;
+  const months = Math.floor(days / 30.44);
+  if (months < 24) return months === 1 ? "about a month" : `about ${months} months`;
+  const years = Math.floor(months / 12);
+  return years === 1 ? "about a year" : `about ${years} years`;
+}
+
+/**
+ * Upgradeability probe. Returns the verdict check plus whether the address is
+ * (or claims to be) an upgradeable proxy — the age check below uses that to
+ * say whose age it found.
+ */
+async function checkUpgradeability(
+  address: `0x${string}`,
+): Promise<{ check: ScanCheck; isProxy: boolean }> {
+  const mk = (
+    status: ScanStatus,
+    detail: string,
+    isProxy: boolean,
+  ): { check: ScanCheck; isProxy: boolean } => ({
+    check: check("proxy", "Upgradeability", status, detail),
+    isProxy,
+  });
   const implSlot = await tryRead(() => scanClient.getStorageAt({ address, slot: EIP1967_IMPL }));
   if (implSlot === null)
     return mk(
       "unknown",
       "The RPC didn't answer the proxy check — upgradeability couldn't be verified. Treat as unknown, not fine.",
+      false,
     );
   const impl = slotToAddress(implSlot);
   if (!impl)
     return mk(
       "pass",
       "No standard upgrade slot found — the token isn't an EIP-1967 upgradeable proxy, so its code can't be swapped out from under you. (Non-standard proxy layouts can hide elsewhere — that's what the deep scan and your own explorer check are for.)",
+      false,
     );
   const implCode = await tryRead(() => scanClient.getBytecode({ address: impl as `0x${string}` }));
   if (implCode === "0x" || implCode === undefined)
     return mk(
       "unknown",
       "The upgrade slot points at an address with no contract code — this may be a custom or stale proxy layout the scan can't read. Treat as risky.",
+      true,
     );
   const adminSlot = await tryRead(() => scanClient.getStorageAt({ address, slot: EIP1967_ADMIN }));
   if (adminSlot === null)
     return mk(
       "warn",
       `This is an upgradeable proxy (implementation ${impl.slice(0, 6)}…${impl.slice(-4)}), but the RPC wouldn't reveal who holds the upgrade key. A live upgrade key can replace the token's code entirely — treat it as risky until you verify the admin on the explorer.`,
+      true,
     );
   const admin = slotToAddress(adminSlot);
   if (!admin || admin.toLowerCase() === DEAD.toLowerCase())
     return mk(
       "pass",
       "This is an upgradeable proxy, but the upgrade key is renounced (admin is the zero/dead address) — the code can't be swapped out from under you.",
+      true,
     );
   return mk(
     "warn",
     `This is an upgradeable proxy (implementation ${impl.slice(0, 6)}…${impl.slice(-4)}) with a LIVE upgrade key (${admin.slice(0, 6)}…${admin.slice(-4)}). Whoever holds it can replace the token's code entirely — a clean token today can become a honeypot tomorrow. Many legitimate tokens use proxies, but a live upgrade key is a real rug vector: check who controls it before buying.`,
+    true,
   );
 }
 
@@ -343,12 +401,23 @@ const check = (id: string, label: string, status: ScanStatus, detail: string): S
 });
 
 /**
- * Read-only sell probe: simulates transfer() of `amount` from `holder` via
- * eth_call. No state changes, no wallet, no signing — the node just answers
- * whether the transfer would succeed. Returns "ok" when it would succeed,
- * "reverted" when the contract itself rejects it (the honeypot shape), and
- * "unknown" when the RPC won't give a clean answer (never a pass).
+ * Read-only sell probe: simulates transfer() of `amount` from `holder` to an
+ * ordinary wallet via eth_call. No state changes, no wallet, no signing — the
+ * node just answers whether the transfer would succeed. Returns "ok" when it
+ * would succeed, "reverted" when the contract itself rejects it (the honeypot
+ * shape), and "unknown" when the RPC won't give a clean answer (never a pass).
+ *
+ * The recipient is a deterministic empty address (keccak-derived, nobody owns
+ * it) — an ordinary-wallet-shaped recipient. The probe previously transferred
+ * to DEAD, but the pass copy claims "sells aren't blocked at the transfer
+ * level": DEAD is not a sell-shaped recipient — a honeypot can allow
+ * holder→dead while blocking holder→wallet/pair (false pass), and
+ * burn-special transfer logic can false-fail on legitimate tokens. An ordinary
+ * wallet is what the claim actually tests.
  */
+const SCAN_PROBE_RECIPIENT =
+  `0x${keccak256(stringToHex("dumbmoney-scan-probe")).slice(2, 42)}` as `0x${string}`;
+
 async function simulateSellFrom(
   token: `0x${string}`,
   holder: `0x${string}`,
@@ -357,7 +426,7 @@ async function simulateSellFrom(
   const data = encodeFunctionData({
     abi: erc20Abi,
     functionName: "transfer",
-    args: [DEAD, amount],
+    args: [SCAN_PROBE_RECIPIENT, amount],
   });
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
@@ -2290,7 +2359,55 @@ export async function quickScan(address: `0x${string}`): Promise<QuickScanResult
   }
 
   // 7. Upgradeability: can someone swap the token's code later?
-  checks.push(await checkUpgradeability(address));
+  const proxyResult = await checkUpgradeability(address);
+  checks.push(proxyResult.check);
+
+  // 7b. Contract age: when was this contract deployed? The first question
+  // almost every buyer asks — answered live on-chain, never guessed. Age is
+  // context, not a verdict, so it sits as an informational pass, never a
+  // flag; the hedge says so out loud.
+  const deployBlock = await findDeployBlock(address);
+  if (deployBlock === null) {
+    checks.push(
+      check(
+        "age",
+        "Contract age",
+        "unknown",
+        "The RPC wouldn't answer the deployment-block search — the contract's age couldn't be verified. Treat unknown as risky, not fine.",
+      ),
+    );
+  } else {
+    const deployHeader = await tryRead(() => scanClient.getBlock({ blockNumber: deployBlock }));
+    const deployTs = deployHeader?.timestamp;
+    if (typeof deployTs !== "bigint") {
+      checks.push(
+        check(
+          "age",
+          "Contract age",
+          "unknown",
+          `Found the deployment block (${deployBlock.toLocaleString("en-US")}) but the RPC wouldn't return its timestamp — age unknown, treat as risky.`,
+        ),
+      );
+    } else {
+      const monthYear = new Date(Number(deployTs) * 1000).toLocaleString("en-US", {
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      });
+      checks.push(
+        check(
+          "age",
+          "Contract age",
+          "pass",
+          `Deployed ${monthYear} (block ${deployBlock.toLocaleString("en-US")}) — ${relAge(deployTs)} old.` +
+            (proxyResult.isProxy
+              ? " For an upgradeable proxy this is the proxy contract's age — the code it runs can still be swapped (see above)."
+              : "") +
+            " Age is context, not a verdict: a fresh contract isn't automatically a scam, and an old one isn't automatically safe — the tax, owner-power, and sell checks above matter more.",
+        ),
+      );
+    }
+  }
 
   // 8. Liquidity: token/WPLS pair on PulseX + how much LP is burned.
   // Honesty rule: the scan can ONLY see LP burned to the dead address — it
@@ -2390,7 +2507,7 @@ export async function quickScan(address: `0x${string}`): Promise<QuickScanResult
             "sell-sim",
             "Sell simulation",
             "pass",
-            "A simulated transfer out of a real holder's balance completed — sells aren't blocked at the transfer level. (A token can still block sells on the DEX specifically — that's what the burn-gated deep scan tests.)",
+            "A simulated transfer from a real holder's balance to an ordinary wallet completed — sells aren't blocked at the transfer level. (A token can still block sells on the DEX specifically — that's what the burn-gated deep scan tests.)",
           ),
         );
       } else if (sim === "reverted") {

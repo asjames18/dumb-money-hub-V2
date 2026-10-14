@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { usePublicClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 import { Paintbrush } from "lucide-react";
 
 import { explorerAddress, pulsechain } from "@/lib/pulsechain";
@@ -28,6 +28,7 @@ const amountOf = (
  */
 export function BurnCanvas() {
   const client = usePublicClient({ chainId: pulsechain.id });
+  const { address: connected } = useAccount();
   const [tab, setTab] = useState<"DUMB" | "DAMP">("DUMB");
 
   const { data, isLoading, isError } = useQuery({
@@ -64,6 +65,13 @@ export function BurnCanvas() {
     }
     return { maxWei: max, totalWei: total };
   }, [rows, tab]);
+
+  // The connected wallet's own row in the same verified epoch scan — no second
+  // chain read. Rows are keyed by lowercased address, so normalize the match.
+  const mine = useMemo(() => {
+    if (!connected || !data) return undefined;
+    return data.find((r) => r.address === connected.toLowerCase()) ?? null;
+  }, [data, connected]);
 
   const brightness = (wei: bigint): number => {
     if (maxWei <= 0n) return 0;
@@ -108,6 +116,38 @@ export function BurnCanvas() {
         — the same verified on-chain reads as the leaderboard, painted. Brighter tiles burned more.
         Nobody is invented here: a blank canvas means nobody has burned {tab} yet, honestly.
       </p>
+
+      {connected && !isLoading && !isError && mine !== undefined && (
+        <div className="mt-3 rounded-lg border border-border bg-secondary/40 px-3 py-2 text-sm">
+          {mine ? (
+            <p>
+              <span className="font-bold text-foreground">Your tiles: </span>
+              {mine.voluntaryDumbWei > 0n && <>{fmtCompactTok(mine.voluntaryDumbWei)} DUMB</>}
+              {mine.voluntaryDumbWei > 0n && mine.voluntaryDampWei > 0n && " + "}
+              {mine.voluntaryDampWei > 0n && <>{fmtCompactTok(mine.voluntaryDampWei)} DAMP</>}{" "}
+              burned straight to dead in {mine.txs} transaction{mine.txs === 1 ? "" : "s"} since
+              Sept 21 —{" "}
+              <a
+                href={explorerAddress(connected)}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+              >
+                see them on the explorer
+              </a>
+              .
+            </p>
+          ) : (
+            <p className="text-muted-foreground">
+              No voluntary burns from this wallet on record yet —{" "}
+              <a href="#burn-box" className="underline underline-offset-2">
+                burn
+              </a>{" "}
+              and your tile lights up here.
+            </p>
+          )}
+        </div>
+      )}
 
       {isError && (
         <p className="mt-4 text-sm text-muted-foreground">

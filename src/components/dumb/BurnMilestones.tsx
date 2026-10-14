@@ -6,22 +6,22 @@ import { SITE_URL } from "@/lib/page-meta";
 import { fetchRootEngines } from "@/lib/proof/fetch-roots";
 import { NativeShareButton } from "./NativeShareButton";
 
-const MILESTONES = [16_000_000_000, 17_000_000_000, 18_000_000_000];
-const BAR_MIN = 15_000_000_000;
-const BAR_MAX = 18_000_000_000;
+const MILESTONES = [20_000_000_000, 21_000_000_000, 22_000_000_000];
+const BAR_MIN = 19_000_000_000;
+const BAR_MAX = 22_000_000_000;
 
 const fmtB = (n: number) =>
   n >= 1_000_000_000 ? `${(n / 1_000_000_000).toFixed(2)}B` : `${Math.round(n / 1_000_000)}M`;
 
 /** The next unhit milestone, or null once all three are crushed. */
-const nextMilestone = (burned: number): number | null => MILESTONES.find((m) => burned < m) ?? null;
+const nextMilestone = (gone: number): number | null => MILESTONES.find((m) => gone < m) ?? null;
 
 const milestoneShareUrl = (): string => `${SITE_URL}/burn`;
 
-const milestoneShareText = (burned: number, next: number | null): string =>
+const milestoneShareText = (gone: number, next: number | null): string =>
   next === null
-    ? `DUMB crushed the 16B / 17B / 18B burn milestones: ${fmtB(burned)} burned so far. 1% of every taxed transfer burns. Verified on-chain.`
-    : `DUMB burn update: ${fmtB(burned)} burned — the ${fmtB(next)} milestone is next. 1% of every taxed transfer burns. Verified on-chain.`;
+    ? `DUMB crushed the ${MILESTONES.map(fmtB).join(" / ")} burn milestones: ${fmtB(gone)} gone for good. 5% of every taxed transfer is destroyed. Verified on-chain.`
+    : `DUMB burn update: ${fmtB(gone)} gone for good — the ${fmtB(next)} milestone is next. 5% of every taxed transfer is destroyed. Verified on-chain.`;
 
 const milestoneShareXUrl = (text: string): string =>
   `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(milestoneShareUrl())}`;
@@ -30,10 +30,14 @@ const milestoneShareTelegramUrl = (text: string): string =>
   `https://t.me/share/url?url=${encodeURIComponent(milestoneShareUrl())}&text=${encodeURIComponent(text)}`;
 
 /**
- * Burn milestones strip — frontend-only, reads the same dead-address balance
- * the /roots tracker uses (shared react-query cache). Celebratory but honest:
- * most of this was the 14B launch-day burn, and the 1% protocol burn on every
- * taxed transfer keeps it growing — every trade pushes the next milestone.
+ * Burn milestones strip — frontend-only, reads the same /roots engine data
+ * the tracker uses (shared react-query cache): the dead-address burns PLUS
+ * the tax buckets entombed in the token contract. Antonio 2026-10-02: the
+ * milestone tracks the true "gone for good" total (dead + locked), not the
+ * dead address alone. Celebratory but honest: most of this was the 14B
+ * launch-day burn, and the live tax keeps it growing — every taxed transfer
+ * destroys 5% for good (1% to the dead address, 4% entombed in the contract),
+ * so every trade pushes the total higher.
  */
 export function BurnMilestones() {
   const { data } = useQuery({
@@ -45,14 +49,18 @@ export function BurnMilestones() {
     retry: 1,
   });
 
-  const burned = data ? Number(data[0].burned) / 1e18 : null;
+  // The milestone tracks "gone for good": dead-address burns plus the tax
+  // buckets entombed in the token contract — both live in the shared engine
+  // read, so this adds zero RPC calls.
+  const engine = data ? data[0] : null;
+  const gone = engine ? (Number(engine.burned) + Number(engine.dormant)) / 1e18 : null;
+  const burned = engine ? Number(engine.burned) / 1e18 : null;
+  const dormant = engine ? Number(engine.dormant) / 1e18 : null;
   const pct =
-    burned === null
-      ? 0
-      : Math.min(100, Math.max(0, ((burned - BAR_MIN) / (BAR_MAX - BAR_MIN)) * 100));
+    gone === null ? 0 : Math.min(100, Math.max(0, ((gone - BAR_MIN) / (BAR_MAX - BAR_MIN)) * 100));
   // The share row only renders on a live number — never a loading or error state.
-  const next = burned === null ? null : nextMilestone(burned);
-  const shareText = burned === null ? null : milestoneShareText(burned, next);
+  const next = gone === null ? null : nextMilestone(gone);
+  const shareText = gone === null ? null : milestoneShareText(gone, next);
 
   return (
     <section
@@ -64,15 +72,27 @@ export function BurnMilestones() {
       </p>
       <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="font-display text-2xl uppercase tracking-wide sm:text-3xl">
-          {burned === null ? "Loading…" : `${fmtB(burned)} DUMB burned`}
+          {gone === null ? "Loading…" : `${fmtB(gone)} DUMB gone for good`}
         </h2>
         <p className="text-xs text-muted-foreground">verified on-chain</p>
       </div>
+      {gone !== null && burned !== null && dormant !== null && (
+        <p className="mt-1 text-xs text-muted-foreground">
+          {fmtB(burned)} burned to the dead address · {fmtB(dormant)} locked in the contract — both
+          can never move
+        </p>
+      )}
 
       <div
         className="relative mt-4 h-3 rounded-full bg-secondary"
         role="img"
-        aria-label={burned === null ? "Burn progress loading" : `${fmtB(burned)} of 18B milestone`}
+        aria-label={
+          gone === null
+            ? "Burn progress loading"
+            : next === null
+              ? `${fmtB(gone)} gone for good — all milestones crushed`
+              : `${fmtB(gone)} gone for good — next milestone ${fmtB(next)}`
+        }
       >
         <div
           className="h-full rounded-full bg-gradient-to-r from-gold/70 to-gold transition-all"
@@ -80,7 +100,7 @@ export function BurnMilestones() {
         />
         {MILESTONES.map((m) => {
           const left = ((m - BAR_MIN) / (BAR_MAX - BAR_MIN)) * 100;
-          const hit = burned !== null && burned >= m;
+          const hit = gone !== null && gone >= m;
           return (
             <div
               key={m}
@@ -99,9 +119,9 @@ export function BurnMilestones() {
       </div>
       <div className="mt-1.5 flex justify-between text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
         {MILESTONES.map((m) => (
-          <span key={m} className={burned !== null && burned >= m ? "text-gold" : ""}>
+          <span key={m} className={gone !== null && gone >= m ? "text-gold" : ""}>
             {fmtB(m)}
-            {burned !== null && burned >= m ? " ✓" : ""}
+            {gone !== null && gone >= m ? " ✓" : ""}
           </span>
         ))}
       </div>
@@ -146,8 +166,11 @@ export function BurnMilestones() {
       <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
         Most of this was the 14B burn in the first minute after launch. What keeps it growing is the
         live mechanic:{" "}
-        <strong className="text-foreground">1% of every taxed transfer is burned</strong> — so every
-        trade pushes the next milestone closer.{" "}
+        <strong className="text-foreground">
+          5% of every taxed transfer is destroyed for good
+        </strong>{" "}
+        — 1% burned to the dead address, 4% entombed in the contract&apos;s tax buckets — so every
+        trade pushes the total {next === null ? "higher" : "toward the next milestone"}.{" "}
         <a href="/roots" className="underline decoration-gold underline-offset-2 hover:text-gold">
           See the receipts
         </a>

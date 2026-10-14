@@ -123,6 +123,11 @@ function RevokeButton({
             abi: erc20Abi,
             functionName: "approve",
             args: [PULSEX_V2_ROUTER, 0n],
+            // Chain guard, matching SwapBox: without chainId wagmi builds the
+            // tx from whatever chain the connector reports at call time, so a
+            // wallet that flips networks mid-click would revoke against the
+            // wrong chain's addresses.
+            chainId: pulsechain.id,
           });
         }}
         className="rounded-md border-2 border-gold/60 px-3 py-1.5 font-display text-xs uppercase tracking-widest text-gold hover:bg-gold/10 disabled:cursor-wait disabled:opacity-50"

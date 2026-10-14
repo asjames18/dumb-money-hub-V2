@@ -34,7 +34,7 @@ export function ConnectButton({ compact = false }: { compact?: boolean }) {
 
   if (!isConnected || !address) {
     return (
-      <span className="inline-flex flex-col items-start gap-1">
+      <span className="inline-flex flex-col items-center gap-1">
         <Button
           size={compact ? "sm" : "default"}
           onClick={() => injected && connect({ connector: injected })}

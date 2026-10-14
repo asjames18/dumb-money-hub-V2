@@ -213,3 +213,88 @@ export function useMarketCaps(): MarketCaps {
   });
   return data ?? MCAP_EMPTY;
 }
+
+export interface DirectoryMarketRow {
+  key: PriceTokenKey;
+  /** Estimated USD price (WPLS pair reserves × PLS/USD); null when unreadable. */
+  priceUsd: number | null;
+  /**
+   * Estimated USD liquidity = 2 × WPLS-side reserve × PLS/USD. In a balanced
+   * V2 pair each side holds ~half the pool's value, so doubling the WPLS side
+   * is the honest estimate derivable from reserves alone.
+   */
+  liquidityUsd: number | null;
+}
+
+async function marketOneToken(
+  client: PublicClient,
+  t: PricedToken,
+  plsUsd: number,
+): Promise<DirectoryMarketRow> {
+  try {
+    // Single eth_call — same working primitive as the price reads above.
+    const reserves = (await client.readContract({
+      address: t.pair,
+      abi: pairAbi,
+      functionName: "getReserves",
+    })) as unknown as readonly [bigint, bigint, number];
+    const reserveWpls = t.wplsIsToken0 ? reserves[0] : reserves[1];
+    const reserveToken = t.wplsIsToken0 ? reserves[1] : reserves[0];
+    if (reserveWpls <= 0n || reserveToken <= 0n)
+      return { key: t.key, priceUsd: null, liquidityUsd: null };
+    const wplsPerToken = Number(reserveWpls) / 10 ** 18 / (Number(reserveToken) / 10 ** t.decimals);
+    const priceUsd = wplsPerToken * plsUsd;
+    const liquidityUsd = (Number(reserveWpls) / 10 ** 18) * 2 * plsUsd;
+    return {
+      key: t.key,
+      priceUsd: Number.isFinite(priceUsd) && priceUsd > 0 ? priceUsd : null,
+      liquidityUsd: Number.isFinite(liquidityUsd) && liquidityUsd > 0 ? liquidityUsd : null,
+    };
+  } catch {
+    // The public RPC drops calls under batch load; a null here means
+    // "couldn't read", never "worth zero". The UI renders it as unavailable.
+    return { key: t.key, priceUsd: null, liquidityUsd: null };
+  }
+}
+
+/**
+ * Screener data for the vetted-token directory: live USD price + liquidity per
+ * curated token, one getReserves call each (12 pairs total, read in small
+ * chunks — the public RPC drops connections under heavy batches, so no big
+ * Promise.all here). Resolves null per token (never throws) on any failure.
+ *
+ * DELIBERATELY OMITTED: 24h change and 24h volume need historical data —
+ * block-by-block reserves or Swap-event log scans over ~17k blocks per pair —
+ * that no current source provides. The hub has no caching layer yet, and
+ * running those log scans per page load on the flaky public RPC is not viable.
+ * Those columns stay out until a server-side cache exists; a column of "—"
+ * placeholders would be decoration, not data.
+ */
+export function useDirectoryMarketData(): {
+  rows: DirectoryMarketRow[];
+  isLoading: boolean;
+} {
+  const client = usePublicClient({ chainId: pulsechain.id });
+  const { data: plsUsd, isPending: plsPending } = usePlsPrice();
+  const { data, isPending } = useQuery({
+    queryKey: ["directory-market", plsUsd ?? "no-pls-price"],
+    queryFn: async (): Promise<DirectoryMarketRow[]> => {
+      if (!client || plsUsd == null)
+        return PRICED.map((t) => ({ key: t.key, priceUsd: null, liquidityUsd: null }));
+      const rows: DirectoryMarketRow[] = [];
+      const CHUNK = 3;
+      for (let i = 0; i < PRICED.length; i += CHUNK) {
+        const chunk = await Promise.all(
+          PRICED.slice(i, i + CHUNK).map((t) => marketOneToken(client, t, plsUsd)),
+        );
+        rows.push(...chunk);
+      }
+      return rows;
+    },
+    staleTime: 60_000,
+    refetchInterval: 60_000,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+  return { rows: data ?? [], isLoading: plsPending || isPending };
+}

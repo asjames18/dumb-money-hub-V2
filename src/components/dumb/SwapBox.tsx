@@ -564,7 +564,11 @@ export function SwapBox() {
         payKey === "PLSX" ||
         payKey === "PRVX" ||
         payKey === "pTGC" ||
-        payKey === "WBTC"));
+        payKey === "WBTC" ||
+        payKey === "TEDDY" ||
+        payKey === "SOLIDX" ||
+        payKey === "PCOCK" ||
+        payKey === "HELGO"));
 
   let parsedIn: bigint | null = null;
   try {
@@ -1512,14 +1516,25 @@ export function SwapBox() {
             <p className="text-red-400">
               Transaction failed on-chain.{" "}
               {hash && (
-                <a
-                  href={explorerTx(hash)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-bold text-primary hover:underline"
-                >
-                  View on explorer
-                </a>
+                <>
+                  <a
+                    href={explorerTx(hash)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-bold text-primary hover:underline"
+                  >
+                    View on explorer
+                  </a>{" "}
+                  ·{" "}
+                  <Link
+                    to="/scan"
+                    search={{ token: undefined, burn: undefined, tx: hash }}
+                    className="font-bold text-primary hover:underline"
+                    title="The hub replays the failed transaction on-chain and names the cause in plain English — out of gas, an expired swap deadline, or the contract's own revert reason. Never a guess, never a retry nudge."
+                  >
+                    Why did it fail?
+                  </Link>
+                </>
               )}
             </p>
           )}

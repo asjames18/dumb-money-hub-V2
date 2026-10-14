@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { Check, ChevronDown, Copy, Flame, Loader2, Plus, Send, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -42,6 +43,37 @@ import {
   proSessionMessage,
   type AiScanPayload,
 } from "@/lib/ai/pro";
+
+// A leg that was BROADCAST but never confirmed (receipt timed out, reload
+// mid-confirmation) is not a failed payment — the transaction may still
+// confirm. Persisting the pending hash lets a resume check the receipt
+// before deciding, instead of blindly re-broadcasting and risking a
+// double payment. Module-level: no component state, safe in any effect.
+const PENDING_STORAGE_KEY = "dumb-ai-pro-pending-v1";
+type PendingLegs = {
+  address: string;
+  symbol: string;
+  burn?: `0x${string}`;
+  model?: `0x${string}`;
+};
+function readPending(wallet: string, symbol: string): PendingLegs | null {
+  try {
+    const raw = localStorage.getItem(PENDING_STORAGE_KEY);
+    if (!raw) return null;
+    const p = JSON.parse(raw) as PendingLegs;
+    return p.address?.toLowerCase() === wallet.toLowerCase() && p.symbol === symbol ? p : null;
+  } catch {
+    return null;
+  }
+}
+function writePending(p: PendingLegs | null) {
+  try {
+    if (p && (p.burn || p.model)) localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(p));
+    else localStorage.removeItem(PENDING_STORAGE_KEY);
+  } catch {
+    /* storage unavailable: resume just won't survive a reload */
+  }
+}
 
 type Turn = {
   role: "user" | "dump";
@@ -161,6 +193,10 @@ function ProPanel({
   const price = (prices[payToken.symbol as keyof typeof prices] ?? null) as number | null;
   const [flow, setFlow] = useState<ProFlow>("idle");
   const [flowError, setFlowError] = useState<string | null>(null);
+  // Hash of the broadcast leg whose receipt failed (revert/timeout/RPC) — kept
+  // so the error panel can link the plain-English /scan diagnosis. Set ONLY by
+  // confirmLeg below: wallet rejections (no broadcast, no hash) never set it.
+  const [failedTxHash, setFailedTxHash] = useState<`0x${string}` | null>(null);
   const [legs, setLegs] = useState<{ burn?: `0x${string}`; model?: `0x${string}` }>({});
   const [amounts, setAmounts] = useState<{ burn: bigint; model: bigint } | null>(null);
   // Slim banner by default — the full split flow expands on tap so the
@@ -201,6 +237,32 @@ function ProPanel({
     }
   };
 
+  /**
+   * Resolve a broadcast-but-unconfirmed leg: a single receipt check decides.
+   * Landed → return the hash so the caller adopts it as confirmed (nothing
+   * is ever re-broadcast). Missing/reverted/RPC hiccup → drop the stale
+   * marker and return undefined so the normal path re-sends. The pending
+   * marker is consumed either way — it never survives a resolution.
+   */
+  const resolvePending = async (leg: "burn" | "model"): Promise<`0x${string}` | undefined> => {
+    if (!address || !publicClient) return undefined;
+    const p = readPending(address, paySymbol);
+    const h = p?.[leg];
+    if (!h) return undefined;
+    const rest: PendingLegs = { address, symbol: paySymbol };
+    if (leg === "burn" && p.model) rest.model = p.model;
+    if (leg === "model" && p.burn) rest.burn = p.burn;
+    let landed = false;
+    try {
+      const rc = await publicClient.getTransactionReceipt({ hash: h });
+      landed = rc.status === "success";
+    } catch {
+      landed = false;
+    }
+    writePending(rest);
+    return landed ? h : undefined;
+  };
+
   // Restore an interrupted paid flow (e.g. a reload after the verifier
   // rejected good transactions): confirmed legs are reused, never re-spent.
   // A hash is only ever stored after its receipt confirmed on-chain.
@@ -231,6 +293,16 @@ function ProPanel({
         }
         setFlow("error");
         setFlowError("Payment interrupted — press Try again to resume where it stopped.");
+      }
+      // A broadcast that never got its receipt (timeout, reload
+      // mid-confirmation): surface it so the resume path checks the
+      // receipt before anything is re-sent — never a blind re-broadcast.
+      const pending = readPending(address, paySymbol);
+      if (pending?.burn || pending?.model) {
+        setFlow("error");
+        setFlowError(
+          "A payment was broadcast but never confirmed — press Try again and it checks whether it landed on-chain before sending anything new.",
+        );
       }
     } catch {
       /* corrupted snapshot: start fresh */
@@ -298,6 +370,19 @@ function ProPanel({
     if (receipt.status !== "success") throw new Error("That transaction failed on-chain.");
   };
 
+  /** Confirm one broadcast leg; on a receipt failure keep the hash so the
+      error panel can offer the evidence-backed "Why did it fail?" diagnosis
+      (same pattern as the SwapBox/BurnBox/scanner surfaces). The hash is the
+      user's own broadcast — the explainer shows only what it can prove. */
+  const confirmLeg = async (hash: `0x${string}`) => {
+    try {
+      await waitReceipt(hash);
+    } catch (e) {
+      setFailedTxHash(hash);
+      throw e;
+    }
+  };
+
   /** Fresh min-out quote for the burn-leg swap (8% slippage guard). */
   const quoteBurnMinOut = async (amountIn: bigint): Promise<bigint> => {
     if (!publicClient || payToken.swapPath.length === 0)
@@ -353,7 +438,7 @@ function ProPanel({
       chainId: pulsechain.id,
     });
     setFlow("confirmingApprove");
-    await waitReceipt(approveHash);
+    await confirmLeg(approveHash);
     setFlow("burning");
     return writeContractAsync({
       address: PRO_ROUTER as `0x${string}`,
@@ -402,6 +487,7 @@ function ProPanel({
     if (!isTxHash(burn) || !isTxHash(model)) {
       setFlow("error");
       setFlowError("Both entries must be transaction hashes: 0x followed by 64 hex characters.");
+      setFailedTxHash(null);
       return;
     }
     const next = { burn, model };
@@ -411,11 +497,13 @@ function ProPanel({
     setRecoverModel("");
     setFlow("error");
     setFlowError("Hashes restored — press Try again to finish activating Pro.");
+    setFailedTxHash(null);
   };
 
   const startSplit = async () => {
     if (!address || burnWei === null || modelWei === null || !modelWallet || paywallBlocks) return;
     setFlowError(null);
+    setFailedTxHash(null);
     const fresh = flow === "idle" || flow === "done";
     if (fresh) {
       setLegs({});
@@ -427,31 +515,54 @@ function ProPanel({
     const burnAmt = fresh ? burnWei : (amounts?.burn ?? burnWei);
     const modelAmt = fresh ? modelWei : (amounts?.model ?? modelWei);
     try {
-      // A retry resumes where it stopped — a confirmed leg is never repeated.
+      // A retry resumes where it stopped — a confirmed leg is never
+      // repeated, and a broadcast-but-unconfirmed leg is never re-sent
+      // blind: resolvePending checks the receipt once and adopts it when
+      // it landed (the timeout case), so a flaky RPC can't double-charge.
+      let nextLegs = { ...legs };
       let burnHash = fresh ? undefined : legs.burn;
+      if (!burnHash && !fresh) {
+        const adopted = await resolvePending("burn");
+        if (adopted) {
+          burnHash = adopted;
+          nextLegs = { ...nextLegs, burn: adopted };
+          setLegs(nextLegs);
+          persistLegs(address, paySymbol, nextLegs, { burn: burnAmt, model: modelAmt });
+        }
+      }
       if (!burnHash) {
         setFlow("burning");
         const newBurnHash = await runBurnLeg(burnAmt);
+        writePending({ address, symbol: paySymbol, burn: newBurnHash });
         setFlow("confirming");
-        await waitReceipt(newBurnHash);
-        setLegs((p) => ({ ...p, burn: newBurnHash }));
-        persistLegs(address, paySymbol, { burn: newBurnHash }, { burn: burnAmt, model: modelAmt });
+        await confirmLeg(newBurnHash);
+        writePending(null);
         burnHash = newBurnHash;
+        nextLegs = { ...nextLegs, burn: newBurnHash };
+        setLegs(nextLegs);
+        persistLegs(address, paySymbol, nextLegs, { burn: burnAmt, model: modelAmt });
       }
       let modelHash = fresh ? undefined : legs.model;
+      if (!modelHash && !fresh) {
+        const adopted = await resolvePending("model");
+        if (adopted) {
+          modelHash = adopted;
+          nextLegs = { ...nextLegs, model: adopted };
+          setLegs(nextLegs);
+          persistLegs(address, paySymbol, nextLegs, { burn: burnAmt, model: modelAmt });
+        }
+      }
       if (!modelHash) {
         setFlow("paying");
         const newModelHash = await runModelLeg(modelAmt);
+        writePending({ address, symbol: paySymbol, model: newModelHash });
         setFlow("confirmingPay");
-        await waitReceipt(newModelHash);
-        setLegs((p) => ({ ...p, model: newModelHash }));
-        persistLegs(
-          address,
-          paySymbol,
-          { burn: burnHash, model: newModelHash },
-          { burn: burnAmt, model: modelAmt },
-        );
+        await confirmLeg(newModelHash);
+        writePending(null);
         modelHash = newModelHash;
+        nextLegs = { ...nextLegs, model: newModelHash };
+        setLegs(nextLegs);
+        persistLegs(address, paySymbol, nextLegs, { burn: burnAmt, model: modelAmt });
       }
       setFlow("signing");
       const signature = await signMessageAsync({
@@ -487,10 +598,17 @@ function ProPanel({
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Something failed.";
+      // A receipt timeout is NOT a failed payment — the transaction was
+      // broadcast and may still confirm. Say so plainly, and steer away
+      // from a blind retry: the resume path checks the receipt first, and
+      // "Paid already? Restore" below finishes a landed payment for free.
+      const receiptTimedOut = /timed out/i.test(msg);
       fail(
         /rejected|denied|cancelled|user/i.test(msg)
           ? "Rejected in wallet — anything already confirmed on-chain stays, just try again to resume."
-          : msg,
+          : receiptTimedOut
+            ? "The transaction was broadcast but confirmation timed out — it may still confirm. Check it on the explorer (Why did it fail?) before trying again; if it landed, use “Paid already? Restore” below to finish without paying twice."
+            : msg,
       );
     }
   };
@@ -619,6 +737,9 @@ function ProPanel({
                 } catch {
                   /* ignore */
                 }
+                // A pending broadcast belongs to the old token — never let a
+                // resume for the new token adopt or clear it.
+                writePending(null);
               }}
               disabled={busy}
               className="ml-2 rounded-md border border-border bg-surface px-2 py-1 text-sm font-bold text-foreground"
@@ -671,6 +792,22 @@ function ProPanel({
               {flowError}
             </p>
           ) : null}
+          {/* On-chain failure only (never wallet-level errors): the hash is the
+              user's own broadcast, kept by confirmLeg when the receipt failed —
+              the evidence-backed diagnosis instead of hammering Try again blind,
+              same pattern as the SwapBox/BurnBox/scanner failure panels. */}
+          {flow === "error" && failedTxHash ? (
+            <p className="mt-1 text-sm">
+              <Link
+                to="/scan"
+                search={{ token: undefined, burn: undefined, tx: failedTxHash }}
+                className="underline decoration-pink underline-offset-2 hover:text-pink"
+                title="The hub reads the failed transaction on-chain and names the cause in plain English — out of gas, an expired deadline, or the contract's own revert reason. Never a guess, never a retry nudge."
+              >
+                Why did it fail?
+              </Link>
+            </p>
+          ) : null}
           <Button
             onClick={() => void startSplit()}
             disabled={busy || burnWei === null || modelWei === null || paywallBlocks}
@@ -687,7 +824,29 @@ function ProPanel({
                     : `Split ~$${(burnTargetUsd + PRO_MODEL_TARGET_USD).toFixed(0)} ${payToken.symbol}, get Pro`)}
           </Button>
           {flow === "done" ? (
-            <p className="mt-2 text-sm font-bold text-primary">Pro is active — ask away.</p>
+            <>
+              <p className="mt-2 text-sm font-bold text-primary">Pro is active — ask away.</p>
+              {/* Success-side counterpart of the BurnBox/scanner "Explain this
+                  burn" (10:43/11:23): the Pro payment's burn leg — ~$16 of
+                  DUMB destroyed — lands here with no decode path. The hash is
+                  the user's own confirmed burn tx (persisted only after
+                  confirmLeg succeeded, or a format-validated manual restore),
+                  so the link can only ever open the burn they just paid for.
+                  Completes the success-side pattern on the last money surface;
+                  style matches this card's own "Why did it fail?" link. */}
+              {legs.burn ? (
+                <p className="mt-1 text-sm">
+                  <Link
+                    to="/scan"
+                    search={{ token: undefined, burn: undefined, tx: legs.burn }}
+                    className="underline decoration-pink underline-offset-2 hover:text-pink"
+                    title="Plain-English breakdown of the burn leg: what you paid, what the tax cost, and what actually landed at the dead address. Never a guess."
+                  >
+                    Explain this burn
+                  </Link>
+                </p>
+              ) : null}
+            </>
           ) : null}
           {flow === "idle" && !legs.burn && !legs.model ? (
             <details className="mt-3 text-sm">
@@ -791,6 +950,8 @@ export function AiPreview() {
   }, [turns, busy]);
 
   // Scanner handoff: /ai?explain=1 with a report in localStorage.
+  // Portfolio handoff: /ai?q=… prefills the question box (never auto-sends —
+  // the user reviews before asking).
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -798,6 +959,12 @@ export function AiPreview() {
         const raw = localStorage.getItem(AI_SCAN_STORAGE_KEY);
         if (raw) setScanPayload(JSON.parse(raw) as AiScanPayload);
         window.history.replaceState(null, "", "/ai");
+      }
+      const q = params.get("q");
+      if (q) {
+        setDraft(q.slice(0, 500));
+        window.history.replaceState(null, "", "/ai");
+        inputRef.current?.focus();
       }
     } catch {
       /* storage/URL unavailable — the explain card just won't show */

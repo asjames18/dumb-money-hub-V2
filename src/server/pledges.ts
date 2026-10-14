@@ -6,7 +6,9 @@
 // Wired in src/server.ts (not here): GET+POST /api/pledges + /api/pledge.
 //
 // KV schema:
-//   pledge:<lowercase 0x-address> -> JSON { name, token, amount, pledgedAt }
+//   pledge:<lowercase 0x-address> -> JSON { token, amount, pledgedAt, block }
+//     (display name is resolved from the uname: registry at read time, not stored here)
+//     (block = chain head at pledge time; the redemption gate. null = unknown)
 //   pledge:index                   -> JSON string[] of lowercase addresses
 //   pledge:rl:<YYYY-MM-DD>:<iphash> -> POST count (10/day per IP)
 //
@@ -31,6 +33,33 @@ import type { AnalyticsKV } from "./analytics";
 
 const MAX_BODY_BYTES = 2048;
 const POST_DAILY_CAP_PER_IP = 10;
+/** GET read-set cap — mirrors burners.ts MAX_ROWS. */
+const MAX_PLEDGES = 500;
+const PULSE_RPC = "https://rpc.pulsechain.com";
+
+/**
+ * Chain head block at pledge time — the redemption block gate. Fail-soft to
+ * null (the pledge still saves; redemption then counts the all-time
+ * aggregate, the pre-fix behavior). Same RPC the site's other server paths
+ * use; a pledge POST is rare and rate-limited, so one extra call is cheap.
+ */
+async function chainHeadBlock(): Promise<number | null> {
+  try {
+    const res = await fetch(PULSE_RPC, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_blockNumber", params: [] }),
+      signal: AbortSignal.timeout(8_000),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { result?: unknown };
+    if (typeof data.result !== "string" || !/^0x[0-9a-fA-F]+$/.test(data.result)) return null;
+    const n = Number.parseInt(data.result, 16);
+    return Number.isSafeInteger(n) && n >= 0 ? n : null;
+  } catch {
+    return null;
+  }
+}
 
 /** The real KV binding supports delete; the shared minimal type doesn't. */
 type PledgeKV = AnalyticsKV & { delete(key: string): Promise<void> };
@@ -103,12 +132,24 @@ export async function handlePledgesGet(request: Request): Promise<Response> {
     const kv = getEnv(request).ANALYTICS_KV;
     if (!kv) return json({ error: "pledge board not configured" }, 503);
     const index = await readIndex(kv);
+    // Growth-cliff guard (same pattern as burners.ts MAX_ROWS): GET does two
+    // sequential KV reads per entry, so the read set is bounded — newest N
+    // win. If the index ever inflates past the cap (POST is rate-limited, but
+    // IP rotation + generated wallets could push it over days), the prune
+    // rewrite below self-heals the stored index down to the newest valid rows.
+    const addrs = index.slice(-MAX_PLEDGES);
     const live: string[] = [];
     const pledges: Pledge[] = [];
-    for (const addr of index) {
+    for (const addr of addrs) {
       const raw = await kv.get(`pledge:${addr}`);
       if (!raw) continue;
-      let rec: { name?: unknown; token?: unknown; amount?: unknown; pledgedAt?: unknown };
+      let rec: {
+        name?: unknown;
+        token?: unknown;
+        amount?: unknown;
+        pledgedAt?: unknown;
+        block?: unknown;
+      };
       try {
         rec = JSON.parse(raw) as typeof rec;
       } catch {
@@ -139,6 +180,7 @@ export async function handlePledgesGet(request: Request): Promise<Response> {
         token: rec.token,
         amount: rec.amount,
         pledgedAt: rec.pledgedAt as number,
+        block: typeof rec.block === "number" && Number.isSafeInteger(rec.block) ? rec.block : null,
       });
     }
     if (live.length !== index.length) {
@@ -176,7 +218,12 @@ export async function handlePledgePost(request: Request): Promise<Response> {
     if (!text || text.length > MAX_BODY_BYTES) {
       return json({ error: "bad request" }, 400);
     }
-    const body = JSON.parse(text) as PledgePostBody;
+    let body: PledgePostBody;
+    try {
+      body = JSON.parse(text) as PledgePostBody;
+    } catch {
+      return json({ error: "invalid JSON" }, 400);
+    }
     const address = typeof body.address === "string" ? body.address : "";
     const signature = typeof body.signature === "string" ? body.signature : "";
     const timestamp = typeof body.timestamp === "number" ? body.timestamp : NaN;
@@ -212,12 +259,17 @@ export async function handlePledgePost(request: Request): Promise<Response> {
 
     const addrLc = address.toLowerCase();
     const now = Date.now();
+    // Block gate for redemption — recorded after signature verification so
+    // invalid requests never cost an RPC call. Fail-soft: a hiccup stores
+    // null and redemption falls back to the all-time aggregate.
+    const block = await chainHeadBlock();
     await kv.put(
       `pledge:${addrLc}`,
       JSON.stringify({
         token: body.token,
         amount: body.amount,
         pledgedAt: now,
+        block,
       }),
       { expirationTtl: PLEDGE_TTL_SECONDS },
     );

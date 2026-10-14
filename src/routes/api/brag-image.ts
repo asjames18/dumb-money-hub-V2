@@ -10,11 +10,16 @@ import { fmtTok, renderBragCard } from "@/server/brag-card.server";
 // card PNG on the fly. Two shapes are accepted:
 //   1. a direct transfer() of DUMB/DAMP straight to the dead address
 //      (amount decoded from the transfer input);
-//   2. the PLS-fallback shape: the PulseX V2 router's
-//      swapExactETHForTokensSupportingFeeOnTransferTokens with `to` = dead
-//      and a path ending in DUMB (amount = the DUMB that provably arrived
-//      at dead in the receipt — the honest destroyed number, since the
-//      arrival itself is taxed).
+//   2. the swap-burn shape: a PulseX V2 router swap with `to` = dead and a
+//      path ending in DUMB — native-PLS via
+//      swapExactETHForTokensSupportingFeeOnTransferTokens (the Burn-with-PLS
+//      / scan-pass PLS fallback) or any ERC-20 via
+//      swapExactTokensForTokensSupportingFeeOnTransferTokens (Dumb AI Pro's
+//      burn leg for every non-DUMB payment token). Amount = the DUMB that
+//      provably arrived at dead in the receipt — the honest destroyed
+//      number, since the arrival itself is taxed. The card shows only the
+//      verified DUMB amount, never the input token, so it needs no
+//      per-shape copy.
 // Nothing is uploaded and nothing is stored: the image is deterministic per
 // tx, so it is safe to cache immutably and nobody can spoof someone else's
 // burn with an arbitrary upload. Unverified txs 404.
@@ -29,12 +34,20 @@ const ROUTER = "0x165c3410fc91ef562c50559f7d2289febed552d9";
 /** Canonical ERC-20 Transfer topic — computed, never hand-typed. */
 const TRANSFER_TOPIC = keccak256(stringToHex("Transfer(address,address,uint256)"));
 const TRANSFER_SELECTOR = "0xa9059cbb"; // transfer(address,uint256)
-/** The one router call the site's PLS fallback makes — ABI parsed, selector
-    computed, never hand-typed. */
+/** The native-PLS router call the site's PLS fallback makes — ABI parsed,
+    selector computed, never hand-typed. */
 const SWAP_ABI = parseAbi([
   "function swapExactETHForTokensSupportingFeeOnTransferTokens(uint256 amountOutMin, address[] path, address to, uint256 deadline)",
 ]);
 const SWAP_SELECTOR = toFunctionSelector(SWAP_ABI[0]);
+/** The ERC-20 router call Dumb AI Pro's burn leg makes — its args are
+    (amountIn, amountOutMin, path, to, deadline), so path/to sit one slot
+    later than the native-PLS shape. ABI parsed, selector computed, never
+    hand-typed. */
+const ERC20_SWAP_ABI = parseAbi([
+  "function swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)",
+]);
+const ERC20_SWAP_SELECTOR = toFunctionSelector(ERC20_SWAP_ABI[0]);
 
 const TX_RE = /^0x[0-9a-fA-F]{64}$/;
 
@@ -102,25 +115,40 @@ function getDirectBurn(tx: RpcTx, receipt: RpcReceipt): VerifiedBurn | null {
 }
 
 /**
- * Shape 2: the PLS-fallback burn — the PulseX V2 router's
- * swapExactETHForTokensSupportingFeeOnTransferTokens with `to` = dead and a
+ * Shape 2: the swap burn — a PulseX V2 router swap with `to` = dead and a
  * path ending in DUMB, mined successfully, with DUMB actually arriving at
- * dead (checked in the receipt logs). Returns the summed dead-arrival — the
- * honest destroyed amount, since the swap output is taxed on arrival.
+ * dead (checked in the receipt logs). Both router swap functions are
+ * accepted — the native-PLS shape (Burn-with-PLS / scan-pass PLS fallback)
+ * and the ERC-20 shape (Dumb AI Pro's burn leg for every non-DUMB payment
+ * token). Returns the summed dead-arrival — the honest destroyed amount,
+ * since the swap output is taxed on arrival. The two shapes differ only in
+ * selector and arg slots; the acceptance bar is identical.
  */
 function getSwapBurnArrival(tx: RpcTx, receipt: RpcReceipt): bigint | null {
   if (!tx || !receipt || receipt.status !== "0x1") return null;
   if ((tx.to ?? "").toLowerCase() !== ROUTER) return null;
   const input = (tx.input ?? "").toLowerCase();
-  if (!input.startsWith(SWAP_SELECTOR)) return null;
   let swapTo: string;
   let path: readonly string[];
-  try {
-    const decoded = decodeFunctionData({ abi: SWAP_ABI, data: input as `0x${string}` });
-    // args: (amountOutMin, path, to, deadline)
-    path = decoded.args[1];
-    swapTo = decoded.args[2];
-  } catch {
+  if (input.startsWith(SWAP_SELECTOR)) {
+    try {
+      const decoded = decodeFunctionData({ abi: SWAP_ABI, data: input as `0x${string}` });
+      // args: (amountOutMin, path, to, deadline)
+      path = decoded.args[1];
+      swapTo = decoded.args[2];
+    } catch {
+      return null;
+    }
+  } else if (input.startsWith(ERC20_SWAP_SELECTOR)) {
+    try {
+      const decoded = decodeFunctionData({ abi: ERC20_SWAP_ABI, data: input as `0x${string}` });
+      // args: (amountIn, amountOutMin, path, to, deadline)
+      path = decoded.args[2];
+      swapTo = decoded.args[3];
+    } catch {
+      return null;
+    }
+  } else {
     return null;
   }
   if (swapTo.toLowerCase() !== DEAD) return null;
@@ -138,9 +166,10 @@ function getSwapBurnArrival(tx: RpcTx, receipt: RpcReceipt): bigint | null {
 
 /**
  * The tx must be a real voluntary burn of DUMB/DAMP to the dead address —
- * either a direct transfer() or the PLS-fallback router swap — mined
- * successfully, with the tokens actually arriving (checked in the receipt
- * logs). Returns the token and the amount to print on the card.
+ * either a direct transfer() or a router swap burn (native-PLS or ERC-20
+ * shape) — mined successfully, with the tokens actually arriving (checked
+ * in the receipt logs). Returns the token and the amount to print on the
+ * card.
  */
 async function getVerifiedBurn(txHash: string): Promise<VerifiedBurn | null> {
   try {

@@ -41,6 +41,8 @@ export const ANALYTICS_EVENTS = new Set([
   "raid_play",
   "rating_submitted",
   "brag_share",
+  "rally_open",
+  "rally_burn",
   "err_quote",
   "err_tx",
   "err_scan",
@@ -307,32 +309,59 @@ export async function handleAnalytics(request: Request): Promise<Response> {
     for (let i = 0; i < 30; i++) {
       days.push(dayKey(new Date(Date.now() - i * 86_400_000)));
     }
-    const daySet = new Set(days);
     const byDay: Record<string, number> = {};
     const byPath: Record<string, number> = {};
     const byEvent: Record<string, number> = {};
     const byCountry: Record<string, number> = {};
+    // --- Stale-list guard ------------------------------------------------
+    // KV lists lexicographically (oldest first) with no reverse option, so a
+    // single flat list({prefix, limit:1000}) goes stale once the prefix passes
+    // the 1000-key page cap: the NEWEST days would be silently dropped from
+    // these aggregates (the same stale-list class the 05:56 #9 run fixed for
+    // the feedback inbox). Walk day-prefixes newest-first instead: each day
+    // holds at most (pv: 400 registry-capped paths / ev: 24 allowlisted
+    // events / cc: ~1296 2-char codes) keys, so one limit-1000 page per day
+    // is always complete. Subrequest budget: a flood-minted day can still
+    // hold hundreds of keys, so each prefix stops after its key-read budget —
+    // newest data always wins, and the response says so honestly via
+    // `truncated`. Worst case: 90 prefix lists + 800 key gets = ~890
+    // subrequests, inside the 1000/invocation ceiling.
+    const MAX_KEY_READS_PER_PREFIX: Record<"pv:" | "ev:" | "cc:", number> = {
+      "pv:": 400,
+      "ev:": 100,
+      "cc:": 300,
+    };
+    let truncated = false;
     for (const prefix of ["pv:", "ev:", "cc:"] as const) {
-      const listed = await kv.list({ prefix, limit: 1000 });
-      for (const k of listed.keys) {
-        const val = Number.parseInt((await kv.get(k.name)) ?? "0", 10) || 0;
-        if (!val) continue;
-        // Key shape: "<prefix><YYYY-MM-DD>:<rest>"
-        const day = k.name.slice(prefix.length, prefix.length + 10);
-        if (!daySet.has(day)) continue;
-        const rest = k.name.slice(prefix.length + 11);
-        if (!rest) continue;
-        if (prefix === "pv:") {
-          byPath[rest] = (byPath[rest] ?? 0) + val;
-          byDay[day] = (byDay[day] ?? 0) + val;
-        } else if (prefix === "ev:") {
-          byEvent[rest] = (byEvent[rest] ?? 0) + val;
-        } else {
-          byCountry[rest] = (byCountry[rest] ?? 0) + val;
+      let reads = 0;
+      const cap = MAX_KEY_READS_PER_PREFIX[prefix];
+      for (const day of days) {
+        const listed = await kv.list({ prefix: `${prefix}${day}:`, limit: 1000 });
+        for (const k of listed.keys) {
+          if (reads >= cap) break;
+          reads++;
+          const val = Number.parseInt((await kv.get(k.name)) ?? "0", 10) || 0;
+          if (!val) continue;
+          // Key shape: "<prefix><YYYY-MM-DD>:<rest>"
+          const rest = k.name.slice(prefix.length + 11);
+          if (!rest) continue;
+          if (prefix === "pv:") {
+            byPath[rest] = (byPath[rest] ?? 0) + val;
+            byDay[day] = (byDay[day] ?? 0) + val;
+          } else if (prefix === "ev:") {
+            byEvent[rest] = (byEvent[rest] ?? 0) + val;
+          } else {
+            byCountry[rest] = (byCountry[rest] ?? 0) + val;
+          }
         }
+        if (reads >= cap) break;
       }
+      if (reads >= cap) truncated = true;
     }
-    return json({ days, byDay, byPath, byEvent, byCountry, feedback: await readFeedback(kv) }, 200);
+    return json(
+      { days, byDay, byPath, byEvent, byCountry, truncated, feedback: await readFeedback(kv) },
+      200,
+    );
   } catch {
     return json({ error: "unavailable" }, 503);
   }
@@ -345,8 +374,13 @@ const SCAN_STATS_EVENTS = ["deep_scan", "pass_burn_dumb", "pass_burn_pls"] as co
  * Unlike /api/analytics this needs no passphrase: it returns only three
  * coarse counts (deep scans completed, scan passes bought, and a
  * conservative DUMB-destroyed floor) — no paths, countries, or feedback.
- * Every pass burn is verified on-chain at >=100,000 DUMB to dead before the
- * pass exists (verifyScanBurn / verifyPlsScanBurn), so the floor is honest.
+ * Every pass burn is verified on-chain before the pass exists
+ * (verifyScanBurn / verifyPlsScanBurn). The destroyed floor counts what
+ * LANDED at the dead address per path, never the sent amount: a
+ * direct-transfer pass burns >=100,000 DUMB but only ~95% lands destroyed
+ * (backlog #1: 94% transfer leg + 1% protocol-burn leg); the PLS-fallback
+ * swap is verified on-chain at >=100,000 DUMB arrived, so it keeps the
+ * full 100k. A public "at least" number must be a true minimum.
  *
  * Reads are direct key gets (ev:<YYYY-MM-DD>:<event>) instead of a kv.list
  * scan: exactly 3 events × 30 days = 90 reads per request, and the list's
@@ -377,12 +411,19 @@ export async function handleScanStats(request: Request): Promise<Response> {
       }),
     );
     const passBurns = (counts["pass_burn_dumb"] ?? 0) + (counts["pass_burn_pls"] ?? 0);
+    // Destroyed floor per path — direct-transfer passes land ~95% at dead
+    // (94% transfer leg + 1% protocol-burn leg of the 100,000 DUMB sent,
+    // backlog #1), so 100k sent ≠ 100k destroyed; PLS-fallback swaps are
+    // verified at >=100,000 DUMB arrived. The public copy says "at least",
+    // so this must be a true minimum in the underclaim direction.
+    const dumbDestroyedMin =
+      (counts["pass_burn_dumb"] ?? 0) * 95_000 + (counts["pass_burn_pls"] ?? 0) * 100_000;
     return json(
       {
         window_days: 30,
         deep_scans: counts["deep_scan"] ?? 0,
         pass_burns: passBurns,
-        dumb_destroyed_min: passBurns * 100_000,
+        dumb_destroyed_min: dumbDestroyedMin,
       },
       200,
       600,
@@ -397,25 +438,32 @@ export async function handleScanStats(request: Request): Promise<Response> {
 async function readFeedback(
   kv: AnalyticsKV,
 ): Promise<{ ts: string; category: string; message: string; page: string }[]> {
-  const listed = await kv.list({ prefix: "fb:", limit: 100 });
+  // Keys are "fb:<YYYY-MM-DD>:<id>". KV lists lexicographically (oldest
+  // first) with no reverse option, so a single bounded list would go stale
+  // once total entries pass the limit — it would keep returning the oldest
+  // keys. Walk day-prefixes newest-first instead: each day holds at most the
+  // 200/day global cap, so one limit-1000 page per day is always complete.
   const items: { name: string; ts: string; category: string; message: string; page: string }[] = [];
-  for (const k of listed.keys) {
-    // Key shape: "fb:<YYYY-MM-DD>:<id>" — descending key order is newest first.
-    if (k.name === "fb:") continue;
-    const raw = await kv.get(k.name);
-    if (!raw) continue;
-    try {
-      const f = JSON.parse(raw) as { c?: unknown; m?: unknown; p?: unknown };
-      if (typeof f.m !== "string" || !f.m) continue;
-      items.push({
-        name: k.name,
-        ts: k.name.slice(3, 13),
-        category: typeof f.c === "string" ? f.c : "other",
-        message: f.m.length > 400 ? `${f.m.slice(0, 400)}…` : f.m,
-        page: typeof f.p === "string" ? f.p : "/",
-      });
-    } catch {
-      // Malformed entry — skip it.
+  const now = Date.now();
+  for (let back = 0; back < 90 && items.length < 30; back++) {
+    const day = dayKey(new Date(now - back * 86400000));
+    const listed = await kv.list({ prefix: `fb:${day}:`, limit: 1000 });
+    for (const k of listed.keys) {
+      const raw = await kv.get(k.name);
+      if (!raw) continue;
+      try {
+        const f = JSON.parse(raw) as { c?: unknown; m?: unknown; p?: unknown };
+        if (typeof f.m !== "string" || !f.m) continue;
+        items.push({
+          name: k.name,
+          ts: day,
+          category: typeof f.c === "string" ? f.c : "other",
+          message: f.m.length > 400 ? `${f.m.slice(0, 400)}…` : f.m,
+          page: typeof f.p === "string" ? f.p : "/",
+        });
+      } catch {
+        // Malformed entry — skip it.
+      }
     }
   }
   items.sort((a, b) => (a.name < b.name ? 1 : -1));
@@ -433,7 +481,24 @@ async function readFeedback(
 
 const FEEDBACK_CATEGORIES = new Set(["bug", "feature", "comment", "other"]);
 const FEEDBACK_DAILY_CAP = 200;
+// Per-visitor daily cap: same 10/day as the username registry and pledge board.
+const FEEDBACK_PER_IP_DAILY_CAP = 10;
 const FEEDBACK_TTL_SECONDS = 365 * 24 * 3600;
+
+/** True unless this visitor already sent its daily feedback budget. Keys
+ * expire in 1 day. Fail-closed: any hiccup returns false — this endpoint is
+ * already fail-closed without KV (503 above). */
+async function allowFeedback(kv: AnalyticsKV, day: string, ipHash: string): Promise<boolean> {
+  const key = `fbip:${day}:${ipHash}`;
+  try {
+    const cur = Number.parseInt((await kv.get(key)) ?? "0", 10) || 0;
+    if (cur >= FEEDBACK_PER_IP_DAILY_CAP) return false;
+    await kv.put(key, String(cur + 1), { expirationTtl: 86_400 });
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 /** POST /api/feedback — accept one feedback submission. */
 export async function handleFeedback(request: Request): Promise<Response> {
@@ -460,6 +525,18 @@ export async function handleFeedback(request: Request): Promise<Response> {
     }
     const pg = typeof page === "string" && page.startsWith("/") && page.length <= 200 ? page : "/";
     const day = dayKey();
+    // Per-visitor daily brake (salted SHA-256 IP hash — never stored, logged,
+    // or reversible). The 200/day global counter is check-then-write, so a
+    // concurrent burst from one source could land many entries while the
+    // counter advances ~1; this bounds single-source floods. Same 10/day cap
+    // as the username and pledge write endpoints. Checked after validation so
+    // honeypot bots and malformed payloads don't burn a shared IP's budget.
+    // On direct (non-CDN) requests cf-connecting-ip is client-spoofable, so
+    // this is defense-in-depth, not proof of humanity.
+    const ip = request.headers.get("cf-connecting-ip") ?? "unknown";
+    const ipHash = (await sha256hex(`dumb-feedback-v1|${day}|${ip}`)).slice(0, 32);
+    const fbIpOk = await allowFeedback(kv, day, ipHash).catch(() => false);
+    if (!fbIpOk) return new Response(null, { status: 429 });
     const countKey = `fbcount:${day}`;
     const count = (Number.parseInt((await kv.get(countKey)) ?? "0", 10) || 0) + 1;
     if (count > FEEDBACK_DAILY_CAP) return new Response(null, { status: 429 });

@@ -23,6 +23,18 @@ export interface ScanWatchEntry {
 
 const KEY = "dumb-scan-watchlist-v1";
 const MAX_ENTRIES = 50;
+/**
+ * On-chain symbol() is attacker-controlled (anyone can deploy a token whose
+ * symbol is megabytes of junk). Bound what we persist so one hostile token
+ * can't blow the localStorage quota and silently break the whole list.
+ * Legit ERC-20 symbols are a handful of chars; anything longer gets an
+ * honest truncation marker.
+ */
+const MAX_SYMBOL_LEN = 32;
+export function safePersistedSymbol(s: string | null): string | null {
+  if (typeof s !== "string") return null;
+  return s.length > MAX_SYMBOL_LEN ? `${s.slice(0, MAX_SYMBOL_LEN - 1)}…` : s;
+}
 /** Fired after any add/remove so the list panel refreshes without a reload. */
 export const WATCHLIST_EVENT = "dumb:watchlist-changed";
 /** CustomEvent detail = 0x address string: ask the mounted scanner to re-run. */
@@ -68,7 +80,7 @@ function save(entries: ScanWatchEntry[]): ScanWatchEntry[] {
 export function watchEntryFromResult(r: QuickScanResult): ScanWatchEntry {
   return {
     address: r.address,
-    symbol: r.symbol,
+    symbol: safePersistedSymbol(r.symbol),
     redFlags: r.checks.filter((c) => c.status === "fail").length,
     cautions: r.checks.filter((c) => c.status === "warn").length,
     taxBps: r.taxBps,

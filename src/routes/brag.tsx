@@ -24,9 +24,9 @@ export const Route = createFileRoute("/brag")({
     const image = valid
       ? `${SITE_URL}/api/brag-image?tx=${tx.toLowerCase()}`
       : `${SITE_URL}/og-card.png`;
-    const title = "A DUMB Money burn, verified on-chain 🔥";
+    const title = "DUMB Money burn brag card 🔥";
     const description =
-      "Someone voluntarily burned DUMB or DAMP to the dead address on PulseChain. Burns shrink supply — they never promise price.";
+      "Brag cards render only for voluntary DUMB/DAMP burns to the dead address, verified on-chain. Burns shrink supply — they never promise price.";
     return {
       meta: [
         { title },

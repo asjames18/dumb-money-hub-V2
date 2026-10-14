@@ -193,7 +193,11 @@ export async function handleMarket(request?: Request): Promise<Response> {
     damp,
   };
   if (!dumb.ok && !damp.ok) {
-    if (cache) {
+    // Same 15-minute honesty bound as the KV fallback below: an isolate can
+    // live long after the upstream dies, so an unbounded in-memory stale
+    // serve would let a hours-old snapshot ride forever labeled just
+    // "stale". Past the bound, fall through to the honest 502.
+    if (cache && now - cache.at < KV_MAX_AGE_MS) {
       return json({
         ...((cache.payload as Record<string, unknown>) ?? {}),
         cached: true,
